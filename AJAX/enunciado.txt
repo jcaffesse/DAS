@@ -1,0 +1,6 @@
+A partir del código adjunto, completar las funcionalidades que permitan ingresar un nuevo país y/o una nueva provincia.
+
+Para ello tener en cuenta las siguientes consideraciones:
+Se debe generar un área dentro de la misma pantalla donde se permita registrar el país o la provincia sin tener que recargar la página completa.
+Cuando se graba el nuevo registro del país, se debe actualizar la pantalla completa.
+Cuando se graba la nueva provincia, solo se debe actualizar la lista correspondiente y limpiar el área de carga de datos.
