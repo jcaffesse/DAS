@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<root>
+    <cereales>
+        <cereal>Cebada</cereal>
+        <cereal>Avena</cereal>
+        <cereal>Mijo</cereal>
+        <cereal>Maíz</cereal>
+        <cereal>Arroz</cereal>
+        <cereal>Centeno</cereal>
+        <cereal>Trigo</cereal>        
+    </cereales>
+</root>

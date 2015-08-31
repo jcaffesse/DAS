@@ -1,0 +1,59 @@
+/* 
+    Document   : style
+    Created on : 01/11/2013, 18:01:51
+    Author     : mpgaviotta
+    Description:
+        Purpose of the stylesheet follows.
+*/
+body, input, select {
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 8pt;
+} 
+
+h1 {
+    font-size: 11pt;
+}
+
+.al {
+    text-align: left;
+}
+
+.ar {
+    text-align: right;
+}
+
+.ac {
+    text-align: center;
+}
+
+table {
+    background-color: #000;
+    border-spacing: 1px;
+}
+
+th {
+    background-color: #e7e7e7;
+}
+
+td {
+    background-color: #fff;
+}
+
+.paddingtop5 {
+    padding-top: 5px;    
+}
+
+.paddingbottom5 {
+    padding-bottom: 5px;    
+}
+
+#message, #response, #executing {
+    display: none;
+}
+
+#message {
+    border: 1px solid #f00;
+    color: #f00;
+    padding: 5px;
+    margin-bottom: 10px;
+}
