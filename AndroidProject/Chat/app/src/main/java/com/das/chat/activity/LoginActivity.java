@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.content.Intent;
 
 import com.das.chat.R;
 
@@ -31,7 +32,8 @@ public class LoginActivity extends AppCompatActivity
 
     public void registerButtonPressed(View v)
     {
-
+        Intent i = new Intent(this, RegisterActivity.class);
+        startActivity(i);
     }
 
 }
