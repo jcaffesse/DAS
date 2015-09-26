@@ -1,0 +1,63 @@
+@CHARSET "ISO-8859-1";
+
+#response,#executing {
+  display: none;
+}
+
+h1 {
+    font-size: 14pt;
+}
+
+h2 {
+    font-size: 13pt;
+}
+
+h3 {
+    font-size: 12pt;
+}
+
+table {
+  border-spacing: 1px;
+}
+
+table thead, th {
+    background-color: #0066CC;
+    color: #fff;
+    font-weight: bold;
+}
+
+table tbody {
+    background-color: #9999FF;
+    color: #000;
+}
+
+table tfoot {
+    background-color: #0066CC;
+    color: #fff;
+}
+
+td, th   {
+    padding: 4px;
+}
+
+a {
+    color: #000066;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.width400 {
+  width: 400px;
+}
+
+.width700 {
+  width: 700px;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}

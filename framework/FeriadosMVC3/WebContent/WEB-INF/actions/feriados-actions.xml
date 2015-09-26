@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	     xsi:noNamespaceSchemaLocation="../schema/actions.xsd">
+    <form-beans>
+    	<form-bean name="Guardar" type="GuardarFormBean"/>
+    </form-beans>
+    <resources-bundles>
+    	<bundle basename="etiquetas"/>
+    </resources-bundles>
+    <action-mappings>
+    	<action path="/Agregar.do" type="AgregarAction">
+    		<forward name="success" path="/feriados/agregar.jsp"/>
+    	</action>
+    	<action path="/Cancelar.do" type="CancelarAction">
+    		<forward name="success" path="/feriados/listado-fila.jsp"/>
+    	</action>
+    	<action path="/Editar.do" type="EditarAction">
+    		<forward name="success" path="/feriados/editar.jsp"/>
+    	</action>
+    	<action path="/Eliminar.do" type="EliminarAction" noforward="true"/>
+    	<action path="/Guardar.do" type="GuardarAction" form="Guardar" validate="true">
+    		<forward name="success" path="/feriados/listado-fila.jsp"/>
+    	</action>
+    	<action path="/GuardarIdiomas.do" type="GuardarIdiomasAction" noforward="true" />
+    	<action path="/Listado.do" type="ListadoAction">
+    		<forward name="success" path="/feriados/listado.jsp"/>
+    	</action>
+    	<action path="/ListadoIdiomas.do" type="ListadoIdiomasAction">
+    		<forward name="success" path="/feriados/listado-idiomas.jsp"/>
+    	</action>
+    </action-mappings>
+</actions>
