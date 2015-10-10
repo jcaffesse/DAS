@@ -23,12 +23,13 @@ import ar.edu.ubp.das.daos.Dao;
 import ar.edu.ubp.das.daos.DaoFactory;
 
 @Path("/feriados")
-@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+@Produces(MediaType.TEXT_PLAIN)
 public class FeriadosResource {
 
 	@GET
 	public Response getFeriados() {
             /*try {
+            @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
                     Dao dao = DaoFactory.getDao("Feriados");
                     List<Bean> list = dao.select(null);
                     return Response.status(Response.Status.OK).entity(list).build();
