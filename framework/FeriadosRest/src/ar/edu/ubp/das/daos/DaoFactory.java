@@ -22,19 +22,21 @@ public class DaoFactory {
     }
 
     private static String getDaoClassName(String daoName) throws SQLException {
-        try {
+        return DaoFactory.class.getPackage().getName() + "." + "MSSQL" + daoName + "Dao";
+        /*try {
         	if(!DaoFactory.loadProp) {
-                InputStream file = DaoFactory.class.getResourceAsStream("DaoFactory.properties");
-                DaoFactory.propFile.load(file);
-                file.close();
-
+                    /*try (InputStream file = DaoFactory.class.getResourceAsStream("DaoFactory.properties")) {
+                       /* //DaoFactory.propFile.load(file);
+                        System.out.println(file.toString());
+                    }
+                    
                 DaoFactory.loadProp = true;
             }
-            return DaoFactory.class.getPackage().getName() + "." + DaoFactory.propFile.getProperty("CurrentDaoFactory") + daoName + "Dao";
+            return DaoFactory.class.getPackage().getName() + "." + "MSSQL" + daoName + "Dao";
         }
         catch(IOException ex) {
             throw new SQLException(ex.getMessage());
-        }
+        }*/
     }
 
 }

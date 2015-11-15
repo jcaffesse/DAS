@@ -5,35 +5,22 @@
  */
 package ar.edu.ubp.das.resources;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import ar.edu.ubp.das.beans.Bean;
-import ar.edu.ubp.das.beans.FeriadoBean;
-import ar.edu.ubp.das.beans.IdiomaFeriadoBean;
 import ar.edu.ubp.das.beans.SalaBean;
 import ar.edu.ubp.das.daos.Dao;
 import ar.edu.ubp.das.daos.DaoFactory;
-import ar.edu.ubp.das.sources.SalasList;
-import java.io.FileWriter;
-import java.io.IOException;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -42,31 +29,54 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Path("/salas")
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 public class SalaResource {
-    private SalasList list;
+    //private SalasList list;
     
     @GET
     public Response getSalas() {
-        list = new SalasList();
-        for(int i=0; i<6;i++) {
-            SalaBean bean = new SalaBean();
-            bean.setNombre("Sala " + i);
-            this.list.addSala(bean);
+        try {
+            Dao dao = DaoFactory.getDao("Salas");
+            List<Bean> list = dao.select(null);
+            System.out.println("LIST"+list.toString());
+            return Response.status(Response.Status.OK).entity(list.toString()).build();
+            
         }
-        
-        return Response.status(Response.Status.OK).entity(list.toString()).build();
+        catch (SQLException e) {
+            System.out.println(e.getErrorCode()+ e.getMessage() + e.getCause());
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
     }
     
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    public Response addSala(@FormParam("nombre") String nombre) {
-        System.out.println(nombre);
+    public Response addSala(
+            @FormParam("id") String id,
+            @FormParam("nombre") String nombre, 
+            @FormParam("desc") String desc,
+            @FormParam("parts") String parts
+        ) {
+        /*System.out.println(nombre);
         SalaBean bean = new SalaBean();
         list = new SalasList();
         bean.setNombre(nombre);
-        this.list.addSala(bean);
-        
-        return Response.status(Response.Status.OK).entity(list.toString()).build();
+        this.list.addSala(bean);*/
+
+        try {
+            SalaBean bean = new SalaBean();
+                bean.setId(Integer.parseInt(id));
+                bean.setNombre(nombre);
+                bean.setDesc(desc);
+                bean.setParts(Integer.parseInt(parts));
+
+            Dao dao = DaoFactory.getDao("Salas");
+            dao.update(bean);
+
+            return Response.status(Response.Status.OK).build();
+        } 
+        catch (SQLException e) {
+            System.out.println(e.getErrorCode()+ e.getMessage() + e.getCause());
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
     }
 }
 

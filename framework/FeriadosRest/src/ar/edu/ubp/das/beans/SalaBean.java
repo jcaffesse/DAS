@@ -15,11 +15,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class SalaBean implements Bean {
     
+    private Integer id;
     private String nombre;
     private String descripcion;
     private Integer participantes;
     
-   
+    public Integer getId() {
+        return this.id;
+    }
+    
     public String getNombre() {
         return this.nombre;
     }
@@ -30,6 +34,11 @@ public class SalaBean implements Bean {
         
     public Integer getParts() {
         return this.participantes;
+    }
+    
+    @XmlElement
+    public void setId(Integer i) {
+        this.id = i;
     }
     
     @XmlElement
@@ -49,12 +58,13 @@ public class SalaBean implements Bean {
     
     @Override
     public int compareTo(Bean bean) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return 0;
     }
     
     @Override
     public String toString() {
-        return "{\"nombre\": \""+ this.getNombre() + "\"}";
+        return "{ \"id\" : \"" + id + "\", \"nombreSala\" : \"" + nombre 
+            +"\", \"descSala\" : \"" + descripcion +"\", \"partsSala\" : \"" + participantes + "\"}";
     }
     
     

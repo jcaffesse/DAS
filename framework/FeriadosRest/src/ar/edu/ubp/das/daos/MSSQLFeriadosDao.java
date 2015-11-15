@@ -59,7 +59,7 @@ public class MSSQLFeriadosDao extends MSSQLDao {
 		
 		this.connect();
         
-        this.setProcedure("dbo.get_feriados");
+        this.setProcedure("dbo.get_salas");
 
         list = this.executeQuery();
         
