@@ -29,6 +29,6 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT id, LTRIM(RTRIM(nombre)) as nombre, LTRIM(RTRIM(descripcion)) as descripcion, participantes  FROM [dbo].Salas
+	SELECT id_sala, LTRIM(RTRIM(nombre_sala)) as nombre_sala, LTRIM(RTRIM(desc_sala)) as desc_sala, tipo_sala  FROM [dbo].Sala
 END
 GO

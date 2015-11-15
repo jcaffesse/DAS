@@ -55,11 +55,6 @@ public class SalaResource {
             @FormParam("desc") String desc,
             @FormParam("parts") String parts
         ) {
-        /*System.out.println(nombre);
-        SalaBean bean = new SalaBean();
-        list = new SalasList();
-        bean.setNombre(nombre);
-        this.list.addSala(bean);*/
 
         try {
             SalaBean bean = new SalaBean();
