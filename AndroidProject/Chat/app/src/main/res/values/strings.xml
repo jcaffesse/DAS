@@ -13,6 +13,7 @@
     <string name="username_hint">Nombre de usuario</string>
     <string name="password_hint">Contraseña</string>
     <string name="rep_password_hint">Repetir Contraseña</string>
+    <string name="title_activity_add_room">AddRoomActivity</string>
 
 
 </resources>

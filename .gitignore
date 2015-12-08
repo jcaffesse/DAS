@@ -10,3 +10,4 @@
 /RESTfulAuth/RESTful Service Authentication/build/
 /RESTfulAuth/RESTful Service Authentication/dist/
 */target/**
+/framework/FeriadosRest/target/

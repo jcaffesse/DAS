@@ -28,6 +28,8 @@ public class LoginActivity extends AppCompatActivity
     public void loginButtonPressed(View v)
     {
         Toast.makeText(this, usernameET.getText() + " " + passwordET.getText(), Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(this, RoomListActivity.class);
+        startActivity(i);
     }
 
     public void registerButtonPressed(View v)
