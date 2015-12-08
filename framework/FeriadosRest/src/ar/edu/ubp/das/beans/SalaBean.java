@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Rocio
+ * @author Javier
  */
 @XmlRootElement
 public class SalaBean implements Bean {
@@ -18,7 +18,7 @@ public class SalaBean implements Bean {
     private Integer id;
     private String nombre;
     private String descripcion;
-    private Integer participantes;
+    private String tipo;
     
     public Integer getId() {
         return this.id;
@@ -32,8 +32,8 @@ public class SalaBean implements Bean {
         return this.descripcion;
     }
         
-    public Integer getParts() {
-        return this.participantes;
+    public String getTipo() {
+        return this.tipo;
     }
     
     @XmlElement
@@ -52,8 +52,8 @@ public class SalaBean implements Bean {
     }
 
     @XmlElement
-    public void setParts(Integer p) {
-        this.participantes = p;
+    public void setTipo(String t) {
+        this.tipo = t;
     }
     
     @Override
@@ -63,8 +63,8 @@ public class SalaBean implements Bean {
     
     @Override
     public String toString() {
-        return "{ \"id\" : \"" + id + "\", \"nombreSala\" : \"" + nombre 
-            +"\", \"descSala\" : \"" + descripcion +"\", \"partsSala\" : \"" + participantes + "\"}";
+        return "{ \"id_sala\" : \"" + id + "\", \"nombre_sala\" : \"" + nombre 
+            +"\", \"desc_sala\" : \"" + descripcion +"\", \"tipo_sala\" : \"" + tipo + "\"}";
     }
     
     

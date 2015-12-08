@@ -21,17 +21,28 @@ public class MSSQLSalasDao extends MSSQLDao {
     @Override
     public Bean make(ResultSet result) throws SQLException {
         SalaBean sala = new SalaBean();
-            sala.setId(result.getInt("id"));
-            sala.setNombre(result.getString("nombre"));
-            sala.setDesc(result.getString("descripcion"));
-            sala.setParts(result.getInt("participantes"));
+            sala.setId(result.getInt("id_sala"));
+            sala.setNombre(result.getString("nombre_sala"));
+            sala.setDesc(result.getString("desc_sala"));
+            sala.setTipo(result.getString("tipo_sala"));
             
         return sala;
     }
 
     @Override
     public void insert(Bean bean) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        SalaBean sala = SalaBean.class.cast(bean);
+		
+        this.connect();
+		
+        this.setProcedure("dbo.insert_sala(?,?,?)");  
+        this.setParameter(1, sala.getNombre());
+        this.setParameter(2, sala.getDesc());
+        this.setParameter(3, sala.getTipo());
+        
+        this.executeUpdate();
+        
+        this.disconnect();
     }
 
     @Override
@@ -39,12 +50,12 @@ public class MSSQLSalasDao extends MSSQLDao {
         SalaBean sala = SalaBean.class.cast(bean);
 		
         this.connect();
-		
-        this.setProcedure("dbo.set_sala(?,?,?,?)");        
+        
+        this.setProcedure("dbo.set_sala(?,?,?,?)");  
         this.setParameter(1, sala.getId());
         this.setParameter(2, sala.getNombre());
         this.setParameter(3, sala.getDesc());
-        this.setParameter(4, sala.getParts());
+        this.setParameter(4, sala.getTipo());
         
         this.executeUpdate();
         
@@ -53,10 +64,13 @@ public class MSSQLSalasDao extends MSSQLDao {
 
     @Override
     public void delete(Bean bean) throws SQLException {
+        SalaBean sala = SalaBean.class.cast(bean);
         this.connect();
+        
+        System.out.println("SALA " + sala.toString());
 		
-        this.setProcedure("dbo.del_sala(?)");        
-        this.setParameter(1, SalaBean.class.cast(bean).getNombre());
+        this.setProcedure("dbo.delete_sala(?)");        
+        this.setParameter(1, sala.getId());
         
         this.executeUpdate();
         
@@ -65,17 +79,14 @@ public class MSSQLSalasDao extends MSSQLDao {
 
     @Override
     public List<Bean> select(Bean bean) throws SQLException {
-        List<Bean> list = null;
+        List<Bean> list;
         
-        System.out.println("SELECT");
-		
         this.connect();
         
         this.setProcedure("dbo.get_salas");
         list = this.executeQuery();
         this.disconnect();
         
-        System.out.println("LISTA: "+list.toString());
         return list; 
     }
 

@@ -21,10 +21,12 @@ import ar.edu.ubp.das.beans.Bean;
 import ar.edu.ubp.das.beans.SalaBean;
 import ar.edu.ubp.das.daos.Dao;
 import ar.edu.ubp.das.daos.DaoFactory;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.PathParam;
 
 /**
  *
- * @author Rocio
+ * @author Javier
  */
 @Path("/salas")
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
@@ -38,7 +40,6 @@ public class SalaResource {
             List<Bean> list = dao.select(null);
             System.out.println("LIST"+list.toString());
             return Response.status(Response.Status.OK).entity(list.toString()).build();
-            
         }
         catch (SQLException e) {
             System.out.println(e.getErrorCode()+ e.getMessage() + e.getCause());
@@ -50,26 +51,44 @@ public class SalaResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public Response addSala(
-            @FormParam("id") String id,
             @FormParam("nombre") String nombre, 
             @FormParam("desc") String desc,
-            @FormParam("parts") String parts
+            @FormParam("tipo") String tipo
         ) {
 
         try {
             SalaBean bean = new SalaBean();
-                bean.setId(Integer.parseInt(id));
                 bean.setNombre(nombre);
                 bean.setDesc(desc);
-                bean.setParts(Integer.parseInt(parts));
+                bean.setTipo(tipo);
 
             Dao dao = DaoFactory.getDao("Salas");
-            dao.update(bean);
-
+            dao.insert(bean);
+          
             return Response.status(Response.Status.OK).build();
         } 
         catch (SQLException e) {
-            System.out.println(e.getErrorCode()+ e.getMessage() + e.getCause());
+            System.out.println(e.getErrorCode()+ e.getMessage());
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
+    
+    @DELETE
+    @Path("/{id_sala}")
+    public Response delSala(
+            @PathParam("id_sala") Integer id
+        ) {
+        try {
+            SalaBean bean = new SalaBean();
+                bean.setId(id);
+           
+            Dao dao = DaoFactory.getDao("Salas");
+            dao.delete(bean);
+          
+            return Response.status(Response.Status.OK).build();
+        } 
+        catch (SQLException e) {
+            System.out.println(e.getErrorCode()+ e.getMessage());
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
