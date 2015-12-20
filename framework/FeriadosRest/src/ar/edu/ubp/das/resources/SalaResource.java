@@ -21,6 +21,7 @@ import ar.edu.ubp.das.beans.Bean;
 import ar.edu.ubp.das.beans.SalaBean;
 import ar.edu.ubp.das.daos.Dao;
 import ar.edu.ubp.das.daos.DaoFactory;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.PathParam;
 
@@ -32,7 +33,7 @@ import javax.ws.rs.PathParam;
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 public class SalaResource {
     //private SalasList list;
-    
+    @RolesAllowed("ADMIN")
     @GET
     public Response getSalas() {
         try {
