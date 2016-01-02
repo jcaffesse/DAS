@@ -68,6 +68,12 @@
       <artifactId>jersey-json</artifactId>
       <version>1.19</version>
     </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.core</groupId>
+      <artifactId>jersey-server</artifactId>
+      <version>2.5.1</version>
+      <type>jar</type>
+    </dependency>
   </dependencies>
     <name>ChatRest</name>
 </project>

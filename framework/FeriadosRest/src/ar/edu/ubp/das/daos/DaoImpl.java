@@ -92,6 +92,12 @@ public abstract class DaoImpl implements Dao {
         }
         return list;
     }
+    
+    public Boolean executeValidation() throws SQLException {
+        ResultSet result = this.statement.executeQuery();
+        result.next();
+        return result.getBoolean("isValid");
+    }
 	
     protected void setDriver(String driver) {
         this.driver = driver;

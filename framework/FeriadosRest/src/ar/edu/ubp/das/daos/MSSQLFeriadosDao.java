@@ -68,10 +68,10 @@ public class MSSQLFeriadosDao extends MSSQLDao {
         return list;
 	}
 
-	@Override
-	public boolean valid(Bean bean) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public boolean valid(Bean bean) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 
 }

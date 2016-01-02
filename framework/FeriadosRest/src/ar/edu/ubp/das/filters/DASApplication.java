@@ -6,13 +6,14 @@
 package ar.edu.ubp.das.filters;
 
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
  
 public class DASApplication extends ResourceConfig
 {
     public DASApplication()
     {
         packages("ar.edu.ubp.das.filters");
-        //Register Auth Filter here
         register(AuthenticationFilter.class);
+        register(RolesAllowedDynamicFeature.class);
     }
 }

@@ -23,7 +23,6 @@ public class MSSQLUsuariosDao extends MSSQLDao {
             usuario.setId(result.getInt("id_usuario"));
             usuario.setNombre(result.getString("nombre_usuario"));
             usuario.setEmail(result.getString("email_usuario"));
-            usuario.setPassword(result.getString("password_usuario"));
             usuario.setIdRol(result.getInt("id_rol"));
             
         return usuario;
@@ -70,7 +69,13 @@ public class MSSQLUsuariosDao extends MSSQLDao {
         
         this.connect();
         
-        this.setProcedure("dbo.get_usuarios");
+        this.setProcedure("dbo.get_usuarios(?)");
+        try {
+            this.setParameter(1, UsuarioBean.class.cast(bean).getNombre());
+        } catch(NullPointerException e) {
+            this.setParameter(1, "");
+        }
+
         list = this.executeQuery();
         this.disconnect();
         
@@ -79,7 +84,14 @@ public class MSSQLUsuariosDao extends MSSQLDao {
 
     @Override
     public boolean valid(Bean bean) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        UsuarioBean usuario = UsuarioBean.class.cast(bean);
+        
+        this.connect();
+        this.setProcedure("dbo.validate_login(?, ?)");
+        this.setParameter(1, usuario.getNombre());
+        this.setParameter(2, usuario.getPassword());
+        
+        return this.executeValidation();
     }
     
 }

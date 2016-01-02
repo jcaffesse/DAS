@@ -92,7 +92,8 @@ public class MSSQLSalasDao extends MSSQLDao {
 
     @Override
     public boolean valid(Bean bean) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
     
 }
