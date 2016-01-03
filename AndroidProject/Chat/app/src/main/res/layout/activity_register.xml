@@ -7,14 +7,6 @@
     android:padding="30dp"
     android:orientation="vertical">
 
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_chat"
-        android:layout_margin="20dp"
-        />
-
     <EditText
         android:id="@+id/reg_username_et"
         android:layout_width="match_parent"
@@ -23,6 +15,18 @@
         android:layout_marginBottom="20dp"
         android:inputType="textEmailAddress"
         android:hint="@string/username_hint"
+        android:padding="10dp"
+        android:gravity="center"
+        android:lines="1"
+        android:background="@drawable/img_textbox"/>
+
+    <EditText
+        android:id="@+id/reg_email_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:inputType="textEmailAddress"
+        android:hint="@string/email_hint"
         android:padding="10dp"
         android:gravity="center"
         android:lines="1"
@@ -58,15 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/create_button_title"
-        android:onClick="saveButtonPressed"
-        android:layout_marginBottom="20dp"/>
-
-    <Button
-        android:id="@+id/reg_back_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/back_button_title"
-        android:onClick="backButtonPressed"
+        android:onClick="registerButtonPressed"
         android:layout_marginBottom="20dp"/>
 
 </LinearLayout>

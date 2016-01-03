@@ -9,7 +9,7 @@ import android.widget.Toast;
 import com.das.chat.R;
 import com.das.chat.backend.Backend;
 import com.das.chat.backend.OnWSResponseListener;
-import com.das.chat.wsmodelmap.AddRoomRequest;º
+import com.das.chat.wsmodelmap.AddRoomRequest;
 
 public class AddRoomActivity extends Activity {
 

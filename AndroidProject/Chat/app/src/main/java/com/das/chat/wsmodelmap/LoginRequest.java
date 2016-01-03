@@ -1,0 +1,40 @@
+package com.das.chat.wsmodelmap;
+
+/**
+ * Created by Pablo on 27/09/2015.
+ */
+public class LoginRequest
+{
+    private String username;
+    private String password;
+
+    public String getForm()
+    {
+        String res = new String();
+
+        res += "usuario=";
+        res += username;
+        res += "&";
+
+        res += "password=";
+        res += password;
+
+        return res;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+}

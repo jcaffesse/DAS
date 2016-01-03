@@ -1,5 +1,11 @@
 package com.das.chat.backend;
 
+import android.provider.Settings;
+
+import com.das.chat.Model.Login;
+import com.das.chat.application.ChatApplication;
+import com.das.chat.wsmodelmap.LoginRequest;
+
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.AbstractHttpEntity;
@@ -8,6 +14,11 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
 
 import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class WSParams 
 {
@@ -37,6 +48,26 @@ public class WSParams
         {
             e.printStackTrace();
         }
+    }
+
+    public void addAuthorizationHeader(LoginRequest req)
+    {
+        try
+        {
+            this.req.setHeader("X-ApiAuth-Userid", Settings.Secure.getString(ChatApplication.getAppContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+            this.req.setHeader("username", req.getUsername());
+            this.req.setHeader("password", req.getPassword());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void addTokenHeader(String token)
+    {
+        this.req.setHeader("Authorization", "Bearer " + token);
     }
 
     public HttpRequestBase getRequest()
