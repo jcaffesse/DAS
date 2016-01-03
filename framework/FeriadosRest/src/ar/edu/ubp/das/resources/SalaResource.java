@@ -32,7 +32,7 @@ import javax.ws.rs.PathParam;
 @Path("/salas")
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 public class SalaResource {
-    @RolesAllowed("ADMIN")
+    
     @GET
     public Response getSalas() {
         try {

@@ -67,7 +67,7 @@ public class WSParams
 
     public void addTokenHeader(String token)
     {
-        this.req.setHeader("Authorization", "Bearer " + token);
+        this.req.setHeader("Authorization", token);
     }
 
     public HttpRequestBase getRequest()

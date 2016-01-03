@@ -108,6 +108,7 @@ public class Backend
         HttpGet get = new HttpGet(String.format("%s%s", WS_BASE_URL, WS_ROOMS_URL));
 
         params.setRequest(get);
+        params.addTokenHeader("asdasdasd");
 
         task.setResponseListener(new OnWSResponseListener<String>()
         {

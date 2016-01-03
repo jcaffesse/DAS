@@ -54,6 +54,9 @@ public class LoginActivity extends AppCompatActivity
             public void onWSResponse(Boolean response, long errorCode, final String errorMsg) {
                 if (errorMsg == null) {
                     Toast.makeText(LoginActivity.this, "Login correcto", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(LoginActivity.this, RoomListActivity.class);
+                    startActivity(i);
+                    finish();
                 } else {
                     Toast.makeText(LoginActivity.this, "Login incorrecto", Toast.LENGTH_SHORT).show();
                 }
