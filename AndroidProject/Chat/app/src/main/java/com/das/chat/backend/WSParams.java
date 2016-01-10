@@ -2,7 +2,6 @@ package com.das.chat.backend;
 
 import android.provider.Settings;
 
-import com.das.chat.Model.Login;
 import com.das.chat.application.ChatApplication;
 import com.das.chat.wsmodelmap.LoginRequest;
 
@@ -14,11 +13,6 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
 
 import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
 
 public class WSParams 
 {

@@ -1,7 +1,8 @@
 package com.das.chat.activity;
 
+import android.app.Activity;
+
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -13,7 +14,7 @@ import com.das.chat.backend.OnWSResponseListener;
 import com.das.chat.wsmodelmap.LoginRequest;
 import com.das.chat.wsmodelmap.RegisterRequest;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends Activity {
     EditText usernameET;
     EditText emailET;
     EditText passwordET;

@@ -1,7 +1,8 @@
 package com.das.chat.activity;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -13,7 +14,7 @@ import com.das.chat.backend.OnWSResponseListener;
 import com.das.chat.wsmodelmap.AddRoomRequest;
 import com.das.chat.wsmodelmap.LoginRequest;
 
-public class LoginActivity extends AppCompatActivity
+public class LoginActivity extends Activity
 {
     EditText usernameET;
     EditText passwordET;
@@ -53,12 +54,12 @@ public class LoginActivity extends AppCompatActivity
             @Override
             public void onWSResponse(Boolean response, long errorCode, final String errorMsg) {
                 if (errorMsg == null) {
-                    Toast.makeText(LoginActivity.this, "Login correcto", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(LoginActivity.this, RoomListActivity.class);
+                    Toast.makeText(LoginActivity.this, "ChatUser correcto", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(i);
                     finish();
                 } else {
-                    Toast.makeText(LoginActivity.this, "Login incorrecto", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "ChatUser incorrecto", Toast.LENGTH_SHORT).show();
                 }
             }
         });

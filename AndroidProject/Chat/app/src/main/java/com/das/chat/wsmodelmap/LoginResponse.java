@@ -1,20 +1,16 @@
 package com.das.chat.wsmodelmap;
 
-import com.das.chat.Model.ChatRoom;
-import com.das.chat.Model.Login;
+import com.das.chat.Model.ChatUser;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 public class LoginResponse
 {
-    public static Login initWithResponse(String response)
+    public static ChatUser initWithResponse(String response)
     {
         JSONObject resp = null;
-        Login login = new Login();
+        ChatUser login = new ChatUser();
         try {
             resp = new JSONObject(response);
             login.setUserName(resp.getString("nombre"));

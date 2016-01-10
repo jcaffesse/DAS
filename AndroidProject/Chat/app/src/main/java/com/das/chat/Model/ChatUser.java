@@ -1,9 +1,11 @@
 package com.das.chat.Model;
 
+import java.io.Serializable;
+
 /**
  * Created by pablo on 12/20/15.
  */
-public class Login {
+public class ChatUser implements Serializable{
     private String userId;
     private String userName;
     private String userEmail;
