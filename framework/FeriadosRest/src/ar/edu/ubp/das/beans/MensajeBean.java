@@ -70,8 +70,10 @@ public class MensajeBean implements Bean {
 
     @Override
     public String toString() {
-        return "{ \"id_usuario\" : \"" + id_usuario + "\", \"id_sala\" : \"" + id_sala 
-            +"\", \"mensaje\" : \"" + mensaje +"\", \"fecha_mensaje\" : \"" + fecha_mensaje + "\"}";
+        return "{ \"id_mensaje\" : \"" + id_mensaje + "\", \"id_usuario\" : \"" 
+            + id_usuario + "\", \"id_sala\" : \"" + id_sala 
+            + "\", \"mensaje\" : \"" + mensaje +"\", \"fecha_mensaje\" : \""
+            + fecha_mensaje.toString() + "\"}";
     }
     
     @Override

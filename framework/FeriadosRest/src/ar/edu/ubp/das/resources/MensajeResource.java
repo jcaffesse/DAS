@@ -18,8 +18,11 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -27,43 +30,84 @@ import javax.ws.rs.core.Response;
  *
  * @author Pablo
  */
-@Path("/mensaje")
+@Path("/mensajes")
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 public class MensajeResource {
     
     @GET
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Path("/{id_mensaje}")
+    public Response getMensaje(
+        @PathParam("id_mensaje") String id_mensaje
+    ) {
+        try {
+            MensajeBean bean = new MensajeBean();
+                bean.setId_mensaje(Integer.parseInt(id_mensaje));
+            try {
+                Dao dao = DaoFactory.getDao("Mensajes");
+                List<Bean> list = dao.select(bean);
+                if (list.isEmpty()) {
+                    return Response.status(Response.Status.NOT_FOUND).build();
+                } else {
+                    return Response.status(Response.Status.OK).entity(list.get(0)).build();
+                }
+            }
+            catch (SQLException e) {
+                return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+            }
+        } catch (NumberFormatException n) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(n.getMessage()).build();
+        }
+    }
+    
+    @GET
+    @Path("/sala/{id_sala}")
     public Response getMensajesSala(
-        @FormParam("id_sala") String id_sala
+        @PathParam("id_sala") String id_sala
     ) {
         try {
             SalaBean bean = new SalaBean();
                 bean.setId(Integer.parseInt(id_sala));
                 
-            Dao dao = DaoFactory.getDao("Mensajes");
-            List<Bean> list = dao.select(bean);
-            return Response.status(Response.Status.OK).entity(list.toString()).build();
-        }
-        catch (SQLException e) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+            try {
+                Dao dao = DaoFactory.getDao("Mensajes");
+                List<Bean> list = dao.select(bean);
+                if (list.isEmpty()) {
+                    return Response.status(Response.Status.NOT_FOUND).build();
+                } else {
+                    return Response.status(Response.Status.OK).entity(list.toString()).build();
+                }
+            }
+            catch (SQLException e) {
+                return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+            }
+        } catch (NumberFormatException n) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(n.getMessage()).build();
         }
     }
     
     @GET
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Path("/usuario/{id_usuario}")
     public Response getMensajesUser(
-        @FormParam("id_usuario") String id_usuario
+        @PathParam("id_usuario") String id_usuario
     ) {
         try {
             UsuarioBean bean = new UsuarioBean();
                 bean.setId(Integer.parseInt(id_usuario));
-                
-            Dao dao = DaoFactory.getDao("Mensajes");
-            List<Bean> list = dao.select(bean);
-            return Response.status(Response.Status.OK).entity(list.toString()).build();
-        }
-        catch (SQLException e) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+            
+            try {
+                Dao dao = DaoFactory.getDao("Mensajes");
+                List<Bean> list = dao.select(bean);
+                if (list.isEmpty()) {
+                    return Response.status(Response.Status.NOT_FOUND).build();
+                } else {
+                    return Response.status(Response.Status.OK).entity(list.toString()).build();
+                }
+            }
+            catch (SQLException e) {
+                return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+            }            
+        } catch (NumberFormatException n) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(n.getMessage()).build();
         }
     }
     
@@ -82,7 +126,29 @@ public class MensajeResource {
 
             Dao dao = DaoFactory.getDao("Mensajes");
             dao.insert(bean);
-          
+            
+            return Response.status(Response.Status.OK).build();
+        }
+        catch (SQLException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
+    
+    @PUT
+    @Path("/{id_mensaje}")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response updateMensaje(
+        @PathParam("id_mensaje") String id_mensaje,
+        @FormParam("mensaje") String mensaje
+    ) {
+        try {
+            MensajeBean bean = new MensajeBean();
+                bean.setId_mensaje(Integer.parseInt(id_mensaje));
+                bean.setMensaje(mensaje);
+
+            Dao dao = DaoFactory.getDao("Mensajes");
+            dao.update(bean);
+            
             return Response.status(Response.Status.OK).build();
         }
         catch (SQLException e) {
@@ -91,11 +157,12 @@ public class MensajeResource {
     }
     
     @DELETE
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Path("/{id_mensaje}")
     public Response delMensaje(
-        @FormParam("id_mensaje") String id_mensaje   
+        @PathParam("id_mensaje") String id_mensaje   
     ) 
     {
+        System.out.println("bang bang");
         try {
             MensajeBean bean = new MensajeBean();
                 bean.setId_mensaje(Integer.parseInt(id_mensaje));

@@ -21,8 +21,8 @@ import ar.edu.ubp.das.beans.Bean;
 import ar.edu.ubp.das.beans.SalaBean;
 import ar.edu.ubp.das.daos.Dao;
 import ar.edu.ubp.das.daos.DaoFactory;
-import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 
 /**
@@ -37,13 +37,41 @@ public class SalaResource {
         try {
             Dao dao = DaoFactory.getDao("Salas");
             List<Bean> list = dao.select(null);
-            System.out.println("LIST"+list.toString());
             return Response.status(Response.Status.OK).entity(list.toString()).build();
         }
         catch (SQLException e) {
-            System.out.println(e.getErrorCode()+ e.getMessage() + e.getCause());
+            System.out.println(e.getErrorCode()+ e.getMessage());
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
+    }
+    
+    @GET
+    @Path("/{id_sala}")
+    public Response getSala(
+        @PathParam("id_sala") String id_sala
+    ) {
+        try {
+            SalaBean sala = new SalaBean();
+                sala.setId(Integer.parseInt(id_sala));
+            
+            try {
+                Dao dao = DaoFactory.getDao("Salas");
+                List<Bean> list = dao.select(sala);
+                if (list.isEmpty()) {
+                    return Response.status(Response.Status.NOT_FOUND).build();
+                } else {
+                    return Response.status(Response.Status.OK).entity(list.get(0)).build();
+                }
+            }
+            catch (SQLException e) {
+                System.out.println(e.getErrorCode()+ e.getMessage());
+                return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+            }                
+            
+        } catch (NumberFormatException n ) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(n.getMessage()).build();
+        }
+
     }
     
     @POST
@@ -63,6 +91,35 @@ public class SalaResource {
 
             Dao dao = DaoFactory.getDao("Salas");
             dao.insert(bean);
+          
+            return Response.status(Response.Status.OK).build();
+        } 
+        catch (SQLException e) {
+            System.out.println(e.getErrorCode()+ e.getMessage());
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
+    
+    @PUT
+    @Path("/{id_sala}")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+    public Response updateSala(
+            @PathParam("id_sala") String id_sala,
+            @FormParam("nombre") String nombre, 
+            @FormParam("desc") String desc,
+            @FormParam("tipo") String tipo
+        ) {
+
+        try {
+            SalaBean bean = new SalaBean();
+                bean.setId(Integer.parseInt(id_sala));
+                bean.setNombre(nombre);
+                bean.setDesc(desc);
+                bean.setTipo(tipo);
+
+            Dao dao = DaoFactory.getDao("Salas");
+            dao.update(bean);
           
             return Response.status(Response.Status.OK).build();
         } 

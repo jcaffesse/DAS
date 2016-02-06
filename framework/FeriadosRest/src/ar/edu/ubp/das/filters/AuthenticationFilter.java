@@ -5,12 +5,18 @@
  */
 package ar.edu.ubp.das.filters;
 
+import ar.edu.ubp.das.beans.Bean;
+import ar.edu.ubp.das.beans.TokenBean;
+import ar.edu.ubp.das.daos.Dao;
+import ar.edu.ubp.das.daos.DaoFactory;
 import java.lang.reflect.Method;
+import java.sql.SQLException;
 import java.util.List;
-import java.util.Set;
+import javax.annotation.Priority;
  
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
+import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
@@ -24,6 +30,7 @@ import javax.ws.rs.ext.Provider;
  * based on username and passowrd provided in request
  * */
 @Provider
+@Priority(Priorities.AUTHENTICATION)
 public class AuthenticationFilter implements ContainerRequestFilter
 {
      
@@ -36,6 +43,8 @@ public class AuthenticationFilter implements ContainerRequestFilter
         .entity("No es posible acceder a este recurso").build();
     private static final Response ACCESS_FORBIDDEN = Response.status(Response.Status.FORBIDDEN)
         .entity("Acceso bloqueado para todos los usuarios").build();
+    private static final Response NEED_RELOGIN = Response.status(Response.Status.FOUND)
+        .entity("El token de acceso ha vencido").build();
       
     @Override
     public void filter(ContainerRequestContext requestContext)
@@ -59,58 +68,26 @@ public class AuthenticationFilter implements ContainerRequestFilter
             
             if((authorization == null || authorization.isEmpty())) { 
                 requestContext.abortWith(ACCESS_DENIED);
-                return;
-            }
-            
-            System.out.println("validar token");
-            
-            //validar token
-            //Get token
-            
-            //final String token = authorization.get(0);
-              
-            /*//Split username and password tokens
-            final StringTokenizer tokenizer = new StringTokenizer(usernameAndPassword, ":");
-            final String username = tokenizer.nextToken();
-            final String password = tokenizer.nextToken();
-              
-            //Verifying Username and password
-            System.out.println(username);
-            System.out.println(password);*/
-              
-            //Verify user access
-            /*if(method.isAnnotationPresent(RolesAllowed.class))
-            {
-                RolesAllowed rolesAnnotation = method.getAnnotation(RolesAllowed.class);
-                Set<String> rolesSet = new HashSet<String>(Arrays.asList(rolesAnnotation.value()));
-                  
-                //Is user valid?
-                if( ! isUserAllowed(token, rolesSet))
-                {
-                    requestContext.abortWith(ACCESS_DENIED);
+            } else {
+                String authToken = authorization.get(0).substring(AUTHORIZATION_BEARER.length());
+                System.out.println(authToken);
+                TokenBean bean = new TokenBean();
+                    bean.setToken(authToken);
+                try {
+                    Dao tokensDao = DaoFactory.getDao("Tokens");
+                    List<Bean> list = tokensDao.select(bean);
+                    
+                    if(list.isEmpty()) {
+                        requestContext.abortWith(ACCESS_DENIED);
+                    }
+                    
+                    if(!tokensDao.valid(list.get(0))) {
+                        requestContext.abortWith(NEED_RELOGIN);
+                    }
+                } catch (SQLException e) {
+                    requestContext.abortWith(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
                 }
-            }*/
-        }
-    }
-    private boolean isUserAllowed(final String token, final Set<String> rolesSet)
-    {
-        boolean isAllowed = false;
-          
-        //Step 1. Fetch password from database and match with password in argument
-        //If both match then get the defined role for user from database and continue; else return isAllowed [false]
-        //Access the database and do this part yourself
-        //String userRole = userMgr.getUserRole(username);
-         
-        if(token.equals("dummytoken"))
-        {
-            String userRole = "ADMIN";
-             
-            //Step 2. Verify user role
-            if(rolesSet.contains(userRole))
-            {
-                isAllowed = true;
             }
         }
-        return isAllowed;
     }
 }

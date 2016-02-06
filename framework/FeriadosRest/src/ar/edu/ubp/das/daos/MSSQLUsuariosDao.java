@@ -47,7 +47,20 @@ public class MSSQLUsuariosDao extends MSSQLDao {
 
     @Override
     public void update(Bean bean) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        UsuarioBean usuario = UsuarioBean.class.cast(bean);
+		
+        this.connect();
+		
+        this.setProcedure("dbo.update_usuario(?,?,?,?,?)");  
+        this.setParameter(1, usuario.getId());
+        this.setParameter(2, usuario.getNombre());
+        this.setParameter(3, usuario.getEmail());
+        this.setParameter(4, usuario.getPassword());
+        this.setParameter(5, usuario.getIdRol());
+        
+        this.executeUpdate();
+        
+        this.disconnect();
     }
 
     @Override
@@ -65,15 +78,23 @@ public class MSSQLUsuariosDao extends MSSQLDao {
 
     @Override
     public List<Bean> select(Bean bean) throws SQLException {
+        UsuarioBean usuario = UsuarioBean.class.cast(bean);
         List<Bean> list;
         
         this.connect();
         
-        this.setProcedure("dbo.get_usuarios(?)");
-        try {
-            this.setParameter(1, UsuarioBean.class.cast(bean).getNombre());
-        } catch(NullPointerException e) {
-            this.setParameter(1, "");
+        if (usuario != null) {
+            System.out.println(usuario.toString());
+            this.setProcedure("dbo.get_usuario(?,?)");
+            try {
+                this.setParameter(1, usuario.getId());
+            } catch (NullPointerException n) {
+                this.setParameter(1, -1);
+            }
+            
+            this.setParameter(2, usuario.getNombre());
+        } else {
+            this.setProcedure("dbo.get_usuarios()");
         }
 
         list = this.executeQuery();
@@ -87,7 +108,7 @@ public class MSSQLUsuariosDao extends MSSQLDao {
         UsuarioBean usuario = UsuarioBean.class.cast(bean);
         
         this.connect();
-        this.setProcedure("dbo.validate_login(?, ?)");
+        this.setProcedure("dbo.validate_login(?,?)");
         this.setParameter(1, usuario.getNombre());
         this.setParameter(2, usuario.getPassword());
         

@@ -8,8 +8,12 @@ package ar.edu.ubp.das.daos;
 import ar.edu.ubp.das.beans.Bean;
 import ar.edu.ubp.das.beans.MensajeBean;
 import ar.edu.ubp.das.beans.SalaBean;
+import ar.edu.ubp.das.beans.UsuarioBean;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,12 +24,14 @@ public class MSSQLMensajesDao extends MSSQLDao{
 
     @Override
     public Bean make(ResultSet result) throws SQLException {
+        Date fecha_mensaje = result.getTimestamp("fecha_mensaje");
+        
         MensajeBean msj = new MensajeBean();
             msj.setId_mensaje(result.getInt("id_mensaje"));
             msj.setId_sala(result.getInt("id_sala"));
             msj.setId_usuario(result.getInt("id_usuario"));
-            msj.setFecha_mensaje(result.getDate("fecha_mensaje"));
-            msj.setMensaje(result.getString("mensaje"));
+            msj.setFecha_mensaje(fecha_mensaje);
+            msj.setMensaje(result.getString("texto_mensaje"));
                         
         return msj;
     }
@@ -54,7 +60,7 @@ public class MSSQLMensajesDao extends MSSQLDao{
         
         this.setProcedure("dbo.update_mensaje(?,?)");
         this.setParameter(1, msj.getId_mensaje());
-        this.setParameter(3, msj.getMensaje());
+        this.setParameter(2, msj.getMensaje());
         
         this.executeUpdate();
         
@@ -77,14 +83,26 @@ public class MSSQLMensajesDao extends MSSQLDao{
 
     @Override
     public List<Bean> select(Bean bean) throws SQLException {
-        //checkear si bean es SalaBean o UsuarioBean !
-        SalaBean sala = SalaBean.class.cast(bean);
+        String procedureName = "dbo.get_mensajes_";
+        String beanClass = bean.getClass().getSimpleName();
+        
+        procedureName += beanClass.substring(0, beanClass.length()-4).toLowerCase() + "(?)";
         List<Bean> list;
         
         this.connect();
+        this.setProcedure(procedureName);
         
-        this.setProcedure("dbo.get_mensajes(?,?)");
-        this.setParameter(1, sala.getId()); // o user id
+        if (beanClass.equals(SalaBean.class.getSimpleName())) {
+            SalaBean sala = SalaBean.class.cast(bean);
+            this.setParameter(1, sala.getId());
+        } else if (beanClass.equals(UsuarioBean.class.getSimpleName())) {
+            UsuarioBean usuario = UsuarioBean.class.cast(bean);
+            this.setParameter(1, usuario.getId());
+        } else if (beanClass.equals(MensajeBean.class.getSimpleName())) {
+            MensajeBean mensaje = MensajeBean.class.cast(bean);
+            this.setParameter(1, mensaje.getId_mensaje());
+        }
+        
         list = this.executeQuery();
         this.disconnect();
         

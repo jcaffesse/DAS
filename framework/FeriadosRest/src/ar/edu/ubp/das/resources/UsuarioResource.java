@@ -17,6 +17,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -35,12 +36,38 @@ public class UsuarioResource {
         try {
             Dao dao = DaoFactory.getDao("Usuarios");
             List<Bean> list = dao.select(null);
-            System.out.println("LIST"+list.toString());
             return Response.status(Response.Status.OK).entity(list.toString()).build();
         }
         catch (SQLException e) {
-            System.out.println(e.getErrorCode()+ e.getMessage() + e.getCause());
+            System.out.println(e.getErrorCode()+ e.getMessage());
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
+    
+    @GET
+    @Path("/{id_usuario}")
+    public Response getUsuarios(
+        @PathParam("id_usuario") String id_usuario
+    ) {
+        try {
+            System.out.println("hello");
+            UsuarioBean usuario = new UsuarioBean();
+                usuario.setId(Integer.parseInt(id_usuario));
+            try {
+                Dao dao = DaoFactory.getDao("Usuarios");
+                List<Bean> list = dao.select(usuario);
+                if (list.isEmpty()) {
+                    return Response.status(Response.Status.NOT_FOUND).build();
+                } else {
+                    return Response.status(Response.Status.OK).entity(list.get(0)).build();
+                }
+            }
+            catch (SQLException e) {
+                System.out.println(e.getErrorCode()+ e.getMessage());
+                return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+            }                
+        } catch (NumberFormatException n) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(n.getMessage()).build();
         }
     }
     
@@ -71,6 +98,37 @@ public class UsuarioResource {
             System.out.println(e.getErrorCode()+ e.getMessage());
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
+    }
+    
+    @PUT
+    @Path("/{id_usuario}")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+    public Response updateUsuario(
+            @PathParam("id_usuario") String id_usuario,
+            @FormParam("nombre") String nombre, 
+            @FormParam("email") String email,
+            @FormParam("password") String password,
+            @FormParam("id_rol") String id_rol
+        ) {
+        UsuarioBean bean = new UsuarioBean();
+            bean.setId(Integer.parseInt(id_usuario));
+            bean.setNombre(nombre);
+            bean.setEmail(email);
+            bean.setPassword(password);
+            bean.setIdRol(Integer.parseInt(id_rol));
+                
+        try {
+            Dao dao = DaoFactory.getDao("Usuarios");
+            System.out.println("hello");
+            dao.update(bean);
+
+            return Response.status(Response.Status.OK).build();
+        } 
+        catch (SQLException e) {
+            System.out.println(e.getErrorCode()+ e.getMessage());
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }            
     }
     
     @DELETE

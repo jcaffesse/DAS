@@ -51,7 +51,7 @@ public class MSSQLSalasDao extends MSSQLDao {
 		
         this.connect();
         
-        this.setProcedure("dbo.set_sala(?,?,?,?)");  
+        this.setProcedure("dbo.update_sala(?,?,?,?)");  
         this.setParameter(1, sala.getId());
         this.setParameter(2, sala.getNombre());
         this.setParameter(3, sala.getDesc());
@@ -67,8 +67,6 @@ public class MSSQLSalasDao extends MSSQLDao {
         SalaBean sala = SalaBean.class.cast(bean);
         this.connect();
         
-        System.out.println("SALA " + sala.toString());
-		
         this.setProcedure("dbo.delete_sala(?)");        
         this.setParameter(1, sala.getId());
         
@@ -79,11 +77,18 @@ public class MSSQLSalasDao extends MSSQLDao {
 
     @Override
     public List<Bean> select(Bean bean) throws SQLException {
+        SalaBean sala = SalaBean.class.cast(bean);
         List<Bean> list;
         
         this.connect();
         
-        this.setProcedure("dbo.get_salas");
+        if (bean != null && bean.getClass() == SalaBean.class) {
+            this.setProcedure("dbo.get_sala(?)");
+            this.setParameter(1, sala.getId());
+        } else {
+            this.setProcedure("dbo.get_salas");
+        }
+        
         list = this.executeQuery();
         this.disconnect();
         

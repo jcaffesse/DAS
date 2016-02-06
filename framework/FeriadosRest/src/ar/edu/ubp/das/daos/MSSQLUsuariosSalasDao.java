@@ -9,6 +9,7 @@ import ar.edu.ubp.das.beans.Bean;
 import ar.edu.ubp.das.beans.UsuarioSalaBean;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,11 +20,12 @@ public class MSSQLUsuariosSalasDao extends MSSQLDao{
 
     @Override
     public Bean make(ResultSet result) throws SQLException {
+        Date fecha_ingreso = result.getTimestamp("fecha_ingreso");
         UsuarioSalaBean usuarioSala = new UsuarioSalaBean();
         usuarioSala.setId_usuario(result.getInt("id_usuario"));
         usuarioSala.setId_sala(result.getInt("id_sala"));
         usuarioSala.setEstado(result.getInt("estado_usuario"));
-        usuarioSala.setFecha_ingreso(result.getDate("fecha_ingreso"));
+        usuarioSala.setFecha_ingreso(fecha_ingreso);
         usuarioSala.setEmail_usuario(result.getString("email_usuario"));
         usuarioSala.setNombre_usuario(result.getString("nombre_usuario"));
         usuarioSala.setRol_usuario(result.getInt("id_rol"));
