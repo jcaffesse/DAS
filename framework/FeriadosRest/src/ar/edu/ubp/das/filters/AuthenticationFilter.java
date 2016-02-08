@@ -69,24 +69,34 @@ public class AuthenticationFilter implements ContainerRequestFilter
             if((authorization == null || authorization.isEmpty())) { 
                 requestContext.abortWith(ACCESS_DENIED);
             } else {
-                String authToken = authorization.get(0).substring(AUTHORIZATION_BEARER.length());
-                System.out.println(authToken);
-                TokenBean bean = new TokenBean();
-                    bean.setToken(authToken);
                 try {
-                    Dao tokensDao = DaoFactory.getDao("Tokens");
-                    List<Bean> list = tokensDao.select(bean);
+                    String authToken = authorization.get(0)
+                        .substring(AUTHORIZATION_BEARER.length());
                     
-                    if(list.isEmpty()) {
+                    TokenBean bean = new TokenBean();
+                        bean.setToken(authToken);
+                    try {
+                        Dao tokensDao = DaoFactory.getDao("Tokens");
+                        List<Bean> list = tokensDao.select(bean);
+
+                        if(list.isEmpty()) {
+                            requestContext.abortWith(ACCESS_DENIED);
+                            return;
+                        }
+
+                        if(!tokensDao.valid(list.get(0))) {
+                            requestContext.abortWith(NEED_RELOGIN);
+                            return;
+                        }
+                    } catch (SQLException e) {
                         requestContext.abortWith(ACCESS_DENIED);
+                        return;
                     }
-                    
-                    if(!tokensDao.valid(list.get(0))) {
-                        requestContext.abortWith(NEED_RELOGIN);
-                    }
-                } catch (SQLException e) {
-                    requestContext.abortWith(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+                } catch (StringIndexOutOfBoundsException e) {
+                    requestContext.abortWith(ACCESS_DENIED);
+                    return;
                 }
+
             }
         }
     }
