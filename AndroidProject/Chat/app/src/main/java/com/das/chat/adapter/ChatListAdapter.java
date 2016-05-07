@@ -5,11 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.das.chat.Model.ChatMessage;
-import com.das.chat.Model.ChatRoom;
 import com.das.chat.R;
+import com.das.chat.backend.Backend;
 
 import java.util.ArrayList;
 
@@ -57,12 +59,18 @@ public class ChatListAdapter extends BaseAdapter
     @Override
     public View getView(int i, View view, ViewGroup viewGroup)
     {
-        if(i%2 == 0)
-        view = inflater.inflate(R.layout.chat_room_list_item, null);
-        else
-            view = inflater.inflate(R.layout.chat_room_their_message_item, null);
-        TextView tv = (TextView) view.findViewById(R.id.room_name);
-        tv.setText(messageList.get(i).getMessage());
+        ChatMessage message = messageList.get(i);
+        view = inflater.inflate(R.layout.chat_message_item, null);
+
+        if(message.getIdUser().compareTo(Backend.getInstance().getSession().getUserId()) != 0) {
+            RelativeLayout layout = (RelativeLayout) view.findViewById(R.id.message_layout);
+            layout.setBackgroundResource(R.drawable.their_message);
+        }
+
+        TextView tv = (TextView) view.findViewById(R.id.message_text);
+        tv.setText(message.getMessage());
+        TextView tv1 = (TextView) view.findViewById(R.id.message_date);
+        tv1.setText(message.getDate());
 
         return view;
     }

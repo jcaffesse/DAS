@@ -1,9 +1,11 @@
 package com.das.chat.Model;
 
+import java.io.Serializable;
+
 /**
  * Created by pablo on 12/8/15.
  */
-public class ChatRoom
+public class ChatRoom implements Serializable
 {
     private String idSala;
     private String nombreSala;

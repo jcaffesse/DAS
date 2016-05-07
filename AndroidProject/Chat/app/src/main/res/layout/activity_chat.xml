@@ -3,13 +3,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
+    <LinearLayout
+        android:id="@+id/user_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/number_of_users"
+            android:text="hola"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
     <ListView
         android:id="@+id/message_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="5dp"
+        android:smoothScrollbar="true"
         android:stackFromBottom="true"
-        
+        android:transcriptMode="alwaysScroll"
+        android:layout_below="@id/user_list"
         android:layout_above="@+id/enter_message_zone"/>
 
     <RelativeLayout
@@ -32,6 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
+            android:onClick="onSendButtonClicked"
             android:background="@android:drawable/ic_media_play" />
 
 

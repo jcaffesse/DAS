@@ -17,6 +17,7 @@ public class LoginResponse
             login.setUserEmail(resp.getString("email"));
             login.setUserId(resp.getString("id"));
             login.setUserRolId(resp.getString("idRol"));
+            login.setSessionToken(resp.getString("Auth-Token"));
         } catch (JSONException e) {
             e.printStackTrace();
         }

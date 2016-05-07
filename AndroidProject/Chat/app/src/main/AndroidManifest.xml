@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Holo.Light.DarkActionBar" >
         <activity
-            android:name=".activity.ChatActitivy"
+            android:name=".activity.LoginActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,13 +21,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.RegisterActivity" />
-        <activity android:name=".activity.RoomListActivity" />
         <activity android:name=".activity.MainActivity" />
         <activity
             android:name=".activity.AddRoomActivity"
             android:label="@string/title_activity_add_room" >
         </activity>
-        <activity android:name=".activity.LoginActivity" >
+        <activity android:name=".activity.ChatActitivy" >
         </activity>
     </application>
 

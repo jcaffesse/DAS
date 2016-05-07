@@ -25,6 +25,7 @@ import java.util.zip.GZIPInputStream;
 public class ChatWSTask extends AsyncTask<WSParams, Void, String>
 {
 	private boolean logHttp = false;
+    String token = null;
 	private OnWSResponseListener<String> responseListener;
 
 	public OnWSResponseListener<String> getResponseListener()
@@ -46,6 +47,7 @@ public class ChatWSTask extends AsyncTask<WSParams, Void, String>
 	@Override
 	protected String doInBackground(WSParams... arg0)
 	{
+
         HttpResponse httpResponse;
 
         InputStreamReader response = null;
@@ -60,23 +62,18 @@ public class ChatWSTask extends AsyncTask<WSParams, Void, String>
 
         try
         {
-            if( 0 != (ChatApplication.getAppContext().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE ) )
-            {
-                for (Header header : arg0[0].getRequest().getAllHeaders()) {
-                    Log.d("HEADER", header.getName() + " : " + header.getValue());
-                }
-            }
-
             httpResponse = httpclient.execute(arg0[0].getRequest());
 
-            if( 0 != (ChatApplication.getAppContext().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE ) )
-            {
-                Log.d("RESPONSE CODE", String.valueOf(httpResponse.getStatusLine().getStatusCode()));
+            Log.d("RESPONSE CODE", String.valueOf(httpResponse.getStatusLine().getStatusCode()));
 
-                for (Header header : httpResponse.getAllHeaders()) {
-                    Log.d("HEADER", header.getName() + " : " + header.getValue());
+            for (Header header : httpResponse.getAllHeaders()) {
+                if(header.getName().compareTo("Auth-Token") == 0)
+                {
+                    token = "\"Auth-Token\":\"" + header.getValue() + "\"";
                 }
+                Log.d("HEADER", header.getName() + " : " + header.getValue());
             }
+
 
             if(httpResponse.getHeaders("Content-Encoding").length > 0)
             {
@@ -111,10 +108,6 @@ public class ChatWSTask extends AsyncTask<WSParams, Void, String>
                 }
 
                 responseListener.onWSResponse(null, httpResponse.getStatusLine().getStatusCode(), message);
-                if (0 != (ChatApplication.getAppContext().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE))
-                {
-                    Log.d("RESPONSE MESSAGE", message);
-                }
                 return null;
             }
             else
@@ -141,6 +134,12 @@ public class ChatWSTask extends AsyncTask<WSParams, Void, String>
             {
                 Log.d("RESPONSE", result);
             }
+
+            if(token != null)
+            {
+                result = result.replace("}", "," + token + "}");
+            }
+
             responseListener.onWSResponse(result, 0, null);
         }
 	}

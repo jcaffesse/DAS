@@ -48,7 +48,7 @@ public class LoginActivity extends Activity
     {
         LoginRequest req = new LoginRequest();
         req.setUsername("Pablo");
-        req.setPassword("qwerty");
+        req.setPassword("12345");
 
         Backend.getInstance().login(req, new OnWSResponseListener<Boolean>() {
             @Override

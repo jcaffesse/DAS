@@ -11,6 +11,16 @@ public class ChatUser implements Serializable{
     private String userEmail;
     private String userRolId;
 
+    public String getSessionToken() {
+        return sessionToken;
+    }
+
+    public void setSessionToken(String sessionToken) {
+        this.sessionToken = sessionToken;
+    }
+
+    private String sessionToken;
+
     public String getUserId() {
         return userId;
     }
@@ -42,4 +52,6 @@ public class ChatUser implements Serializable{
     public void setUserRolId(String userRolId) {
         this.userRolId = userRolId;
     }
+
+        
 }

@@ -1,7 +1,6 @@
 package com.das.chat.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +58,7 @@ public class RoomListAdapter extends BaseAdapter
     public View getView(int i, View view, ViewGroup viewGroup)
     {
         view = inflater.inflate(R.layout.chat_room_list_item, null);
-        TextView tv = (TextView) view.findViewById(R.id.room_name);
+        TextView tv = (TextView) view.findViewById(R.id.message_text);
         tv.setText(rooms.get(i).getNombreSala());
 
         return view;

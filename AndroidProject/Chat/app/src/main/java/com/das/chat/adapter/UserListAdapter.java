@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.das.chat.Model.ChatRoom;
 import com.das.chat.Model.ChatUser;
 import com.das.chat.R;
 
@@ -59,7 +58,7 @@ public class UserListAdapter extends BaseAdapter
     public View getView(int i, View view, ViewGroup viewGroup)
     {
         view = inflater.inflate(R.layout.chat_room_list_item, null);
-        TextView tv = (TextView) view.findViewById(R.id.room_name);
+        TextView tv = (TextView) view.findViewById(R.id.message_text);
         tv.setText(users.get(i).getUserName());
 
         return view;

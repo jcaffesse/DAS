@@ -12,7 +12,7 @@ public class LoginRequest
     {
         String res = new String();
 
-        res += "usuario=";
+        res += "nombre_usuario=";
         res += username;
         res += "&";
 
