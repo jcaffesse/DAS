@@ -1,54 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
 
-    <LinearLayout
-        android:id="@+id/user_list"
+    <RelativeLayout
+        android:id="@+id/char_room_info_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="50dp"
+        android:padding="3dp"
+        android:background="#ccc">
+
+        <ImageView
+            android:id="@+id/chat_room_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_chat"/>
+
+        <TextView
+            android:id="@+id/chat_room_name"
+            android:text="hola"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:gravity="top"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/chat_room_image"/>
+
         <TextView
             android:id="@+id/number_of_users"
-            android:text="hola"
-            android:textSize="20sp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
+            android:text="integrantes"
+            android:textSize="12sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/chat_room_image"
+            android:layout_below="@id/chat_room_name"/>
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/message_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@android:color/transparent"
-        android:dividerHeight="5dp"
+
         android:smoothScrollbar="true"
         android:stackFromBottom="true"
         android:transcriptMode="alwaysScroll"
-        android:layout_below="@id/user_list"
+        android:layout_below="@id/char_room_info_layout"
         android:layout_above="@+id/enter_message_zone"/>
 
     <RelativeLayout
         android:id="@id/enter_message_zone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:padding="10dp">
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:padding="5dp"
+        android:background="#ccc">
 
         <EditText
             android:id="@+id/enter_message_et"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_height="match_parent"
+            android:textSize="18sp"
+            android:inputType="textCapSentences"
             android:layout_toLeftOf="@+id/send_message_btn"/>
 
         <Button
             android:id="@+id/send_message_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:onClick="onSendButtonClicked"
-            android:background="@android:drawable/ic_media_play" />
+            android:background="@android:drawable/ic_menu_send" />
 
 
     </RelativeLayout>

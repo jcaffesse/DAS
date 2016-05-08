@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -60,11 +59,10 @@ public class ChatListAdapter extends BaseAdapter
     public View getView(int i, View view, ViewGroup viewGroup)
     {
         ChatMessage message = messageList.get(i);
-        view = inflater.inflate(R.layout.chat_message_item, null);
+        view = inflater.inflate(R.layout.my_chat_message_item, null);
 
         if(message.getIdUser().compareTo(Backend.getInstance().getSession().getUserId()) != 0) {
-            RelativeLayout layout = (RelativeLayout) view.findViewById(R.id.message_layout);
-            layout.setBackgroundResource(R.drawable.their_message);
+            view = inflater.inflate(R.layout.their_chat_message_item, null);
         }
 
         TextView tv = (TextView) view.findViewById(R.id.message_text);
