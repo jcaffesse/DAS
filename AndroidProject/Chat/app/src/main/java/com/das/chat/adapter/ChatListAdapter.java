@@ -5,10 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.das.chat.Model.ChatMessage;
+import com.das.chat.dao.ChatMessage;
 import com.das.chat.R;
 import com.das.chat.backend.Backend;
 
@@ -63,6 +62,8 @@ public class ChatListAdapter extends BaseAdapter
 
         if(message.getIdUser().compareTo(Backend.getInstance().getSession().getUserId()) != 0) {
             view = inflater.inflate(R.layout.their_chat_message_item, null);
+            TextView tv = (TextView) view.findViewById(R.id.message_owner);
+            tv.setText(Backend.getInstance().getUserById(message.getIdUser()).getUserName());
         }
 
         TextView tv = (TextView) view.findViewById(R.id.message_text);

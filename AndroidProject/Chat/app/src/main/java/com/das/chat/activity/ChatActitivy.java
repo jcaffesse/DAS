@@ -1,18 +1,16 @@
 package com.das.chat.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.das.chat.Model.ChatMessage;
-import com.das.chat.Model.ChatRoom;
-import com.das.chat.Model.ChatUser;
+import com.das.chat.dao.ChatMessage;
+import com.das.chat.dao.ChatRoom;
+import com.das.chat.dao.ChatUser;
 import com.das.chat.R;
 import com.das.chat.adapter.ChatListAdapter;
 import com.das.chat.backend.Backend;
@@ -63,8 +61,7 @@ public class ChatActitivy extends Activity {
         Backend.getInstance().sendMessage(req, new OnWSResponseListener<Boolean>() {
             @Override
             public void onWSResponse(Boolean response, long errorCode, String errorMsg) {
-                if(errorMsg == null)
-                {
+                if (errorMsg == null) {
                     EnterChatRoomRequest req = new EnterChatRoomRequest();
                     req.setIdSala(chatRoom.getIdSala());
                     Backend.getInstance().getChatRoomMessages(req, new OnWSResponseListener<ArrayList<ChatMessage>>() {
@@ -83,4 +80,7 @@ public class ChatActitivy extends Activity {
         });
     }
 
+    public void onBackButtonPressed(View v) {
+        finish();
+    }
 }

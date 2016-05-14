@@ -9,10 +9,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.das.chat.Model.ChatRoom;
-import com.das.chat.Model.ChatUser;
+import com.das.chat.dao.ChatUser;
 import com.das.chat.R;
-import com.das.chat.adapter.RoomListAdapter;
 import com.das.chat.adapter.UserListAdapter;
 import com.das.chat.backend.Backend;
 import com.das.chat.backend.OnWSResponseListener;
@@ -47,6 +45,7 @@ public class UserListFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
+        showLoadingView(true);
         Backend.getInstance().getUserList(new OnWSResponseListener<ArrayList<ChatUser>>() {
             @Override
             public void onWSResponse(ArrayList<ChatUser> response, long errorCode, final String errorMsg) {
@@ -54,7 +53,16 @@ public class UserListFragment extends Fragment{
                     adapter = new UserListAdapter(getActivity(), response);
                     list.setAdapter(adapter);
                 }
+                showLoadingView(false);
             }
         });
+    }
+
+    public void showLoadingView (boolean show) {
+        if(show) {
+            getView().findViewById(R.id.loading_layout).setVisibility(View.VISIBLE);
+        } else {
+            getView().findViewById(R.id.loading_layout).setVisibility(View.GONE);
+        }
     }
 }

@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.das.chat.Model.ChatMessage;
-import com.das.chat.Model.ChatRoom;
-import com.das.chat.Model.ChatUser;
+import com.das.chat.dao.ChatMessage;
+import com.das.chat.dao.ChatRoom;
+import com.das.chat.dao.ChatUser;
 import com.das.chat.R;
 import com.das.chat.adapter.RoomListAdapter;
 import com.das.chat.backend.Backend;
@@ -41,6 +41,7 @@ public class RoomListFragment extends Fragment{
                 final EnterChatRoomRequest req = new EnterChatRoomRequest();
                 final ChatRoom chatRoom = (ChatRoom) adapterView.getItemAtPosition(i);
                 req.setIdSala(chatRoom.getIdSala());
+                ((MainActivity)getActivity()).showLoadingView(true);
                 Backend.getInstance().enterChatRoom(req, new OnWSResponseListener<ArrayList<ChatUser>>() {
                     @Override
                     public void onWSResponse(final ArrayList<ChatUser> response1, long errorCode, final String errorMsg) {
@@ -57,7 +58,7 @@ public class RoomListFragment extends Fragment{
                                     }
                                 }
                             });
-
+                            ((MainActivity)getActivity()).showLoadingView(false);
                         }
                     }
                 });
@@ -70,6 +71,7 @@ public class RoomListFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
+        showLoadingView(true);
         Backend.getInstance().getRoomList(new OnWSResponseListener<ArrayList<ChatRoom>>() {
             @Override
             public void onWSResponse(ArrayList<ChatRoom> response, long errorCode, final String errorMsg) {
@@ -77,7 +79,16 @@ public class RoomListFragment extends Fragment{
                     adapter = new RoomListAdapter(getActivity(), response);
                     list.setAdapter(adapter);
                 }
+                showLoadingView(false);
             }
         });
+    }
+
+    public void showLoadingView (boolean show) {
+        if(show) {
+            getView().findViewById(R.id.loading_layout).setVisibility(View.VISIBLE);
+        } else {
+            getView().findViewById(R.id.loading_layout).setVisibility(View.GONE);
+        }
     }
 }

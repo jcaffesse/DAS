@@ -1,7 +1,6 @@
 package com.das.chat.wsmodelmap;
 
-import com.das.chat.Model.ChatMessage;
-import com.das.chat.Model.ChatUser;
+import com.das.chat.dao.ChatMessage;
 
 import org.json.JSONArray;
 import org.json.JSONException;

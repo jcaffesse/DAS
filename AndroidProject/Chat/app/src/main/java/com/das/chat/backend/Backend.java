@@ -2,9 +2,9 @@ package com.das.chat.backend;
 
 import android.util.Log;
 
-import com.das.chat.Model.ChatMessage;
-import com.das.chat.Model.ChatRoom;
-import com.das.chat.Model.ChatUser;
+import com.das.chat.dao.ChatMessage;
+import com.das.chat.dao.ChatRoom;
+import com.das.chat.dao.ChatUser;
 import com.das.chat.wsmodelmap.AddRoomRequest;
 import com.das.chat.wsmodelmap.EnterChatRoomGetMessagesResponse;
 import com.das.chat.wsmodelmap.EnterChatRoomRequest;
@@ -35,6 +35,7 @@ public class Backend
     private static final String WS_MESSAGES_URL = "/mensajes";
 
     private static Backend instance = new Backend();
+    private ArrayList<ChatUser> users;
     private ChatUser session;
 
     private static synchronized void initInstance()
@@ -54,6 +55,16 @@ public class Backend
     private Backend()
     {
     }
+
+    public ChatUser getUserById(String userId) {
+        for (ChatUser user : users) {
+            if(user.getUserId().compareTo(userId) == 0) {
+                return user;
+            }
+        }
+        return null;
+    }
+
 
     public ChatUser getSession() {
         return session;
@@ -206,7 +217,7 @@ public class Backend
             public void onWSResponse(final String response, final long errorCode, final String errorMsg) {
                 if (errorMsg == null)
                 {
-                    ArrayList<ChatUser> users = ListUsersResponse.initWithResponse(response);
+                    users = ListUsersResponse.initWithResponse(response);
                     responseListener.onWSResponse(users, errorCode, null);
                 }
                 else

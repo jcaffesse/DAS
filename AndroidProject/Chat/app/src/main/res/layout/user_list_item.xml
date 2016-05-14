@@ -6,41 +6,31 @@
     android:paddingBottom="5dp">
 
     <ImageView
-        android:id="@+id/chat_room_image"
+        android:id="@+id/user_img"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/ic_bubble_chart_black"/>
-
-    <ImageView
-        android:id="@+id/chat_room_visibility"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@id/chat_room_image"
-        android:src="@drawable/ic_lock_open_black"/>
+        android:src="@drawable/ic_person_black"/>
 
     <TextView
-        android:id="@+id/chat_room_name"
+        android:id="@+id/user_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/chat_room_image"
-        android:layout_alignTop="@id/chat_room_image"
+        android:layout_toRightOf="@id/user_img"
+        android:layout_alignTop="@id/user_img"
         android:textStyle="bold"
         android:textSize="20sp"
         android:text="test"/>
 
     <TextView
-        android:id="@+id/chat_room_desc"
+        android:id="@+id/user_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/chat_room_image"
-        android:layout_below="@id/chat_room_name"
+        android:layout_toRightOf="@id/user_img"
+        android:layout_below="@id/user_name"
         android:includeFontPadding="false"
         android:textSize="16sp"
         android:text="test"/>

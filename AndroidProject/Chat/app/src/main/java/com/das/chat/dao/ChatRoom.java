@@ -1,4 +1,4 @@
-package com.das.chat.Model;
+package com.das.chat.dao;
 
 import java.io.Serializable;
 

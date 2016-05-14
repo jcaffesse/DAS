@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 import android.content.Intent;
 
@@ -21,8 +22,7 @@ public class LoginActivity extends Activity
     EditText passwordET;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -30,25 +30,20 @@ public class LoginActivity extends Activity
         passwordET = (EditText) findViewById(R.id.password_et);
     }
 
-    public void loginButtonPressed(View v)
-    {
-        //Toast.makeText(this, usernameET.getText() + " " + passwordET.getText(), Toast.LENGTH_SHORT).show();
-        //Intent i = new Intent(this, RoomListActivity.class);
-        //startActivity(i);
+    public void loginButtonPressed(View v) {
         callLoginWS();
     }
 
-    public void registerButtonPressed(View v)
-    {
+    public void registerButtonPressed(View v) {
         Intent i = new Intent(this, RegisterActivity.class);
         startActivity(i);
     }
 
-    public void callLoginWS()
-    {
+    public void callLoginWS() {
         LoginRequest req = new LoginRequest();
         req.setUsername("Pablo");
         req.setPassword("12345");
+        showLoadingView(true);
 
         Backend.getInstance().login(req, new OnWSResponseListener<Boolean>() {
             @Override
@@ -61,8 +56,16 @@ public class LoginActivity extends Activity
                 } else {
                     Toast.makeText(LoginActivity.this, "ChatUser incorrecto", Toast.LENGTH_SHORT).show();
                 }
+                showLoadingView(false);
             }
         });
     }
 
+    public void showLoadingView (boolean show) {
+        if(show) {
+            findViewById(R.id.loading_layout).setVisibility(View.VISIBLE);
+        } else {
+            findViewById(R.id.loading_layout).setVisibility(View.GONE);
+        }
+    }
 }
