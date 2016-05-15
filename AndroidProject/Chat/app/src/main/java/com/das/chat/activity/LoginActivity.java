@@ -49,7 +49,6 @@ public class LoginActivity extends Activity
             @Override
             public void onWSResponse(Boolean response, long errorCode, final String errorMsg) {
                 if (errorMsg == null) {
-                    Toast.makeText(LoginActivity.this, "ChatUser correcto", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(i);
                     finish();
@@ -61,11 +60,16 @@ public class LoginActivity extends Activity
         });
     }
 
-    public void showLoadingView (boolean show) {
-        if(show) {
-            findViewById(R.id.loading_layout).setVisibility(View.VISIBLE);
-        } else {
-            findViewById(R.id.loading_layout).setVisibility(View.GONE);
-        }
+    public void showLoadingView (final boolean show) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(show) {
+                    findViewById(R.id.loading_layout).setVisibility(View.VISIBLE);
+                } else {
+                    findViewById(R.id.loading_layout).setVisibility(View.GONE);
+                }
+            }
+        });
     }
 }

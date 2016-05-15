@@ -120,16 +120,16 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         }
     }
 
-
-
-
-    public void showLoadingView (boolean show) {
-        if(show) {
-            mViewPager.setEnabled(false);
-            findViewById(R.id.loading_layout).setVisibility(View.VISIBLE);
-        } else {
-            mViewPager.setEnabled(true);
-            findViewById(R.id.loading_layout).setVisibility(View.GONE);
-        }
+    public void showLoadingView (final boolean show) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(show) {
+                    findViewById(R.id.loading_layout).setVisibility(View.VISIBLE);
+                } else {
+                    findViewById(R.id.loading_layout).setVisibility(View.GONE);
+                }
+            }
+        });
     }
 }

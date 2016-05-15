@@ -17,18 +17,15 @@ import com.das.chat.backend.OnWSResponseListener;
 
 import java.util.ArrayList;
 
-/**
- * Created by pablo on 1/10/16.
- */
 public class UserListFragment extends Fragment{
 
     ListView list;
     UserListAdapter adapter;
+    View rootView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_user_list, container, false);
-        Bundle args = getArguments();
+        rootView = inflater.inflate(R.layout.fragment_user_list, container, false);
 
         list = (ListView) rootView.findViewById(R.id.list_view);
 
@@ -39,12 +36,6 @@ public class UserListFragment extends Fragment{
             }
         });
 
-        return rootView;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         showLoadingView(true);
         Backend.getInstance().getUserList(new OnWSResponseListener<ArrayList<ChatUser>>() {
             @Override
@@ -56,13 +47,25 @@ public class UserListFragment extends Fragment{
                 showLoadingView(false);
             }
         });
+
+        return rootView;
     }
 
-    public void showLoadingView (boolean show) {
-        if(show) {
-            getView().findViewById(R.id.loading_layout).setVisibility(View.VISIBLE);
-        } else {
-            getView().findViewById(R.id.loading_layout).setVisibility(View.GONE);
-        }
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    public void showLoadingView (final boolean show) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (show) {
+                    rootView.findViewById(R.id.loading_layout).setVisibility(View.VISIBLE);
+                } else {
+                    rootView.findViewById(R.id.loading_layout).setVisibility(View.GONE);
+                }
+            }
+        });
     }
 }
