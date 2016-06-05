@@ -10,6 +10,8 @@ import ar.edu.ubp.das.beans.InvitacionBean;
 import ar.edu.ubp.das.beans.UsuarioBean;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -83,10 +85,17 @@ public class MSSQLInvitacionesDao extends MSSQLDao{
     public List<Bean> select(Bean bean) throws SQLException {
         UsuarioBean usr = UsuarioBean.class.cast(bean);
         List<Bean> list;
+        DateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
         
         this.connect();
-        this.setProcedure("dbo.get_invitaciones_usuario(?)");
-        this.setParameter(1, usr.getId());
+        if (usr.getUltimaAct() != null) {
+            this.setProcedure("dbo.get_invitaciones_usuario(?, ?)");
+            this.setParameter(1, usr.getId());
+            this.setParameter(2, sdf.format(usr.getUltimaAct()));
+        } else {
+            this.setProcedure("dbo.get_invitaciones_usuario(?)");
+            this.setParameter(1, usr.getId());
+        }
         
         list = this.executeQuery();
         this.disconnect();

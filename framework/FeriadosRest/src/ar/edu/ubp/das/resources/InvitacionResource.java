@@ -46,10 +46,13 @@ public class InvitacionResource {
         @PathParam("id_usuario") String id_usuario,
         @QueryParam("ultima_act") String ultima_act
     ) {
-        DateFormat format = new SimpleDateFormat("yyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         Date ua = null;
         if (ultima_act != null) {
-            ua = new Date(Long.parseLong(ultima_act));
+            try {
+                ua = new Date(Long.parseLong(ultima_act));
+            } catch (NumberFormatException l) {
+                return Response.status(Response.Status.BAD_REQUEST).entity(l.getMessage()).build();
+            }
         }
         try {
             UsuarioBean bean = new UsuarioBean();
