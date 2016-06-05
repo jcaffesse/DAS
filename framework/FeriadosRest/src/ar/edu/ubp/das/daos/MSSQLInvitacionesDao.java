@@ -85,13 +85,14 @@ public class MSSQLInvitacionesDao extends MSSQLDao{
     public List<Bean> select(Bean bean) throws SQLException {
         UsuarioBean usr = UsuarioBean.class.cast(bean);
         List<Bean> list;
-        DateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date ultimaAct = usr.getUltimaAct();
         
         this.connect();
-        if (usr.getUltimaAct() != null) {
+        if (ultimaAct != null) {
             this.setProcedure("dbo.get_invitaciones_usuario(?, ?)");
             this.setParameter(1, usr.getId());
-            this.setParameter(2, sdf.format(usr.getUltimaAct()));
+            this.setParameter(2, sdf.format(ultimaAct));
         } else {
             this.setProcedure("dbo.get_invitaciones_usuario(?)");
             this.setParameter(1, usr.getId());
