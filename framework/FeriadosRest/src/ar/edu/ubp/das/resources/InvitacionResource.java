@@ -28,6 +28,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -43,16 +44,12 @@ public class InvitacionResource {
     @Path("/{id_usuario}")
     public Response getInvitaciones(
         @PathParam("id_usuario") String id_usuario,
-        @FormParam("ultima_act") String ultima_act
+        @QueryParam("ultima_act") String ultima_act
     ) {
         DateFormat format = new SimpleDateFormat("yyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         Date ua = null;
         if (ultima_act != null) {
-            try {
-                ua = format.parse(ultima_act);
-            } catch (ParseException d) {
-                return Response.status(Response.Status.BAD_REQUEST).entity(d.getMessage()).build();
-            }
+            ua = new Date(Long.parseLong(ultima_act));
         }
         try {
             UsuarioBean bean = new UsuarioBean();
