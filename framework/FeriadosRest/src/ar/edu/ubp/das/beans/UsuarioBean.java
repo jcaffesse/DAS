@@ -5,6 +5,7 @@
  */
 package ar.edu.ubp.das.beans;
 
+import java.util.Date;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -19,6 +20,7 @@ public class UsuarioBean implements Bean {
     private String email;
     private String password;
     private Integer id_rol;
+    private Date ultima_act;
 
     public Integer getId() {
         return id;
@@ -38,6 +40,10 @@ public class UsuarioBean implements Bean {
 
     public Integer getIdRol() {
         return id_rol;
+    }
+    
+    public Date getUltimaAct() {
+        return ultima_act;
     }
 
     @XmlElement
@@ -68,6 +74,11 @@ public class UsuarioBean implements Bean {
     @Override
     public int compareTo(Bean bean) {
         return 0;
+    }
+    
+    @XmlElement
+    public void setUltimaAct(Date d) {
+       this.ultima_act = d;
     }
     
     @Override

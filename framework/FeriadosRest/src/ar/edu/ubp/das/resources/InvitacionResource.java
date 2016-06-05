@@ -11,7 +11,14 @@ import ar.edu.ubp.das.beans.UsuarioBean;
 import ar.edu.ubp.das.daos.Dao;
 import ar.edu.ubp.das.daos.DaoFactory;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -35,11 +42,25 @@ public class InvitacionResource {
     @GET
     @Path("/{id_usuario}")
     public Response getInvitaciones(
-        @PathParam("id_usuario") String id_usuario
+        @PathParam("id_usuario") String id_usuario,
+        @FormParam("ultima_act") String ultima_act
     ) {
+        DateFormat format = new SimpleDateFormat("yyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+        Date ua = null;
+        if (ultima_act != null) {
+            try {
+                ua = format.parse(ultima_act);
+            } catch (ParseException d) {
+                return Response.status(Response.Status.BAD_REQUEST).entity(d.getMessage()).build();
+            }
+        }
         try {
             UsuarioBean bean = new UsuarioBean();
                 bean.setId(Integer.parseInt(id_usuario));
+            if (ua != null) {
+                bean.setUltimaAct(ua);
+            }
+                
             try {
                 Dao dao = DaoFactory.getDao("Invitaciones");
                 List<Bean> list = dao.select(bean);
