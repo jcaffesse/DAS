@@ -59,7 +59,7 @@ public class InvitacionResource {
                 Dao dao = DaoFactory.getDao("Invitaciones");
                 List<Bean> list = dao.select(bean);
                 if (list.isEmpty()) {
-                    return Response.status(Response.Status.NOT_FOUND).build();
+                    return Response.status(Response.Status.OK).entity("[]").build();
                 } else {
                     return Response.status(Response.Status.OK).entity(list.toString()).build();
                 }
