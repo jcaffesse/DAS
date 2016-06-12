@@ -86,23 +86,46 @@ public class MSSQLMensajesDao extends MSSQLDao{
         String procedureName = "dbo.get_mensajes_";
         String beanClass = bean.getClass().getSimpleName();
         
-        procedureName += beanClass.substring(0, beanClass.length()-4).toLowerCase() + "(?)";
+        procedureName += beanClass.substring(0, beanClass.length()-4).toLowerCase() + "(?";
         List<Bean> list;
-        
+
         this.connect();
-        this.setProcedure(procedureName);
+        
         
         if (beanClass.equals(SalaBean.class.getSimpleName())) {
             SalaBean sala = SalaBean.class.cast(bean);
-            this.setParameter(1, sala.getId());
+            try {
+                Date ultimaAct = sala.getUltimaAct();
+                java.sql.Timestamp tmst = new java.sql.Timestamp(ultimaAct.getTime());
+                procedureName += ", ?)";
+                this.setProcedure(procedureName);
+                this.setParameter(1, sala.getId());
+                this.setParameter(2, tmst.toString());
+            } catch (NullPointerException e) {
+                procedureName += ")";
+                this.setProcedure(procedureName);
+                this.setParameter(1, sala.getId());
+            }
         } else if (beanClass.equals(UsuarioBean.class.getSimpleName())) {
             UsuarioBean usuario = UsuarioBean.class.cast(bean);
-            this.setParameter(1, usuario.getId());
+            try {
+                Date ultimaAct = usuario.getUltimaAct();
+                java.sql.Timestamp tmst = new java.sql.Timestamp(ultimaAct.getTime());
+                procedureName += ", ?)";
+                this.setProcedure(procedureName);
+                this.setParameter(1, usuario.getId());
+                this.setParameter(2, tmst.toString());
+            } catch (NullPointerException e) {
+                procedureName += ")";
+                this.setProcedure(procedureName);
+                this.setParameter(1, usuario.getId());
+            }
         } else if (beanClass.equals(MensajeBean.class.getSimpleName())) {
             MensajeBean mensaje = MensajeBean.class.cast(bean);
+            procedureName += ")";
+            this.setProcedure(procedureName);
             this.setParameter(1, mensaje.getId_mensaje());
         }
-        
         list = this.executeQuery();
         this.disconnect();
         

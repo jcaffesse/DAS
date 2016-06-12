@@ -48,16 +48,11 @@ public abstract class DaoImpl implements Dao {
 
     public void connect() throws SQLException {
         try {
-            System.out.println("DRIVER "+this.driver);
             Class.forName(this.driver).newInstance();
-            System.out.println("1");
             this.connection = DriverManager.getConnection(this.url, this.user, this.passwd);
-            System.out.println("2");
             this.connection.setAutoCommit(true);
-            System.out.println("3");
         }
         catch(InstantiationException | IllegalAccessException | ClassNotFoundException ex) {
-            System.out.println("exc!! " + ex.getLocalizedMessage() + ex.getMessage() + ex.toString());
             throw new SQLException(ex.getMessage());
         }
     }
@@ -86,6 +81,7 @@ public abstract class DaoImpl implements Dao {
 
     public List<Bean> executeQuery() throws SQLException {
         List<Bean> list   = new LinkedList<Bean>();
+        System.out.println(statement.toString());
         ResultSet  result = this.statement.executeQuery();
         while(result.next()) {
             list.add(this.make(result));

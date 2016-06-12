@@ -12,6 +12,7 @@ import ar.edu.ubp.das.beans.UsuarioBean;
 import ar.edu.ubp.das.daos.Dao;
 import ar.edu.ubp.das.daos.DaoFactory;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -62,17 +63,28 @@ public class MensajeResource {
     @GET
     @Path("/sala/{id_sala}")
     public Response getMensajesSala(
-        @PathParam("id_sala") String id_sala
+        @PathParam("id_sala") String id_sala,
+        @QueryParam("ultima_act") String ultima_act
     ) {
+        Date ua = null;
+        if (ultima_act != null) {
+            try {
+                ua = new Date(Long.parseLong(ultima_act));
+            } catch (NumberFormatException l) {
+                return Response.status(Response.Status.BAD_REQUEST).entity(l.getMessage()).build();
+            }
+        }
         try {
             SalaBean bean = new SalaBean();
                 bean.setId(Integer.parseInt(id_sala));
-                
+            if (ua != null) {
+                bean.setUltimaAct(ua);
+            }
             try {
                 Dao dao = DaoFactory.getDao("Mensajes");
                 List<Bean> list = dao.select(bean);
                 if (list.isEmpty()) {
-                    return Response.status(Response.Status.NOT_FOUND).build();
+                    return Response.status(Response.Status.OK).entity("[]").build();
                 } else {
                     return Response.status(Response.Status.OK).entity(list.toString()).build();
                 }
@@ -88,17 +100,29 @@ public class MensajeResource {
     @GET
     @Path("/usuario/{id_usuario}")
     public Response getMensajesUser(
-        @PathParam("id_usuario") String id_usuario
+        @PathParam("id_usuario") String id_usuario,
+        @QueryParam("ultima_act") String ultima_act
     ) {
+        Date ua = null;
+        if (ultima_act != null) {
+            try {
+                ua = new Date(Long.parseLong(ultima_act));
+            } catch (NumberFormatException l) {
+                return Response.status(Response.Status.BAD_REQUEST).entity(l.getMessage()).build();
+            }
+        }
         try {
             UsuarioBean bean = new UsuarioBean();
                 bean.setId(Integer.parseInt(id_usuario));
+            if (ua != null) {
+                bean.setUltimaAct(ua);
+            }
             
             try {
                 Dao dao = DaoFactory.getDao("Mensajes");
                 List<Bean> list = dao.select(bean);
                 if (list.isEmpty()) {
-                    return Response.status(Response.Status.NOT_FOUND).build();
+                    return Response.status(Response.Status.OK).entity("[]").build();
                 } else {
                     return Response.status(Response.Status.OK).entity(list.toString()).build();
                 }

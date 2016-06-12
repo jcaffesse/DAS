@@ -5,6 +5,7 @@
  */
 package ar.edu.ubp.das.beans;
 
+import java.util.Date;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -19,6 +20,7 @@ public class SalaBean implements Bean {
     private String nombre;
     private String descripcion;
     private String tipo;
+    private Date ultima_act;
     
     public Integer getId() {
         return this.id;
@@ -34,6 +36,10 @@ public class SalaBean implements Bean {
         
     public String getTipo() {
         return this.tipo;
+    }
+    
+    public Date getUltimaAct() {
+        return this.ultima_act;
     }
     
     @XmlElement
@@ -54,6 +60,11 @@ public class SalaBean implements Bean {
     @XmlElement
     public void setTipo(String t) {
         this.tipo = t;
+    }
+    
+    @XmlElement
+    public void setUltimaAct(Date d) {
+        this.ultima_act = d;
     }
     
     @Override

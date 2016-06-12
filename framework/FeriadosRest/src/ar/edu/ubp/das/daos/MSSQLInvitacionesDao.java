@@ -85,7 +85,6 @@ public class MSSQLInvitacionesDao extends MSSQLDao{
     public List<Bean> select(Bean bean) throws SQLException {
         UsuarioBean usr = UsuarioBean.class.cast(bean);
         List<Bean> list;
-        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date ultimaAct = usr.getUltimaAct();
         java.sql.Timestamp sqlUA = new java.sql.Timestamp(ultimaAct.getTime());
         
