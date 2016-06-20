@@ -11,10 +11,10 @@
         android:layout_marginTop="5dp"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/ic_person_black"/>
+        android:src="@drawable/ic_mail_outline_black"/>
 
     <TextView
-        android:id="@+id/user_name"
+        android:id="@+id/invitation_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -25,12 +25,12 @@
         android:text="test"/>
 
     <TextView
-        android:id="@+id/user_email"
+        android:id="@+id/invitation_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/invite_img"
-        android:layout_below="@id/user_name"
+        android:layout_below="@id/invitation_name"
         android:includeFontPadding="false"
         android:textSize="16sp"
         android:text="test"/>

@@ -2,6 +2,7 @@ package com.das.chat.backend;
 
 import android.util.Log;
 
+import com.das.chat.dao.ChatInvitation;
 import com.das.chat.dao.ChatMessage;
 import com.das.chat.dao.ChatRoom;
 import com.das.chat.dao.ChatUser;
@@ -9,6 +10,8 @@ import com.das.chat.wsmodelmap.AddRoomRequest;
 import com.das.chat.wsmodelmap.EnterChatRoomGetMessagesResponse;
 import com.das.chat.wsmodelmap.EnterChatRoomRequest;
 import com.das.chat.wsmodelmap.EnterChatRoomGetUsersResponse;
+import com.das.chat.wsmodelmap.GetInvitationsRequest;
+import com.das.chat.wsmodelmap.GetInvitationsResponse;
 import com.das.chat.wsmodelmap.ListRoomsResponse;
 import com.das.chat.wsmodelmap.ListUsersResponse;
 import com.das.chat.wsmodelmap.LoginRequest;
@@ -33,6 +36,7 @@ public class Backend
     private static final String WS_USERS_URL = "/usuarios";
     private static final String WS_USERS_ROOMS_URL = "/usuarios-salas";
     private static final String WS_MESSAGES_URL = "/mensajes";
+    private static final String WS_INVITATIONS_URL = "/invitaciones";
 
     private static Backend instance = new Backend();
     private ArrayList<ChatUser> users;
@@ -149,13 +153,13 @@ public class Backend
     }
 
 
-    public void getChatRoomMessages(EnterChatRoomRequest req, final OnWSResponseListener<ArrayList<ChatMessage>> responseListener)
+    public void getChatRoomMessages(EnterChatRoomRequest req, String date, final OnWSResponseListener<ArrayList<ChatMessage>> responseListener)
     {
         ChatWSTask task = new ChatWSTask();
         WSParams params = new WSParams();
 
-        HttpGet get = new HttpGet(String.format("%s%s/sala/%s", WS_BASE_URL, WS_MESSAGES_URL, req.getIdSala()));
-
+        HttpGet get = new HttpGet(String.format("%s%s/sala/%s?ultima_act=%s", WS_BASE_URL, WS_MESSAGES_URL, req.getIdSala(), date));
+        Log.d("REQUEST", String.format("%s%s/%s?ultima_act=%s", WS_BASE_URL, WS_MESSAGES_URL, req.getIdSala(), date));
         params.setRequest(get);
         params.addTokenHeader(session.getSessionToken());
 
@@ -190,6 +194,34 @@ public class Backend
                 if (errorMsg == null)
                 {
                     ArrayList<ChatRoom> rooms = ListRoomsResponse.initWithResponse(response);
+                    responseListener.onWSResponse(rooms, errorCode, null);
+                }
+                else
+                {
+                    responseListener.onWSResponse(null, errorCode, errorMsg);
+                }
+            }
+        });
+        task.execute(params);
+    }
+
+    public void getInvitationList(String userId, String date, final OnWSResponseListener<ArrayList<ChatInvitation>> responseListener)
+    {
+        ChatWSTask task = new ChatWSTask();
+        WSParams params = new WSParams();
+
+        HttpGet get = new HttpGet(String.format("%s%s/%s?ultima_act=%s", WS_BASE_URL, WS_INVITATIONS_URL, userId, date));
+        Log.d("REQUEST", String.format("%s%s/%s?ultima_act=%s", WS_BASE_URL, WS_INVITATIONS_URL, userId, date));
+        params.setRequest(get);
+        params.addTokenHeader(session.getSessionToken());
+
+        task.setResponseListener(new OnWSResponseListener<String>()
+        {
+            @Override
+            public void onWSResponse(final String response, final long errorCode, final String errorMsg) {
+                if (errorMsg == null)
+                {
+                    ArrayList<ChatInvitation> rooms = GetInvitationsResponse.initWithResponse(response);
                     responseListener.onWSResponse(rooms, errorCode, null);
                 }
                 else

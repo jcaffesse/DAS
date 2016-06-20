@@ -21,6 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.RegisterActivity" />
+        <activity android:name=".activity.InvitationListActivity" />
         <activity android:name=".activity.MainActivity" />
         <activity
             android:name=".activity.AddRoomActivity"
@@ -28,6 +29,12 @@
         </activity>
         <activity android:name=".activity.ChatActitivy" >
         </activity>
+
+        <service
+            android:name=".service.GeneralUpdateService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>

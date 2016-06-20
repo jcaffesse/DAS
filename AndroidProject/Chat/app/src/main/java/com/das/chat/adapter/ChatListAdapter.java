@@ -50,7 +50,7 @@ public class ChatListAdapter extends BaseAdapter
 
     public void updateChatList(ArrayList<ChatMessage> messageList)
     {
-        this.messageList = messageList;
+        this.messageList.addAll(messageList);
         this.notifyDataSetChanged();
     }
 

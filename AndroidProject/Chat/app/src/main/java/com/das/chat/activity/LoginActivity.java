@@ -13,8 +13,11 @@ import android.content.Intent;
 import com.das.chat.R;
 import com.das.chat.backend.Backend;
 import com.das.chat.backend.OnWSResponseListener;
+import com.das.chat.dao.ChatInvitation;
 import com.das.chat.wsmodelmap.AddRoomRequest;
 import com.das.chat.wsmodelmap.LoginRequest;
+
+import java.util.ArrayList;
 
 public class LoginActivity extends Activity
 {
@@ -28,6 +31,9 @@ public class LoginActivity extends Activity
 
         usernameET = (EditText) findViewById(R.id.username_et);
         passwordET = (EditText) findViewById(R.id.password_et);
+
+        usernameET.setText("pablo");
+        passwordET.setText("12345");
     }
 
     public void loginButtonPressed(View v) {
@@ -41,8 +47,8 @@ public class LoginActivity extends Activity
 
     public void callLoginWS() {
         LoginRequest req = new LoginRequest();
-        req.setUsername("Pablo");
-        req.setPassword("12345");
+        req.setUsername(usernameET.getText().toString());
+        req.setPassword(passwordET.getText().toString());
         showLoadingView(true);
 
         Backend.getInstance().login(req, new OnWSResponseListener<Boolean>() {
@@ -53,7 +59,12 @@ public class LoginActivity extends Activity
                     startActivity(i);
                     finish();
                 } else {
-                    Toast.makeText(LoginActivity.this, "ChatUser incorrecto", Toast.LENGTH_SHORT).show();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(LoginActivity.this, "ChatUser incorrecto", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
                 showLoadingView(false);
             }

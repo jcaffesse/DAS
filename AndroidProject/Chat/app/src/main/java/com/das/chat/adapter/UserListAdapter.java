@@ -67,7 +67,7 @@ public class UserListAdapter extends BaseAdapter
         TextView uEmail = (TextView) view.findViewById(R.id.user_email);
         uEmail.setText(users.get(i).getUserEmail());
 
-        ImageView iv = (ImageView) view.findViewById(R.id.user_img);
+        ImageView iv = (ImageView) view.findViewById(R.id.invite_img);
         Random rnd = new Random();
         int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
         iv.setColorFilter(color);
