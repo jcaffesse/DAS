@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class InvitacionBean implements Bean {
     
     private int id_usuario;
-    private int id_destino;
+    private UsuarioBean usr_destino;
     private Date fecha_invitacion;
     private String mensaje_invitacion;
     private String estado;
@@ -32,13 +32,13 @@ public class InvitacionBean implements Bean {
         this.id_usuario = id_usuario;
     }
 
-    public int getId_destino() {
-        return id_destino;
+    public UsuarioBean getUsr_destino() {
+        return usr_destino;
     }
 
     @XmlElement    
-    public void setId_destino(int id_destino) {
-        this.id_destino = id_destino;
+    public void setUsr_destino(UsuarioBean usr) {
+        this.usr_destino = usr;
     }
 
     public Date getFecha_invitacion() {
@@ -70,8 +70,8 @@ public class InvitacionBean implements Bean {
     
     @Override
     public String toString() {
-        return "{ \"id_usuario\" : \"" + id_usuario + "\", \"id_destino\" : \"" 
-            + id_destino + "\", \"fecha_invitacion\" : \"" + fecha_invitacion.toString() 
+        return "{ \"id_usuario\" : \"" + id_usuario + "\", \"usr_destino\" : \"" 
+            + usr_destino.toString() + "\", \"fecha_invitacion\" : \"" + fecha_invitacion.toString() 
             + "\", \"mensaje_invitacion\" : \"" + mensaje_invitacion +"\","
             + " \"estado\" : \"" + estado + "\" }";
     }

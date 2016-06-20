@@ -82,9 +82,11 @@ public class InvitacionResource {
         ) {
 
         try {
+            UsuarioBean usr = new UsuarioBean();
+                usr.setId(Integer.parseInt(id_destino));
             InvitacionBean bean = new InvitacionBean();
                 bean.setId_usuario(Integer.parseInt(id_usuario));
-                bean.setId_destino(Integer.parseInt(id_destino));
+                bean.setUsr_destino(usr);
                 bean.setMensaje_invitacion(mensaje_invitacion);
 
             Dao dao = DaoFactory.getDao("Invitaciones");
@@ -109,9 +111,11 @@ public class InvitacionResource {
         ) {
 
         try {
+            UsuarioBean usr = new UsuarioBean();
+                usr.setId(Integer.parseInt(id_destino));
             InvitacionBean bean = new InvitacionBean();
                 bean.setId_usuario(Integer.parseInt(id_usuario));
-                bean.setId_destino(Integer.parseInt(id_destino));
+                bean.setUsr_destino(usr);
                 bean.setMensaje_invitacion(mensaje_invitacion);
 
             Dao dao = DaoFactory.getDao("Invitaciones");
@@ -132,9 +136,11 @@ public class InvitacionResource {
             @PathParam("id_destino") String id_destino
         ) {
         try {
+            UsuarioBean usr = new UsuarioBean();
+                usr.setId(Integer.parseInt(id_destino));
             InvitacionBean bean = new InvitacionBean();
                 bean.setId_usuario(Integer.parseInt(id_usuario));
-                bean.setId_destino(Integer.parseInt(id_destino));
+                bean.setUsr_destino(usr);
            
             Dao dao = DaoFactory.getDao("Invitaciones");
             dao.delete(bean);
@@ -142,7 +148,6 @@ public class InvitacionResource {
             return Response.status(Response.Status.OK).build();
         } 
         catch (SQLException e) {
-            System.out.println(e.getErrorCode()+ e.getMessage());
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }    

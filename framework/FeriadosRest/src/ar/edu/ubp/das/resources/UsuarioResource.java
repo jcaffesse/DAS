@@ -50,7 +50,6 @@ public class UsuarioResource {
         @PathParam("id_usuario") String id_usuario
     ) {
         try {
-            System.out.println("hello");
             UsuarioBean usuario = new UsuarioBean();
                 usuario.setId(Integer.parseInt(id_usuario));
             try {
