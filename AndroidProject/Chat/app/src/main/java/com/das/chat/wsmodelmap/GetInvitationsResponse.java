@@ -2,9 +2,11 @@ package com.das.chat.wsmodelmap;
 
 import com.das.chat.dao.ChatInvitation;
 import com.das.chat.dao.ChatRoom;
+import com.das.chat.dao.ChatUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -21,7 +23,14 @@ public class GetInvitationsResponse
             for(int i=0; i<resp.length(); i++) {
                 ChatInvitation invite = new ChatInvitation();
                 invite.setInvitationOwner(resp.getJSONObject(i).getString("id_usuario"));
-                invite.setInvitationOwner(resp.getJSONObject(i).getString("id_destino"));
+
+                ChatUser user = new ChatUser();
+                JSONObject usrJson = resp.getJSONObject(i).getJSONObject("usr_destino");
+                user.setUserId(usrJson.getString("id_usuario"));
+                user.setUserName(usrJson.getString("nombre_usuario"));
+                user.setUserEmail(usrJson.getString("email_usuario"));
+                invite.setInvitationReceiver(user);
+
                 invite.setInvitationDate(resp.getJSONObject(i).getString("fecha_invitacion"));
                 invite.setInvitationMessage(resp.getJSONObject(i).getString("mensaje_invitacion"));
                 invite.setInvitationStatus(resp.getJSONObject(i).getString("estado"));

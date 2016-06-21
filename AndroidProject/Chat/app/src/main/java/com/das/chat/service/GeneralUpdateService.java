@@ -39,7 +39,6 @@ public class GeneralUpdateService extends Service {
     private Notification notification;
     private NotificationManager notificationManager;
     private DateFormat format;
-    private SharedPreferences updateTime;
     private ChatRoom chatRoomUpdating;
 
     public GeneralUpdateService() {
@@ -53,7 +52,7 @@ public class GeneralUpdateService extends Service {
         Log.d("SERVICE", "-------------- CREATE --------------");
 
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        updateTime = this.getSharedPreferences("com.das.chat.last_update_time", 0);
+
         format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
     }
 
@@ -70,6 +69,7 @@ public class GeneralUpdateService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("SERVICE", "--------- SERVICE STARTED ---------");
         startInvitationsTimer();
+        startGeneralMessagesTimer();
         return START_NOT_STICKY;
     }
 
@@ -110,44 +110,38 @@ public class GeneralUpdateService extends Service {
     }
 
 
-    public void setLastInvitationUpdateTime() {
-        updateTime.edit().putString("com.das.chat.last_update_time.invites", Long.toString(new Date().getTime())).apply();
-    }
-
-    public void setLastGeneralUpdateTime() {
-        updateTime.edit().putString("com.das.chat.last_update_time.general", Long.toString(new Date().getTime())).apply();
-    }
-
-    public void setLastRoomUpdateTime() {
-        updateTime.edit().putString("com.das.chat.last_update_time.room", Long.toString(new Date().getTime())).apply();
-    }
-
-    public String getLastInvitationUpdateTime() {
-        return updateTime.getString("com.das.chat.last_update_time.invites", "0");
-    }
-
-    public String getLastGeneralUpdateTime() {
-        return updateTime.getString("com.das.chat.last_update_time.general", "0");
-    }
-
-    public String getLastRoomUpdateTime() {
-        return updateTime.getString("com.das.chat.last_update_time.room", "0");
-    }
-
     public void startInvitationsTimer() {
         invitesTimer = new Timer();
         invitesTimer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
-                Backend.getInstance().getInvitationList("2", getLastInvitationUpdateTime(), new OnWSResponseListener<ArrayList<ChatInvitation>>() {
+                Backend.getInstance().getInvitationList(Backend.getInstance().getLastInvitationUpdateTime(), new OnWSResponseListener<ArrayList<ChatInvitation>>() {
                     @Override
                     public void onWSResponse(ArrayList<ChatInvitation> response, long errorCode, String errorMsg) {
                         callbackClient.updateInvitations();
-                        setLastInvitationUpdateTime();
+                        Backend.getInstance().setLastInvitationUpdateTime();
                         Log.d("SERVICE", "----------- UPDATING INVITES -----------");
                     }
                 });
             }
         }, 0, 20000L);
+    }
+
+    public void startGeneralMessagesTimer() {
+        generalTimer = new Timer();
+        generalTimer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                Backend.getInstance().getMessages(Backend.getInstance().getLastGeneralUpdateTime(), new OnWSResponseListener<ArrayList<ChatMessage>>() {
+                    @Override
+                    public void onWSResponse(ArrayList<ChatMessage> response, long errorCode, String errorMsg) {
+                        if (errorMsg == null) {
+                            callbackClient.updateMessages();
+                            Backend.getInstance().setLastGeneralUpdateTime();
+                            Log.d("SERVICE", "----------- UPDATING MESSAGES -----------");
+                        }
+                    }
+                });
+            }
+        }, 0, 5000L);
     }
 
     public void startChatRoomTimer() {
@@ -156,12 +150,12 @@ public class GeneralUpdateService extends Service {
             public void run() {
                 EnterChatRoomRequest req = new EnterChatRoomRequest();
                 req.setIdSala(String.valueOf(chatRoomUpdating.getIdSala()));
-                Backend.getInstance().getChatRoomMessages(req, getLastRoomUpdateTime(), new OnWSResponseListener<ArrayList<ChatMessage>>() {
+                Backend.getInstance().getChatRoomMessages(req, Backend.getInstance().getLastRoomUpdateTime(), new OnWSResponseListener<ArrayList<ChatMessage>>() {
                     @Override
                     public void onWSResponse(ArrayList<ChatMessage> response, long errorCode, String errorMsg) {
                         if (errorMsg == null) {
                             callbackClient.updateMessagesForChatRoom(response);
-                            setLastRoomUpdateTime();
+                            Backend.getInstance().setLastRoomUpdateTime();
                             Log.d("SERVICE", "----------- UPDATING CHAT ROOM " + chatRoomUpdating.getNombreSala() + "-----------");
                         }
                     }
@@ -177,6 +171,7 @@ public class GeneralUpdateService extends Service {
 
     public interface Callbacks {
         void updateInvitations();
+        void updateMessages();
         void updateMessagesForChatRoom(ArrayList<ChatMessage> messages);
     }
 

@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.das.chat.R;
+import com.das.chat.backend.Backend;
 import com.das.chat.dao.ChatMessage;
 import com.das.chat.service.GeneralUpdateService;
 
@@ -133,6 +134,15 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     @Override
     public void updateInvitations() {
 
+    }
+
+    @Override
+    public void updateMessages() {
+        android.support.v4.app.Fragment fragment = getSupportFragmentManager().findFragmentByTag(
+                "android:switcher:" + mViewPager.getId() + ":" + mAppSectionsPagerAdapter.getItemId(0));
+        if(fragment != null) {
+            ((RoomListFragment) fragment).adapter.updateRoomList(Backend.getInstance().getRooms());
+        }
     }
 
     @Override

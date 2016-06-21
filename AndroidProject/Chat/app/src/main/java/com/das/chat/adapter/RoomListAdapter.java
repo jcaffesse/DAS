@@ -2,6 +2,7 @@ package com.das.chat.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,29 +21,29 @@ import java.util.Random;
  */
 public class RoomListAdapter extends BaseAdapter
 {
-    Context context;
-    ArrayList<ChatRoom> rooms;
-    LayoutInflater inflater;
+    Context mContext;
+    ArrayList<ChatRoom> mRooms;
+    LayoutInflater mInflater;
 
     public RoomListAdapter(Context context, ArrayList<ChatRoom> rooms)
     {
         super();
-        this.context = context;
-        this.rooms = rooms;
-        this.inflater = LayoutInflater.from(context);
+        this.mContext = context;
+        this.mRooms = rooms;
+        this.mInflater = LayoutInflater.from(context);
     }
 
 
     @Override
     public int getCount()
     {
-        return rooms.size();
+        return mRooms.size();
     }
 
     @Override
     public Object getItem(int i)
     {
-        return rooms.get(i);
+        return mRooms.get(i);
     }
 
     @Override
@@ -53,19 +54,26 @@ public class RoomListAdapter extends BaseAdapter
 
     public void updateRoomList(ArrayList<ChatRoom> roomList)
     {
-        this.rooms = roomList;
+        this.mRooms = roomList;
         this.notifyDataSetChanged();
     }
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup)
     {
-        view = inflater.inflate(R.layout.chat_room_list_item, null);
+        ChatRoom room = mRooms.get(i);
+
+        view = mInflater.inflate(R.layout.chat_room_list_item, null);
         TextView crName = (TextView) view.findViewById(R.id.chat_room_name);
-        crName.setText(rooms.get(i).getNombreSala());
+        crName.setText(room.getNombreSala());
 
         TextView  crDesc = (TextView) view.findViewById(R.id.chat_room_desc);
-        crDesc.setText(rooms.get(i).getDescSala());
+        crDesc.setText(room.getDescSala());
+
+        if(room.getAlertaSala()) {
+            crName.setTextColor(mContext.getResources().getColor(android.R.color.holo_red_dark));
+            Log.d("RoomListAdapter", "new messages in room " + room.getNombreSala() );
+        }
 
         ImageView iv = (ImageView) view.findViewById(R.id.chat_room_image);
         Random rnd = new Random();

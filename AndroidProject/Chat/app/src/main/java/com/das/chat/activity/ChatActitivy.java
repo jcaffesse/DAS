@@ -56,6 +56,7 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.Callb
 
         adapter = new ChatListAdapter(this, messages);
         messageList.setAdapter(adapter);
+        Backend.getInstance().updateRoomAlert(chatRoom.getIdSala(), false);
     }
 
     @Override
@@ -128,6 +129,11 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.Callb
 
     @Override
     public void updateInvitations() {
+
+    }
+
+    @Override
+    public void updateMessages() {
 
     }
 

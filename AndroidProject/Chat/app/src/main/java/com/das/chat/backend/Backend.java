@@ -1,7 +1,9 @@
 package com.das.chat.backend;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.das.chat.application.ChatApplication;
 import com.das.chat.dao.ChatInvitation;
 import com.das.chat.dao.ChatMessage;
 import com.das.chat.dao.ChatRoom;
@@ -23,6 +25,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
@@ -40,7 +43,10 @@ public class Backend
 
     private static Backend instance = new Backend();
     private ArrayList<ChatUser> users;
+    private ArrayList<ChatRoom> rooms;
     private ChatUser session;
+
+    private SharedPreferences updateTime;
 
     private static synchronized void initInstance()
     {
@@ -58,6 +64,7 @@ public class Backend
 
     private Backend()
     {
+        updateTime = ChatApplication.getAppContext().getSharedPreferences("com.das.chat.last_update_time", 0);
     }
 
     public ChatUser getUserById(String userId) {
@@ -69,6 +76,45 @@ public class Backend
         return null;
     }
 
+    public void setLastInvitationUpdateTime() {
+        updateTime.edit().putString("com.das.chat.last_update_time.invites", Long.toString(new Date().getTime())).apply();
+    }
+
+    public void setLastGeneralUpdateTime() {
+        updateTime.edit().putString("com.das.chat.last_update_time.general", Long.toString(new Date().getTime())).apply();
+    }
+
+    public void setLastRoomUpdateTime() {
+        updateTime.edit().putString("com.das.chat.last_update_time.room", Long.toString(new Date().getTime())).apply();
+    }
+
+    public String getLastInvitationUpdateTime() {
+        return updateTime.getString("com.das.chat.last_update_time.invites", "0");
+    }
+
+    public String getLastGeneralUpdateTime() {
+        return updateTime.getString("com.das.chat.last_update_time.general", "0");
+    }
+
+    public String getLastRoomUpdateTime() {
+        return updateTime.getString("com.das.chat.last_update_time.room", "0");
+    }
+
+    public ArrayList<ChatUser> getUsers() {
+        return users;
+    }
+
+    public ArrayList<ChatRoom> getRooms() {
+        return rooms;
+    }
+
+    public void updateRoomAlert(String roomId, boolean alert) {
+        for (ChatRoom room : rooms) {
+            if(room.getIdSala().compareTo(roomId) == 0) {
+                room.setAlertaSala(alert);
+            }
+        }
+    }
 
     public ChatUser getSession() {
         return session;
@@ -177,6 +223,34 @@ public class Backend
         task.execute(params);
     }
 
+    public void getMessages(String date, final OnWSResponseListener<ArrayList<ChatMessage>> responseListener)
+    {
+        ChatWSTask task = new ChatWSTask();
+        WSParams params = new WSParams();
+
+        HttpGet get = new HttpGet(String.format("%s%s/usuario/%s?ultima_act=%s", WS_BASE_URL, WS_MESSAGES_URL, session.getUserId(), date));
+        Log.d("REQUEST", String.format("%s%s/usuario/%s?ultima_act=%s", WS_BASE_URL, WS_MESSAGES_URL, session.getUserId(), date));
+        params.setRequest(get);
+        params.addTokenHeader(session.getSessionToken());
+
+        task.setResponseListener(new OnWSResponseListener<String>() {
+            @Override
+            public void onWSResponse(final String response, final long errorCode, final String errorMsg) {
+                if (errorMsg == null) {
+                    ArrayList<ChatMessage> messages = EnterChatRoomGetMessagesResponse.initWithResponse(response);
+                    responseListener.onWSResponse(messages, errorCode, null);
+
+                    for (ChatMessage message : messages) {
+                        updateRoomAlert(message.getIdChatRoom(), true);
+                    }
+                } else {
+                    responseListener.onWSResponse(null, errorCode, errorMsg);
+                }
+            }
+        });
+        task.execute(params);
+    }
+
     public void getRoomList(final OnWSResponseListener<ArrayList<ChatRoom>> responseListener)
     {
         ChatWSTask task = new ChatWSTask();
@@ -193,7 +267,7 @@ public class Backend
             public void onWSResponse(final String response, final long errorCode, final String errorMsg) {
                 if (errorMsg == null)
                 {
-                    ArrayList<ChatRoom> rooms = ListRoomsResponse.initWithResponse(response);
+                    rooms = ListRoomsResponse.initWithResponse(response);
                     responseListener.onWSResponse(rooms, errorCode, null);
                 }
                 else
@@ -205,13 +279,13 @@ public class Backend
         task.execute(params);
     }
 
-    public void getInvitationList(String userId, String date, final OnWSResponseListener<ArrayList<ChatInvitation>> responseListener)
+    public void getInvitationList(String date, final OnWSResponseListener<ArrayList<ChatInvitation>> responseListener)
     {
         ChatWSTask task = new ChatWSTask();
         WSParams params = new WSParams();
 
-        HttpGet get = new HttpGet(String.format("%s%s/%s?ultima_act=%s", WS_BASE_URL, WS_INVITATIONS_URL, userId, date));
-        Log.d("REQUEST", String.format("%s%s/%s?ultima_act=%s", WS_BASE_URL, WS_INVITATIONS_URL, userId, date));
+        HttpGet get = new HttpGet(String.format("%s%s/%s?ultima_act=%s", WS_BASE_URL, WS_INVITATIONS_URL, session.getUserId(), date));
+        Log.d("REQUEST", String.format("%s%s/%s?ultima_act=%s", WS_BASE_URL, WS_INVITATIONS_URL, session.getUserId(), date));
         params.setRequest(get);
         params.addTokenHeader(session.getSessionToken());
 

@@ -11,7 +11,7 @@ public class ChatRoom implements Serializable
     private String nombreSala;
     private String descSala;
     private String tipoSala;
-
+    private boolean alertaSala;
 
     public void setIdSala(String idSala) {
         this.idSala = idSala;
@@ -43,5 +43,13 @@ public class ChatRoom implements Serializable
 
     public String getTipoSala() {
         return tipoSala;
+    }
+
+    public Boolean getAlertaSala() {
+        return alertaSala;
+    }
+
+    public void setAlertaSala(Boolean alertaSala) {
+        this.alertaSala = alertaSala;
     }
 }
