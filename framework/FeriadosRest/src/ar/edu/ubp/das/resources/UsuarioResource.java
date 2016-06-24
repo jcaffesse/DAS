@@ -87,6 +87,7 @@ public class UsuarioResource {
                 bean.setEmail(email);
                 bean.setPassword(password);
                 bean.setIdRol(Integer.parseInt(id_rol));
+                bean.createColor();
 
             Dao dao = DaoFactory.getDao("Usuarios");
             dao.insert(bean);
@@ -108,7 +109,8 @@ public class UsuarioResource {
             @FormParam("nombre") String nombre, 
             @FormParam("email") String email,
             @FormParam("password") String password,
-            @FormParam("id_rol") String id_rol
+            @FormParam("id_rol") String id_rol,
+            @FormParam("color") int color
         ) {
         UsuarioBean bean = new UsuarioBean();
             bean.setId(Integer.parseInt(id_usuario));

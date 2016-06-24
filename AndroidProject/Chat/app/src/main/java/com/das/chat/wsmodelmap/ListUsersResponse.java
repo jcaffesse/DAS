@@ -25,6 +25,7 @@ public class ListUsersResponse
                 user.setUserEmail(resp.getJSONObject(i).getString("email_usuario"));
                 user.setUserId(resp.getJSONObject(i).getString("id_usuario"));
                 user.setUserRolId(resp.getJSONObject(i).getString("rol_usuario"));
+                user.setColor(resp.getJSONObject(i).getString("color_usuario"));
                 usersArray.add(user);
             }
 

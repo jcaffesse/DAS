@@ -5,6 +5,7 @@
  */
 package ar.edu.ubp.das.beans;
 
+import java.awt.Color;
 import java.util.Date;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -21,7 +22,20 @@ public class UsuarioBean implements Bean {
     private String password;
     private Integer id_rol;
     private Date ultima_act;
+    private int color;
 
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
+    public void createColor() {
+        this.color = new Color((int)(Math.random() * 0x1000000)).getRGB();
+    }
+    
     public Integer getId() {
         return id;
     }
@@ -84,6 +98,6 @@ public class UsuarioBean implements Bean {
     @Override
     public String toString() {
         return "{ \"id_usuario\" : \"" + id + "\", \"nombre_usuario\" : \"" + nombre 
-            +"\", \"email_usuario\" : \"" + email +"\", \"rol_usuario\" : \"" + id_rol + "\"}";
+            +"\", \"email_usuario\" : \"" + email +"\", \"rol_usuario\" : \"" + id_rol + "\" , \"color_usuario\" : \"" + Integer.toString(color) + "\"}";
     }
 }

@@ -24,6 +24,7 @@ public class MSSQLUsuariosDao extends MSSQLDao {
             usuario.setNombre(result.getString("nombre_usuario"));
             usuario.setEmail(result.getString("email_usuario"));
             usuario.setIdRol(result.getInt("id_rol"));
+            usuario.setColor(result.getInt("color_usuario"));
             
         return usuario;
     }
@@ -34,11 +35,12 @@ public class MSSQLUsuariosDao extends MSSQLDao {
 		
         this.connect();
 		
-        this.setProcedure("dbo.insert_usuario(?,?,?,?)");  
+        this.setProcedure("dbo.insert_usuario(?,?,?,?,?)");  
         this.setParameter(1, usuario.getNombre());
         this.setParameter(2, usuario.getEmail());
         this.setParameter(3, usuario.getPassword());
         this.setParameter(4, usuario.getIdRol());
+        this.setParameter(5, usuario.getColor());
         
         this.executeUpdate();
         
@@ -51,12 +53,13 @@ public class MSSQLUsuariosDao extends MSSQLDao {
 		
         this.connect();
 		
-        this.setProcedure("dbo.update_usuario(?,?,?,?,?)");  
+        this.setProcedure("dbo.update_usuario(?,?,?,?,?,?)");  
         this.setParameter(1, usuario.getId());
         this.setParameter(2, usuario.getNombre());
         this.setParameter(3, usuario.getEmail());
         this.setParameter(4, usuario.getPassword());
         this.setParameter(5, usuario.getIdRol());
+        this.setParameter(6, usuario.getColor());
         
         this.executeUpdate();
         
@@ -113,6 +116,5 @@ public class MSSQLUsuariosDao extends MSSQLDao {
         this.setParameter(2, usuario.getPassword());
         
         return this.executeValidation();
-    }
-    
+    }   
 }

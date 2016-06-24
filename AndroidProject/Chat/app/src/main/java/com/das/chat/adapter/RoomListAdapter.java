@@ -76,10 +76,7 @@ public class RoomListAdapter extends BaseAdapter
         }
 
         ImageView iv = (ImageView) view.findViewById(R.id.chat_room_image);
-        Random rnd = new Random();
-        int color = Color.argb (255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
         iv.setColorFilter(room.getColor());
-
 
         return view;
     }

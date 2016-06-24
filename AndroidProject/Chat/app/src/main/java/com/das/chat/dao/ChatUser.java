@@ -10,6 +10,15 @@ public class ChatUser implements Serializable{
     private String userName;
     private String userEmail;
     private String userRolId;
+    private int color;
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = Integer.valueOf(color);
+    }
 
     public String getSessionToken() {
         return sessionToken;

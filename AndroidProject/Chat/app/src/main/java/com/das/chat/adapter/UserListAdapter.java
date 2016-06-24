@@ -60,17 +60,17 @@ public class UserListAdapter extends BaseAdapter
     @Override
     public View getView(int i, View view, ViewGroup viewGroup)
     {
+        ChatUser user = users.get(i);
+
         view = inflater.inflate(R.layout.user_list_item, null);
         TextView uName = (TextView) view.findViewById(R.id.user_name);
-        uName.setText(users.get(i).getUserName());
+        uName.setText(user.getUserName());
 
         TextView uEmail = (TextView) view.findViewById(R.id.user_email);
-        uEmail.setText(users.get(i).getUserEmail());
+        uEmail.setText(user.getUserEmail());
 
         ImageView iv = (ImageView) view.findViewById(R.id.invite_img);
-        Random rnd = new Random();
-        int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-        iv.setColorFilter(color);
+        iv.setColorFilter(user.getColor());
 
         return view;
     }

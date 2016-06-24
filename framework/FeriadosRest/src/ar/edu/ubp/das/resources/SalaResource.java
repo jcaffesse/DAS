@@ -37,7 +37,6 @@ public class SalaResource {
     public Response getSalas() {
         try {
             Dao dao = DaoFactory.getDao("Salas");
-            String str = String.valueOf(new Color((int)(Math.random() * 0x1000000)).getRGB());
             List<Bean> list = dao.select(null);
             
             return Response.status(Response.Status.OK).entity(list.toString()).build();
@@ -112,7 +111,8 @@ public class SalaResource {
             @PathParam("id_sala") String id_sala,
             @FormParam("nombre") String nombre, 
             @FormParam("desc") String desc,
-            @FormParam("tipo") String tipo
+            @FormParam("tipo") String tipo,
+            @FormParam("color") int color
         ) {
 
         try {
