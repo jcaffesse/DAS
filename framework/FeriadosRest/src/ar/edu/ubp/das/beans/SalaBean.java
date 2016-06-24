@@ -5,6 +5,7 @@
  */
 package ar.edu.ubp.das.beans;
 
+import java.awt.Color;
 import java.util.Date;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -21,6 +22,19 @@ public class SalaBean implements Bean {
     private String descripcion;
     private String tipo;
     private Date ultima_act;
+    private int color;
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+    
+    public void createColor() {
+        this.color = new Color((int)(Math.random() * 0x1000000)).getRGB();
+    }
     
     public Integer getId() {
         return this.id;
@@ -74,8 +88,9 @@ public class SalaBean implements Bean {
     
     @Override
     public String toString() {
-        return "{ \"id_sala\" : \"" + id + "\", \"nombre_sala\" : \"" + nombre 
-            +"\", \"desc_sala\" : \"" + descripcion +"\", \"tipo_sala\" : \"" + tipo + "\"}";
+        String str = "{ \"id_sala\" : \"" + id + "\", \"nombre_sala\" : \"" + nombre 
+            +"\", \"desc_sala\" : \"" + descripcion +"\", \"tipo_sala\" : \"" + tipo + "\", \"color_sala\" : \"" + Integer.toString(color) + "\"}";
+        return str;
     }
     
     

@@ -24,6 +24,7 @@ public class ListRoomsResponse
                 room.setNombreSala(resp.getJSONObject(i).getString("nombre_sala"));
                 room.setDescSala(resp.getJSONObject(i).getString("desc_sala"));
                 room.setTipoSala(resp.getJSONObject(i).getString("tipo_sala"));
+                room.setColor(resp.getJSONObject(i).getString("color_sala"));
                 roomArray.add(room);
             }
 

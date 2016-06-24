@@ -21,6 +21,7 @@ import ar.edu.ubp.das.beans.Bean;
 import ar.edu.ubp.das.beans.SalaBean;
 import ar.edu.ubp.das.daos.Dao;
 import ar.edu.ubp.das.daos.DaoFactory;
+import java.awt.Color;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
@@ -36,7 +37,9 @@ public class SalaResource {
     public Response getSalas() {
         try {
             Dao dao = DaoFactory.getDao("Salas");
+            String str = String.valueOf(new Color((int)(Math.random() * 0x1000000)).getRGB());
             List<Bean> list = dao.select(null);
+            
             return Response.status(Response.Status.OK).entity(list.toString()).build();
         }
         catch (SQLException e) {
@@ -88,6 +91,7 @@ public class SalaResource {
                 bean.setNombre(nombre);
                 bean.setDesc(desc);
                 bean.setTipo(tipo);
+                bean.createColor();
 
             Dao dao = DaoFactory.getDao("Salas");
             dao.insert(bean);

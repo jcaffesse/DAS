@@ -11,7 +11,16 @@ public class ChatRoom implements Serializable
     private String nombreSala;
     private String descSala;
     private String tipoSala;
+    private int color;
     private boolean alertaSala;
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = Integer.valueOf(color);
+    }
 
     public void setIdSala(String idSala) {
         this.idSala = idSala;

@@ -25,6 +25,7 @@ public class MSSQLSalasDao extends MSSQLDao {
             sala.setNombre(result.getString("nombre_sala"));
             sala.setDesc(result.getString("desc_sala"));
             sala.setTipo(result.getString("tipo_sala"));
+            sala.setColor(result.getInt("color_sala"));
             
         return sala;
     }
@@ -35,10 +36,11 @@ public class MSSQLSalasDao extends MSSQLDao {
 		
         this.connect();
 		
-        this.setProcedure("dbo.insert_sala(?,?,?)");  
+        this.setProcedure("dbo.insert_sala(?,?,?,?)");  
         this.setParameter(1, sala.getNombre());
         this.setParameter(2, sala.getDesc());
         this.setParameter(3, sala.getTipo());
+        this.setParameter(4, sala.getColor());
         
         this.executeUpdate();
         
@@ -51,11 +53,12 @@ public class MSSQLSalasDao extends MSSQLDao {
 		
         this.connect();
         
-        this.setProcedure("dbo.update_sala(?,?,?,?)");  
+        this.setProcedure("dbo.update_sala(?,?,?,?,?)");  
         this.setParameter(1, sala.getId());
         this.setParameter(2, sala.getNombre());
         this.setParameter(3, sala.getDesc());
         this.setParameter(4, sala.getTipo());
+        this.setParameter(5, sala.getColor());
         
         this.executeUpdate();
         
