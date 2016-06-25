@@ -20,6 +20,7 @@
             android:id="@+id/message_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minWidth="50dp"
             android:textSize="18sp"
             android:text="prueba de un mensaje smuuuy largo que entre en 2 lineas"/>
 
@@ -30,7 +31,8 @@
             android:layout_below="@id/message_text"
             android:layout_alignEnd="@id/message_text"
             android:textSize="10sp"
-            android:text="10:40"/>
+            android:text="10:40"
+            android:lines="1"/>
 
 
 

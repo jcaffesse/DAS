@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,8 +35,10 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.Callb
     ArrayList<ChatMessage> messages;
     ChatRoom chatRoom;
     TextView numberOfUsers;
+    TextView chatRoomName;
     EditText messageET;
     ListView messageList;
+    ImageView chatRoomImage;
     ChatListAdapter adapter;
     private boolean serviceIsBind;
     private GeneralUpdateService serviceInstante;
@@ -47,6 +50,8 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.Callb
         messageList = (ListView) findViewById(R.id.message_list);
         numberOfUsers = (TextView) findViewById(R.id.number_of_users);
         messageET = (EditText) findViewById(R.id.enter_message_et);
+        chatRoomImage = (ImageView) findViewById(R.id.chat_room_image);
+        chatRoomName = (TextView) findViewById(R.id.chat_room_name);
 
         users = (ArrayList<ChatUser>)getIntent().getSerializableExtra("users");
         messages = (ArrayList<ChatMessage>)getIntent().getSerializableExtra("messages");
@@ -57,6 +62,8 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.Callb
         adapter = new ChatListAdapter(this, messages);
         messageList.setAdapter(adapter);
         Backend.getInstance().updateRoomAlert(chatRoom.getIdSala(), false);
+        chatRoomImage.setColorFilter(chatRoom.getColor());
+        chatRoomName.setText(chatRoom.getNombreSala());
     }
 
     @Override
@@ -101,14 +108,16 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.Callb
         req.setIdUsuario(Backend.getInstance().getSession().getUserId());
         req.setIdSala(chatRoom.getIdSala());
 
+        adapter.addMessage(req);
+        messageET.setText("");
+
         Backend.getInstance().sendMessage(req, new OnWSResponseListener<Boolean>() {
             @Override
             public void onWSResponse(Boolean response, long errorCode, String errorMsg) {
                 if (errorMsg == null) {
-                    messageET.setText("");
                     EnterChatRoomRequest req = new EnterChatRoomRequest();
                     req.setIdSala(chatRoom.getIdSala());
-                    Backend.getInstance().getChatRoomMessages(req, "",new OnWSResponseListener<ArrayList<ChatMessage>>() {
+                    Backend.getInstance().getChatRoomMessages(req, "0", new OnWSResponseListener<ArrayList<ChatMessage>>() {
                         @Override
                         public void onWSResponse(ArrayList<ChatMessage> response, long errorCode, String errorMsg) {
                             if (errorMsg == null) {

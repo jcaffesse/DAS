@@ -71,8 +71,8 @@ public class RoomListAdapter extends BaseAdapter
         crDesc.setText(room.getDescSala());
 
         if(room.getAlertaSala()) {
-            crName.setTextColor(mContext.getResources().getColor(android.R.color.holo_red_dark));
-            Log.d("RoomListAdapter", "new messages in room " + room.getNombreSala() );
+            crName.setTextColor(mContext.getResources().getColor(android.R.color.holo_red_light));
+            crDesc.setTextColor(mContext.getResources().getColor(android.R.color.holo_red_light));
         }
 
         ImageView iv = (ImageView) view.findViewById(R.id.chat_room_image);

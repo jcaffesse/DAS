@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.das.chat.dao.ChatMessage;
 import com.das.chat.R;
 import com.das.chat.backend.Backend;
+import com.das.chat.wsmodelmap.SendMessageRequest;
 
 import java.util.ArrayList;
 
@@ -54,6 +55,16 @@ public class ChatListAdapter extends BaseAdapter
         this.notifyDataSetChanged();
     }
 
+    public void addMessage(SendMessageRequest req)
+    {
+        ChatMessage myMsg = new ChatMessage();
+        myMsg.setMessage(req.getMessage());
+        myMsg.setIdUser(req.getIdUsuario());
+        myMsg.setIdChatRoom(req.getIdSala());
+        this.messageList.add(myMsg);
+        this.notifyDataSetChanged();
+    }
+
     @Override
     public View getView(int i, View view, ViewGroup viewGroup)
     {
@@ -69,7 +80,12 @@ public class ChatListAdapter extends BaseAdapter
         TextView tv = (TextView) view.findViewById(R.id.message_text);
         tv.setText(message.getMessage());
         TextView tv1 = (TextView) view.findViewById(R.id.message_date);
-        tv1.setText(message.getDate());
+        if(message.getDate() == null) {
+            tv1.setText("Enviando...");
+        } else {
+            tv1.setText(message.getDate());
+        }
+
 
         return view;
     }

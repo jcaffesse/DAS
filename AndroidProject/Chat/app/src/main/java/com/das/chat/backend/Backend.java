@@ -112,6 +112,7 @@ public class Backend
         for (ChatRoom room : rooms) {
             if(room.getIdSala().compareTo(roomId) == 0) {
                 room.setAlertaSala(alert);
+                break;
             }
         }
     }
@@ -205,7 +206,7 @@ public class Backend
         WSParams params = new WSParams();
 
         HttpGet get = new HttpGet(String.format("%s%s/sala/%s?ultima_act=%s", WS_BASE_URL, WS_MESSAGES_URL, req.getIdSala(), date));
-        Log.d("REQUEST", String.format("%s%s/%s?ultima_act=%s", WS_BASE_URL, WS_MESSAGES_URL, req.getIdSala(), date));
+        Log.d("REQUEST", String.format("%s%s/sala/%s?ultima_act=%s", WS_BASE_URL, WS_MESSAGES_URL, req.getIdSala(), date));
         params.setRequest(get);
         params.addTokenHeader(session.getSessionToken());
 
@@ -215,6 +216,7 @@ public class Backend
                 if (errorMsg == null) {
                     ArrayList<ChatMessage> messages = EnterChatRoomGetMessagesResponse.initWithResponse(response);
                     responseListener.onWSResponse(messages, errorCode, null);
+                    setLastRoomUpdateTime();
                 } else {
                     responseListener.onWSResponse(null, errorCode, errorMsg);
                 }
@@ -228,8 +230,8 @@ public class Backend
         ChatWSTask task = new ChatWSTask();
         WSParams params = new WSParams();
 
-        HttpGet get = new HttpGet(String.format("%s%s/usuario/%s?ultima_act=%s", WS_BASE_URL, WS_MESSAGES_URL, session.getUserId(), date));
-        Log.d("REQUEST", String.format("%s%s/usuario/%s?ultima_act=%s", WS_BASE_URL, WS_MESSAGES_URL, session.getUserId(), date));
+        HttpGet get = new HttpGet(String.format("%s%s/mensajes/%s?ultima_act=%s", WS_BASE_URL, WS_USERS_ROOMS_URL, session.getUserId(), date));
+        Log.d("REQUEST", String.format("%s%s/mensajes/%s?ultima_act=%s", WS_BASE_URL, WS_USERS_ROOMS_URL, session.getUserId(), date));
         params.setRequest(get);
         params.addTokenHeader(session.getSessionToken());
 
@@ -239,7 +241,7 @@ public class Backend
                 if (errorMsg == null) {
                     ArrayList<ChatMessage> messages = EnterChatRoomGetMessagesResponse.initWithResponse(response);
                     responseListener.onWSResponse(messages, errorCode, null);
-
+                    setLastGeneralUpdateTime();
                     for (ChatMessage message : messages) {
                         updateRoomAlert(message.getIdChatRoom(), true);
                     }
@@ -297,6 +299,7 @@ public class Backend
                 {
                     ArrayList<ChatInvitation> rooms = GetInvitationsResponse.initWithResponse(response);
                     responseListener.onWSResponse(rooms, errorCode, null);
+                    setLastInvitationUpdateTime();
                 }
                 else
                 {
@@ -352,6 +355,7 @@ public class Backend
             {
                 if (errorMsg == null)
                 {
+                    setLastRoomUpdateTime();
                     responseListener.onWSResponse(true, errorCode, null);
                 }
                 else

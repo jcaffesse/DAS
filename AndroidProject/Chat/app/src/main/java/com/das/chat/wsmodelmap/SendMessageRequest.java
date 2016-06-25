@@ -43,4 +43,16 @@ public class SendMessageRequest
     public void setSessionToken(String sessionToken) {
         this.sessionToken = sessionToken;
     }
+
+    public String getIdUsuario() {
+        return idUsuario;
+    }
+
+    public String getIdSala() {
+        return idSala;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 }

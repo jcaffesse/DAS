@@ -118,7 +118,6 @@ public class GeneralUpdateService extends Service {
                     @Override
                     public void onWSResponse(ArrayList<ChatInvitation> response, long errorCode, String errorMsg) {
                         callbackClient.updateInvitations();
-                        Backend.getInstance().setLastInvitationUpdateTime();
                         Log.d("SERVICE", "----------- UPDATING INVITES -----------");
                     }
                 });
@@ -134,8 +133,10 @@ public class GeneralUpdateService extends Service {
                     @Override
                     public void onWSResponse(ArrayList<ChatMessage> response, long errorCode, String errorMsg) {
                         if (errorMsg == null) {
-                            callbackClient.updateMessages();
-                            Backend.getInstance().setLastGeneralUpdateTime();
+                            if(response.size() > 0) {
+                                callbackClient.updateMessages();
+                            }
+
                             Log.d("SERVICE", "----------- UPDATING MESSAGES -----------");
                         }
                     }
@@ -155,7 +156,6 @@ public class GeneralUpdateService extends Service {
                     public void onWSResponse(ArrayList<ChatMessage> response, long errorCode, String errorMsg) {
                         if (errorMsg == null) {
                             callbackClient.updateMessagesForChatRoom(response);
-                            Backend.getInstance().setLastRoomUpdateTime();
                             Log.d("SERVICE", "----------- UPDATING CHAT ROOM " + chatRoomUpdating.getNombreSala() + "-----------");
                         }
                     }

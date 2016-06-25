@@ -80,6 +80,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         unbindService(timerServiceConnection);
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        updateMessages();
+    }
+
     private ServiceConnection timerServiceConnection = new ServiceConnection()
     {
         public void onServiceConnected(ComponentName className, IBinder service) {
