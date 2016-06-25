@@ -121,7 +121,7 @@ public class UsuarioSalaResource {
     @GET
     @Path("/mensajes/{id_usuario}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    public Response getUsuariosSala(
+    public Response getMensajesUsuariosSala(
         @PathParam("id_usuario") String id_usuario,
         @QueryParam("ultima_act") String ultima_act
     ) {
