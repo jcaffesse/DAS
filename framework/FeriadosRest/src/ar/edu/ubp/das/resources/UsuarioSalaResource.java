@@ -140,7 +140,7 @@ public class UsuarioSalaResource {
                     usr.setUltimaAct(ua);
                 }
             try {
-                Dao dao = DaoFactory.getDao("UsuariosSalas");
+                Dao dao = DaoFactory.getDao("Mensajes");
                 List<Bean> list = dao.select(usr);
                 if (list.isEmpty()) {
                     return Response.status(Response.Status.OK).entity("[]").build();

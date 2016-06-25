@@ -111,7 +111,7 @@ public class MSSQLMensajesDao extends MSSQLDao{
             try {
                 Date ultimaAct = usuario.getUltimaAct();
                 java.sql.Timestamp tmst = new java.sql.Timestamp(ultimaAct.getTime());
-                procedureName += ", ?)";
+                procedureName = "dbo.get_mensajes_usuario_salas(?, ?)";
                 this.setProcedure(procedureName);
                 this.setParameter(1, usuario.getId());
                 this.setParameter(2, tmst.toString());
