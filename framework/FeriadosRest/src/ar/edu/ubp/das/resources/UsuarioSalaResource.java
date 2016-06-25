@@ -6,10 +6,12 @@
 package ar.edu.ubp.das.resources;
 
 import ar.edu.ubp.das.beans.Bean;
+import ar.edu.ubp.das.beans.UsuarioBean;
 import ar.edu.ubp.das.beans.UsuarioSalaBean;
 import ar.edu.ubp.das.daos.Dao;
 import ar.edu.ubp.das.daos.DaoFactory;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -20,6 +22,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -115,4 +118,41 @@ public class UsuarioSalaResource {
     }
     
     
+    @GET
+    @Path("/mensajes/{id_usuario}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+    public Response getUsuariosSala(
+        @PathParam("id_usuario") String id_usuario,
+        @QueryParam("ultima_act") String ultima_act
+    ) {
+        Date ua = null;
+        if (ultima_act != null) {
+            try {
+                ua = new Date(Long.parseLong(ultima_act));
+            } catch (NumberFormatException l) {
+                return Response.status(Response.Status.BAD_REQUEST).entity(l.getMessage()).build();
+            }
+        }
+        try {
+            UsuarioBean usr = new UsuarioBean();
+                usr.setId(Integer.parseInt(id_usuario));
+                if (ua != null) {
+                    usr.setUltimaAct(ua);
+                }
+            try {
+                Dao dao = DaoFactory.getDao("UsuariosSalas");
+                List<Bean> list = dao.select(usr);
+                if (list.isEmpty()) {
+                    return Response.status(Response.Status.OK).entity("[]").build();
+                } else {
+                    return Response.status(Response.Status.OK).entity(list.toString()).build();
+                }
+            }
+            catch (SQLException e) {
+                return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+            }
+        } catch (NumberFormatException n) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(n.getMessage()).build();
+        }
+    }        
 }
