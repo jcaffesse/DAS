@@ -6,6 +6,7 @@
 package ar.edu.ubp.das.daos;
 
 import ar.edu.ubp.das.beans.Bean;
+import ar.edu.ubp.das.beans.UsuarioBean;
 import ar.edu.ubp.das.beans.UsuarioSalaBean;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -82,11 +83,23 @@ public class MSSQLUsuariosSalasDao extends MSSQLDao{
     @Override
     public List<Bean> select(Bean bean) throws SQLException {
         List<Bean> list;
+        String procedureName = "dbo.get_";
+        String beanClass = bean.getClass().getSimpleName();
         
         this.connect();
-        
-        this.setProcedure("dbo.get_usuarios_sala(?)");
-        this.setParameter(1, UsuarioSalaBean.class.cast(bean).getId_sala());
+        if (beanClass.equals(UsuarioBean.class.getSimpleName())) {
+            Date ultimaAct = UsuarioBean.class.cast(bean).getUltimaAct();
+            java.sql.Timestamp tmst = new java.sql.Timestamp(ultimaAct.getTime());
+            procedureName += "mensajes_usuario_salas(?, ?)";
+            this.setProcedure(procedureName);
+            this.setParameter(1, UsuarioBean.class.cast(bean).getId());
+            this.setParameter(2, tmst.toString());
+            
+        } else if (beanClass.equals(UsuarioSalaBean.class.getSimpleName())) {
+            procedureName += "usuarios_sala(?)";
+            this.setProcedure(procedureName);
+            this.setParameter(1, UsuarioSalaBean.class.cast(bean).getId_sala());
+        }
 
         list = this.executeQuery();
         this.disconnect();
