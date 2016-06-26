@@ -35,7 +35,8 @@ public class GeneralUpdateService extends Service {
     private Timer generalTimer = null;
     private Timer invitesTimer = null;
     private Timer chatRoomTimer = null;
-    Callbacks callbackClient;
+    GeneralCallbacks generalCallbackClient;
+    ChatRoomCallbacks chatRoomCallbackClient;
     private Notification notification;
     private NotificationManager notificationManager;
     private DateFormat format;
@@ -117,7 +118,7 @@ public class GeneralUpdateService extends Service {
                 Backend.getInstance().getInvitationList(Backend.getInstance().getLastInvitationUpdateTime(), new OnWSResponseListener<ArrayList<ChatInvitation>>() {
                     @Override
                     public void onWSResponse(ArrayList<ChatInvitation> response, long errorCode, String errorMsg) {
-                        callbackClient.updateInvitations();
+                        generalCallbackClient.updateInvitations();
                         Log.d("SERVICE", "----------- UPDATING INVITES -----------");
                     }
                 });
@@ -134,10 +135,10 @@ public class GeneralUpdateService extends Service {
                     public void onWSResponse(ArrayList<ChatMessage> response, long errorCode, String errorMsg) {
                         if (errorMsg == null) {
                             if(response.size() > 0) {
-                                callbackClient.updateMessages();
+                                generalCallbackClient.updateMessages();
                             }
 
-                            Log.d("SERVICE", "----------- UPDATING MESSAGES -----------");
+                            Log.d("SERVICE", "----------- UPDATING ALL MESSAGES -----------");
                         }
                     }
                 });
@@ -151,11 +152,11 @@ public class GeneralUpdateService extends Service {
             public void run() {
                 EnterChatRoomRequest req = new EnterChatRoomRequest();
                 req.setIdSala(String.valueOf(chatRoomUpdating.getIdSala()));
-                Backend.getInstance().getChatRoomMessages(req, Backend.getInstance().getLastRoomUpdateTime(), new OnWSResponseListener<ArrayList<ChatMessage>>() {
+                Backend.getInstance().getChatRoomMessages(req, Backend.getInstance().getLastRoomUpdateTime(req.getIdSala()), new OnWSResponseListener<ArrayList<ChatMessage>>() {
                     @Override
                     public void onWSResponse(ArrayList<ChatMessage> response, long errorCode, String errorMsg) {
                         if (errorMsg == null) {
-                            callbackClient.updateMessagesForChatRoom(response);
+                            chatRoomCallbackClient.updateMessagesForChatRoom(response);
                             Log.d("SERVICE", "----------- UPDATING CHAT ROOM " + chatRoomUpdating.getNombreSala() + "-----------");
                         }
                     }
@@ -169,20 +170,25 @@ public class GeneralUpdateService extends Service {
         chatRoomTimer = null;
     }
 
-    public interface Callbacks {
+    public interface GeneralCallbacks {
         void updateInvitations();
         void updateMessages();
+    }
+
+    public interface ChatRoomCallbacks {
         void updateMessagesForChatRoom(ArrayList<ChatMessage> messages);
     }
 
     //Here Activity register to the service as Callbacks client
-    public void registerClient(Activity activity){
-        this.callbackClient = (Callbacks)activity;
+    public void registerGeneralUpdateClient(Activity activity) {
+        this.generalCallbackClient = (GeneralCallbacks)activity;
     }
 
     //Here Activity register to the service as Callbacks client
-    public void registerChatClient(Activity activity, ChatRoom room){
-        this.callbackClient = (Callbacks)activity;
+    public void registerChatRoomClient(Activity activity, ChatRoom room){
+        this.chatRoomCallbackClient = (ChatRoomCallbacks)activity;
         this.chatRoomUpdating = room;
     }
+
+
 }

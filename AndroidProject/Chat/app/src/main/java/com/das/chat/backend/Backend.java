@@ -23,6 +23,7 @@ import com.das.chat.wsmodelmap.SendMessageRequest;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -84,8 +85,8 @@ public class Backend
         updateTime.edit().putString("com.das.chat.last_update_time.general", Long.toString(new Date().getTime())).apply();
     }
 
-    public void setLastRoomUpdateTime() {
-        updateTime.edit().putString("com.das.chat.last_update_time.room", Long.toString(new Date().getTime())).apply();
+    public void setLastRoomUpdateTime(String chatRoomId) {
+        updateTime.edit().putString("com.das.chat.last_update_time.room_" + chatRoomId, Long.toString(new Date().getTime())).apply();
     }
 
     public String getLastInvitationUpdateTime() {
@@ -96,8 +97,8 @@ public class Backend
         return updateTime.getString("com.das.chat.last_update_time.general", "0");
     }
 
-    public String getLastRoomUpdateTime() {
-        return updateTime.getString("com.das.chat.last_update_time.room", "0");
+    public String getLastRoomUpdateTime(String chatRoomId) {
+        return updateTime.getString("com.das.chat.last_update_time.room_" + chatRoomId, "0");
     }
 
     public ArrayList<ChatUser> getUsers() {
@@ -175,12 +176,40 @@ public class Backend
         task.execute(params);
     }
 
-    public void enterChatRoom(EnterChatRoomRequest req, final OnWSResponseListener<ArrayList<ChatUser>> responseListener)
+    public void enterChatRoom(EnterChatRoomRequest req, final OnWSResponseListener<Boolean> responseListener)
+    {
+        ChatWSTask task = new ChatWSTask();
+        WSParams params = new WSParams();
+
+        req.setIdUsuario(session.getUserId());
+        req.setEstado("1");
+        HttpPut put = new HttpPut(String.format("%s%s", WS_BASE_URL, WS_USERS_ROOMS_URL));
+        Log.d("REQUEST", String.format("%s%s", WS_BASE_URL, WS_USERS_ROOMS_URL));
+
+        params.setRequestWithBody(put, req.getForm());
+        params.addTokenHeader(session.getSessionToken());
+        Log.d("REQUEST", req.getForm());
+
+        task.setResponseListener(new OnWSResponseListener<String>() {
+            @Override
+            public void onWSResponse(final String response, final long errorCode, final String errorMsg) {
+                if (errorMsg == null) {
+                    responseListener.onWSResponse(true, errorCode, null);
+                } else {
+                    responseListener.onWSResponse(false, errorCode, errorMsg);
+                }
+            }
+        });
+        task.execute(params);
+    }
+
+    public void getChatRoomUsers(EnterChatRoomRequest req, final OnWSResponseListener<ArrayList<ChatUser>> responseListener)
     {
         ChatWSTask task = new ChatWSTask();
         WSParams params = new WSParams();
 
         HttpGet get = new HttpGet(String.format("%s%s/sala/%s", WS_BASE_URL, WS_USERS_ROOMS_URL, req.getIdSala()));
+        Log.d("REQUEST", String.format("%s%s/sala/%s", WS_BASE_URL, WS_USERS_ROOMS_URL, req.getIdSala()));
 
         params.setRequest(get);
         params.addTokenHeader(session.getSessionToken());
@@ -199,8 +228,7 @@ public class Backend
         task.execute(params);
     }
 
-
-    public void getChatRoomMessages(EnterChatRoomRequest req, String date, final OnWSResponseListener<ArrayList<ChatMessage>> responseListener)
+    public void getChatRoomMessages(final EnterChatRoomRequest req, String date, final OnWSResponseListener<ArrayList<ChatMessage>> responseListener)
     {
         ChatWSTask task = new ChatWSTask();
         WSParams params = new WSParams();
@@ -216,7 +244,7 @@ public class Backend
                 if (errorMsg == null) {
                     ArrayList<ChatMessage> messages = EnterChatRoomGetMessagesResponse.initWithResponse(response);
                     responseListener.onWSResponse(messages, errorCode, null);
-                    setLastRoomUpdateTime();
+                    setLastRoomUpdateTime(req.getIdSala());
                 } else {
                     responseListener.onWSResponse(null, errorCode, errorMsg);
                 }
@@ -338,7 +366,7 @@ public class Backend
         task.execute(params);
     }
 
-    public void sendMessage(SendMessageRequest req, final OnWSResponseListener<Boolean> responseListener)
+    public void sendMessage(final SendMessageRequest req, final OnWSResponseListener<Boolean> responseListener)
     {
         ChatWSTask task = new ChatWSTask();
         WSParams params = new WSParams();
@@ -355,7 +383,6 @@ public class Backend
             {
                 if (errorMsg == null)
                 {
-                    setLastRoomUpdateTime();
                     responseListener.onWSResponse(true, errorCode, null);
                 }
                 else

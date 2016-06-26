@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends FragmentActivity implements ActionBar.TabListener, GeneralUpdateService.Callbacks {
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener, GeneralUpdateService.GeneralCallbacks {
 
     AppSectionsPagerAdapter mAppSectionsPagerAdapter;
     ViewPager mViewPager;
@@ -65,19 +65,19 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                             .setTabListener(this));
         }
 
-        startService(new Intent(this, GeneralUpdateService.class));
+        //startService(new Intent(this, GeneralUpdateService.class));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        bindService(new Intent(this, GeneralUpdateService.class), timerServiceConnection, Context.BIND_AUTO_CREATE);
+        //bindService(new Intent(this, GeneralUpdateService.class), timerServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        unbindService(timerServiceConnection);
+        //unbindService(timerServiceConnection);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
             serviceInstante =  ((GeneralUpdateService.LocalBinder) service).getService();
             serviceIsBind = true;
-            serviceInstante.registerClient(MainActivity.this);
+            serviceInstante.registerGeneralUpdateClient(MainActivity.this);
         }
 
         public void onServiceDisconnected(ComponentName className) {
@@ -149,11 +149,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         if(fragment != null) {
             ((RoomListFragment) fragment).adapter.updateRoomList(Backend.getInstance().getRooms());
         }
-    }
-
-    @Override
-    public void updateMessagesForChatRoom(ArrayList<ChatMessage> messages) {
-
     }
 
     public static class AppSectionsPagerAdapter extends FragmentPagerAdapter {

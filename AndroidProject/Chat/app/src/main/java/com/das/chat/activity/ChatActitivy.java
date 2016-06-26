@@ -29,7 +29,7 @@ import com.das.chat.wsmodelmap.SendMessageRequest;
 
 import java.util.ArrayList;
 
-public class ChatActitivy extends Activity implements GeneralUpdateService.Callbacks{
+public class ChatActitivy extends Activity implements GeneralUpdateService.ChatRoomCallbacks{
 
     ArrayList<ChatUser> users;
     ArrayList<ChatMessage> messages;
@@ -61,7 +61,6 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.Callb
 
         adapter = new ChatListAdapter(this, messages);
         messageList.setAdapter(adapter);
-        Backend.getInstance().updateRoomAlert(chatRoom.getIdSala(), false);
         chatRoomImage.setColorFilter(chatRoom.getColor());
         chatRoomName.setText(chatRoom.getNombreSala());
     }
@@ -80,6 +79,12 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.Callb
         unbindService(timerServiceConnection);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Backend.getInstance().updateRoomAlert(chatRoom.getIdSala(), false);
+    }
+
     private ServiceConnection timerServiceConnection = new ServiceConnection()
     {
         public void onServiceConnected(ComponentName className, IBinder service) {
@@ -87,7 +92,7 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.Callb
 
             serviceInstante =  ((GeneralUpdateService.LocalBinder) service).getService();
             serviceIsBind = true;
-            serviceInstante.registerChatClient(ChatActitivy.this, chatRoom);
+            serviceInstante.registerChatRoomClient(ChatActitivy.this, chatRoom);
             serviceInstante.startChatRoomTimer();
         }
 
@@ -97,7 +102,6 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.Callb
             serviceIsBind = false;
         }
     };
-
 
     public void onSendButtonClicked(View v) {
         if(messageET.getText().length() == 0)
@@ -115,16 +119,7 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.Callb
             @Override
             public void onWSResponse(Boolean response, long errorCode, String errorMsg) {
                 if (errorMsg == null) {
-                    EnterChatRoomRequest req = new EnterChatRoomRequest();
-                    req.setIdSala(chatRoom.getIdSala());
-                    Backend.getInstance().getChatRoomMessages(req, "0", new OnWSResponseListener<ArrayList<ChatMessage>>() {
-                        @Override
-                        public void onWSResponse(ArrayList<ChatMessage> response, long errorCode, String errorMsg) {
-                            if (errorMsg == null) {
-                                adapter.updateChatList(response);
-                            }
-                        }
-                    });
+
                 } else {
                     Toast.makeText(ChatActitivy.this, "Error al enviar mensaje", Toast.LENGTH_SHORT).show();
                 }
@@ -137,17 +132,8 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.Callb
     }
 
     @Override
-    public void updateInvitations() {
-
-    }
-
-    @Override
-    public void updateMessages() {
-
-    }
-
-    @Override
     public void updateMessagesForChatRoom(ArrayList<ChatMessage> messages) {
+        Log.d("LOG", "new messages!!");
         adapter.updateChatList(messages);
     }
 }
