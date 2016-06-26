@@ -243,8 +243,10 @@ public class Backend
             public void onWSResponse(final String response, final long errorCode, final String errorMsg) {
                 if (errorMsg == null) {
                     ArrayList<ChatMessage> messages = EnterChatRoomGetMessagesResponse.initWithResponse(response);
+                    if(messages.size() > 0) {
+                        setLastRoomUpdateTime(req.getIdSala());
+                    }
                     responseListener.onWSResponse(messages, errorCode, null);
-                    setLastRoomUpdateTime(req.getIdSala());
                 } else {
                     responseListener.onWSResponse(null, errorCode, errorMsg);
                 }
