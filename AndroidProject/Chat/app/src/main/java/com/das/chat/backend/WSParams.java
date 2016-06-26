@@ -5,6 +5,7 @@ import android.provider.Settings;
 import com.das.chat.application.ChatApplication;
 import com.das.chat.wsmodelmap.LoginRequest;
 
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.AbstractHttpEntity;
@@ -36,7 +37,7 @@ public class WSParams
 
             entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded"));
 
-            ((HttpPost)this.req).setEntity(entity);
+            ((HttpEntityEnclosingRequestBase)this.req).setEntity(entity);
         }
         catch (UnsupportedEncodingException e)
         {

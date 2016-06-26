@@ -1,6 +1,7 @@
 package com.das.chat.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,9 +50,28 @@ public class ChatListAdapter extends BaseAdapter
         return 0;
     }
 
-    public void updateChatList(ArrayList<ChatMessage> messageList)
+    public void updateChatList(ArrayList<ChatMessage> msgList)
     {
-        this.messageList.addAll(messageList);
+        if(msgList.size() == 0) {
+            Log.d("LOG", "empty msg list");
+            return;
+        }
+
+        Log.d("LOG", "check msg list");
+        for (int i = messageList.size() -1; i >= 0; i--) {
+            if (messageList.get(i).getDate() == null  && messageList.get(i).getIdUser().compareTo(Backend.getInstance().getSession().getUserId()) == 0) {
+                Log.d("LOG", "message not sent yet");
+                for (ChatMessage msg1 : msgList) {
+                    if (msg1.getMessage().compareTo(messageList.get(i).getMessage()) == 0 && msg1.getIdUser().compareTo(messageList.get(i).getIdUser()) == 0)
+                    {
+                        Log.d("LOG", "removed and updated message: " + messageList.get(i).getMessage());
+                        messageList.remove(i);
+                    }
+                }
+            }
+        }
+
+        this.messageList.addAll(msgList);
         this.notifyDataSetChanged();
     }
 
@@ -85,7 +105,6 @@ public class ChatListAdapter extends BaseAdapter
         } else {
             tv1.setText(message.getDate());
         }
-
 
         return view;
     }

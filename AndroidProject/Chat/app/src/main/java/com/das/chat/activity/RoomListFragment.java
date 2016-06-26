@@ -58,27 +58,34 @@ public class RoomListFragment extends Fragment{
                 final ChatRoom chatRoom = (ChatRoom) adapterView.getItemAtPosition(i);
                 req.setIdSala(chatRoom.getIdSala());
                 ((MainActivity) getActivity()).showLoadingView(true);
-                Backend.getInstance().enterChatRoom(req, new OnWSResponseListener<ArrayList<ChatUser>>() {
+                Backend.getInstance().enterChatRoom(req, new OnWSResponseListener<Boolean>() {
                     @Override
-                    public void onWSResponse(final ArrayList<ChatUser> response1, long errorCode, final String errorMsg) {
+                    public void onWSResponse(Boolean response, long errorCode, String errorMsg) {
                         if (errorMsg == null) {
-                            Backend.getInstance().getChatRoomMessages(req, "0", new OnWSResponseListener<ArrayList<ChatMessage>>() {
+                            Backend.getInstance().getChatRoomUsers(req, new OnWSResponseListener<ArrayList<ChatUser>>() {
                                 @Override
-                                public void onWSResponse(ArrayList<ChatMessage> response, long errorCode, String errorMsg) {
+                                public void onWSResponse(final ArrayList<ChatUser> response1, long errorCode, final String errorMsg) {
                                     if (errorMsg == null) {
-                                        Intent i = new Intent(getActivity(), ChatActitivy.class);
-                                        i.putExtra("users", response1);
-                                        i.putExtra("messages", response);
-                                        i.putExtra("chatroom", chatRoom);
-                                        startActivity(i);
-                                    }
+                                        Backend.getInstance().getChatRoomMessages(req, "0", new OnWSResponseListener<ArrayList<ChatMessage>>() {
+                                            @Override
+                                            public void onWSResponse(ArrayList<ChatMessage> response, long errorCode, String errorMsg) {
+                                                if (errorMsg == null) {
+                                                    Intent i = new Intent(getActivity(), ChatActitivy.class);
+                                                    i.putExtra("users", response1);
+                                                    i.putExtra("messages", response);
+                                                    i.putExtra("chatroom", chatRoom);
+                                                    startActivity(i);
+                                                }
 
-                                    ((MainActivity) getActivity()).showLoadingView(false);
+                                                ((MainActivity) getActivity()).showLoadingView(false);
+                                            }
+                                        });
+
+                                    } else {
+                                        ((MainActivity) getActivity()).showLoadingView(false);
+                                    }
                                 }
                             });
-
-                        } else {
-                            ((MainActivity) getActivity()).showLoadingView(false);
                         }
                     }
                 });

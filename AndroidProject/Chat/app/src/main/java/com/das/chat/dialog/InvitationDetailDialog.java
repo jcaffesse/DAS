@@ -1,6 +1,7 @@
 package com.das.chat.dialog;
 
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,6 +24,7 @@ public class InvitationDetailDialog extends DialogFragment {
     public InvitationDetailDialog() {
     }
 
+    @SuppressLint("ValidFragment")
     public InvitationDetailDialog(ChatInvitation invite) {
         this.invite = invite;
     }
