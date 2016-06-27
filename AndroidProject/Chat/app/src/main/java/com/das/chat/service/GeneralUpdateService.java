@@ -162,7 +162,7 @@ public class GeneralUpdateService extends Service {
                     }
                 });
             }
-        }, 0, 5000L);
+        }, 0, 15000L);
     }
 
     public void stopChatRoomTimer() {
