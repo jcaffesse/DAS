@@ -3,7 +3,6 @@ package com.das.chat.activity;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -14,22 +13,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.das.chat.R;
 import com.das.chat.backend.Backend;
-import com.das.chat.dao.ChatMessage;
 import com.das.chat.service.GeneralUpdateService;
-
-import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener, GeneralUpdateService.GeneralCallbacks {
 
@@ -106,7 +97,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.invitation_menu, menu);
+        inflater.inflate(R.menu.home_menu, menu);
         return true;
     }
 

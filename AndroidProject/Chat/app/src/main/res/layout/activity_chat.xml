@@ -15,6 +15,7 @@
             android:id="@+id/back_btn"
             android:layout_width="35dp"
             android:layout_height="40dp"
+            android:layout_marginTop="3dp"
             android:background="@drawable/ic_keyboard_arrow_left_black"
             android:onClick="onBackButtonPressed"/>
 
@@ -47,6 +48,17 @@
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@id/chat_room_image"
             android:layout_below="@id/chat_room_name"/>
+
+
+        <Button
+            android:id="@+id/leave_room_btn"
+            android:layout_width="26dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/ic_leave_room"
+            android:layout_alignParentEnd="true"
+            android:onClick="onLeaveRoomButtonPressed"/>
     </RelativeLayout>
 
     <ListView
