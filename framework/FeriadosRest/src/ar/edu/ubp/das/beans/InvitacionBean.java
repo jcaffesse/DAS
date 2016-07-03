@@ -21,7 +21,7 @@ public class InvitacionBean implements Bean {
     private UsuarioBean usr_destino;
     private Date fecha_invitacion;
     private String mensaje_invitacion;
-    private String estado;
+    private int estado_invitacion;
 
     public int getId_usuario() {
         return id_usuario;
@@ -59,13 +59,13 @@ public class InvitacionBean implements Bean {
         this.mensaje_invitacion = mensaje_invitacion;
     }
 
-    public String getEstado() {
-        return estado;
+    public int getEstado() {
+        return estado_invitacion;
     }
 
     @XmlElement
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setEstado(int estado) {
+        this.estado_invitacion = estado;
     }
     
     @Override
@@ -73,7 +73,7 @@ public class InvitacionBean implements Bean {
         return "{ \"id_usuario\" : \"" + id_usuario + "\", \"usr_destino\" : " 
             + usr_destino.toString() + ", \"fecha_invitacion\" : \"" + fecha_invitacion.toString() 
             + "\", \"mensaje_invitacion\" : \"" + mensaje_invitacion +"\","
-            + " \"estado\" : \"" + estado + "\" }";
+            + " \"estado\" : \"" + estado_invitacion + "\" }";
     }
     
     @Override
