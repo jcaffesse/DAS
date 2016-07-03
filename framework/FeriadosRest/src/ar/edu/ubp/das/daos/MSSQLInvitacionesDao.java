@@ -70,7 +70,7 @@ public class MSSQLInvitacionesDao extends MSSQLDao{
         this.setProcedure("dbo.update_invitacion(?,?,?)");
         this.setParameter(1, inv.getUsr_orig().getId());
         this.setParameter(2, inv.getId_destino());
-        this.setParameter(3, inv.getMensaje_invitacion());
+        this.setParameter(3, inv.getEstado());
         
         this.executeUpdate();
         

@@ -101,13 +101,12 @@ public class InvitacionResource {
     }    
     
     @PUT
-    @Path("/{id_usuario}/{id_destino}")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public Response updateInvitacion(
-            @PathParam("id_usuario") String id_usuario, 
-            @PathParam("id_destino") String id_destino,
-            @FormParam("mensaje_invitacion") String mensaje_invitacion
+            @FormParam("id_usuario") String id_usuario, 
+            @FormParam("id_destino") String id_destino,
+            @FormParam("estado") String estado
         ) {
 
         try {
@@ -116,8 +115,8 @@ public class InvitacionResource {
             InvitacionBean bean = new InvitacionBean();
                 bean.setUsr_orig(usr);
                 bean.setId_destino(Integer.parseInt(id_destino));
-                bean.setMensaje_invitacion(mensaje_invitacion);
-
+                bean.setEstado(Integer.parseInt(estado));
+                
             Dao dao = DaoFactory.getDao("Invitaciones");
             dao.update(bean);
           
