@@ -29,8 +29,7 @@ public class MSSQLInvitacionesDao extends MSSQLDao{
             invite.setId_usuario(result.getInt("id_usuario"));
             invite.setFecha_invitacion(fecha_invitacion);
             invite.setMensaje_invitacion(result.getString("mensaje_invitacion"));
-            invite.setEstado(result.getString("estado"));
-        
+            invite.setEstado(result.getInt("estado_invitacion"));
         try {
             Dao dao = DaoFactory.getDao("Usuarios");
             List<Bean> list = dao.select(usr);
@@ -98,10 +97,11 @@ public class MSSQLInvitacionesDao extends MSSQLDao{
         UsuarioBean usr = UsuarioBean.class.cast(bean);
         List<Bean> list;
         Date ultimaAct = usr.getUltimaAct();
-        java.sql.Timestamp sqlUA = new java.sql.Timestamp(ultimaAct.getTime());
+        
         
         this.connect();
         if (ultimaAct != null) {
+            java.sql.Timestamp sqlUA = new java.sql.Timestamp(ultimaAct.getTime());
             this.setProcedure("dbo.get_invitaciones_usuario(?, ?)");
             this.setParameter(1, usr.getId());
             this.setParameter(2, sqlUA.toString());
