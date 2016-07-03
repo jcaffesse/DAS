@@ -70,10 +70,10 @@ public class InvitacionBean implements Bean {
     
     @Override
     public String toString() {
-        return "{  \"usuario\" : " + usr_orig.toString() + ","
+        return "{\"usuario\" : " + usr_orig.toString() + ","
             + "\"id_destino\" : \"" + id_destino + "\",\"fecha_invitacion\" : \"" 
             + fecha_invitacion.toString() + "\", \"mensaje_invitacion\" : \"" 
-            + mensaje_invitacion +"\"," + " \"estado\" : \"" + estado_invitacion + "\" }";
+            + mensaje_invitacion +"\"," + " \"estado\" : \"" + estado_invitacion + "\"}";
     }
     
     @Override
