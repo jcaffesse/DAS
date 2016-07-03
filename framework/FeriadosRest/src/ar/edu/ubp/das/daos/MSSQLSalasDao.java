@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import ar.edu.ubp.das.beans.Bean;
+import ar.edu.ubp.das.beans.InvitacionBean;
 import ar.edu.ubp.das.beans.SalaBean;
 
 /**
@@ -32,15 +33,35 @@ public class MSSQLSalasDao extends MSSQLDao {
 
     @Override
     public void insert(Bean bean) throws SQLException {
-        SalaBean sala = SalaBean.class.cast(bean);
+        SalaBean sala;
+        if (SalaBean.class.getSimpleName().equals(bean.getClass().getSimpleName())) {
+            sala = SalaBean.class.cast(bean);
 		
-        this.connect();
+            this.connect();
+
+            this.setProcedure("dbo.insert_sala(?,?,?,?)");  
+            this.setParameter(1, sala.getNombre());
+            this.setParameter(2, sala.getDesc());
+            this.setParameter(3, sala.getTipo());
+            this.setParameter(4, sala.getColor());
+            
+        } else if (InvitacionBean.class.getSimpleName().equals(bean.getClass().getSimpleName())) {
+            InvitacionBean inv = InvitacionBean.class.cast(bean);
+            sala = new SalaBean();
+                sala.setNombre("Sala " + inv.getUsr_orig().getId() + inv.getId_destino());
+                sala.setDesc("Sala privada");
+                sala.setTipo("private");
+                sala.createColor();
 		
-        this.setProcedure("dbo.insert_sala(?,?,?,?)");  
-        this.setParameter(1, sala.getNombre());
-        this.setParameter(2, sala.getDesc());
-        this.setParameter(3, sala.getTipo());
-        this.setParameter(4, sala.getColor());
+            this.connect();
+		
+            this.setProcedure("dbo.insert_sala_privada(?,?,?,?,?)");  
+            this.setParameter(1, sala.getNombre());
+            this.setParameter(2, sala.getDesc());
+            this.setParameter(3, sala.getColor());
+            this.setParameter(4, inv.getUsr_orig().getId());
+            this.setParameter(5, inv.getId_destino());
+        }
         
         this.executeUpdate();
         

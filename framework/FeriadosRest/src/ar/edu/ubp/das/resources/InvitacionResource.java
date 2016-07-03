@@ -7,7 +7,9 @@ package ar.edu.ubp.das.resources;
 
 import ar.edu.ubp.das.beans.Bean;
 import ar.edu.ubp.das.beans.InvitacionBean;
+import ar.edu.ubp.das.beans.SalaBean;
 import ar.edu.ubp.das.beans.UsuarioBean;
+import ar.edu.ubp.das.beans.UsuarioSalaBean;
 import ar.edu.ubp.das.daos.Dao;
 import ar.edu.ubp.das.daos.DaoFactory;
 import java.sql.SQLException;
@@ -119,6 +121,17 @@ public class InvitacionResource {
                 
             Dao dao = DaoFactory.getDao("Invitaciones");
             dao.update(bean);
+            
+            if (bean.getEstado() == 1) {
+                try {
+                    Dao salaDao = DaoFactory.getDao("Salas");
+                        salaDao.insert(bean);
+                } catch (SQLException s) {
+                    return Response.status(Response.Status.BAD_REQUEST).entity(s.getMessage()).build();
+                }
+            }
+            
+            //estado = 2 DELETE inv
           
             return Response.status(Response.Status.OK).build();
         } 
@@ -129,10 +142,11 @@ public class InvitacionResource {
     } 
     
     @DELETE
-    @Path("/{id_usuario}/{id_destino}")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public Response delSala(
-            @PathParam("id_usuario") String id_usuario,
-            @PathParam("id_destino") String id_destino
+            @FormParam("id_usuario") String id_usuario,
+            @FormParam("id_destino") String id_destino
         ) {
         try {
             UsuarioBean usr = new UsuarioBean();
