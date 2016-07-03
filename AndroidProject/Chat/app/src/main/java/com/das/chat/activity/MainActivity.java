@@ -3,6 +3,7 @@ package com.das.chat.activity;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -56,19 +57,19 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                             .setTabListener(this));
         }
 
-        //startService(new Intent(this, GeneralUpdateService.class));
+        startService(new Intent(this, GeneralUpdateService.class));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //bindService(new Intent(this, GeneralUpdateService.class), timerServiceConnection, Context.BIND_AUTO_CREATE);
+        bindService(new Intent(this, GeneralUpdateService.class), timerServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        //unbindService(timerServiceConnection);
+        unbindService(timerServiceConnection);
     }
 
     @Override
