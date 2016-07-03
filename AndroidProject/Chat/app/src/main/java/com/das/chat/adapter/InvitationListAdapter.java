@@ -32,7 +32,6 @@ public class InvitationListAdapter extends BaseAdapter
         this.inflater = LayoutInflater.from(context);
     }
 
-
     @Override
     public int getCount()
     {
@@ -56,7 +55,7 @@ public class InvitationListAdapter extends BaseAdapter
     {
         view = inflater.inflate(R.layout.invites_list_item, null);
         TextView uName = (TextView) view.findViewById(R.id.invitation_name);
-        uName.setText(invites.get(i).getInvitationOwner());
+        uName.setText(invites.get(i).getInvitationSender().getUserName());
 
         TextView message = (TextView) view.findViewById(R.id.invitation_message);
         message.setText(invites.get(i).getInvitationMessage());

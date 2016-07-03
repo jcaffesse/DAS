@@ -11,11 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.das.chat.R;
+import com.das.chat.backend.Backend;
+import com.das.chat.backend.OnWSResponseListener;
 import com.das.chat.dao.ChatInvitation;
+import com.das.chat.dao.ChatUser;
+import com.das.chat.wsmodelmap.SendInvitationRequest;
+import com.das.chat.wsmodelmap.UpdateInvitationRequest;
 
 public class InvitationDetailDialog extends DialogFragment {
 
@@ -38,20 +42,20 @@ public class InvitationDetailDialog extends DialogFragment {
             Button acceptBtn = (Button)view.findViewById(R.id.accept_button);
             Button discardBtn = (Button)view.findViewById(R.id.discard_button);
 
-            title.setText(invite.getInvitationReceiver().getUserName() + " te ha invitado a crear una sala");
+            title.setText(invite.getInvitationSender().getUserName() + " te ha invitado a crear una sala");
             message.setText(invite.getInvitationMessage());
 
             acceptBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    InvitationDetailDialog.this.dismiss();
+                    updateInvitation(1);
                 }
             });
 
             discardBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    InvitationDetailDialog.this.dismiss();
+                    updateInvitation(2);
                 }
             });
         }
@@ -65,5 +69,24 @@ public class InvitationDetailDialog extends DialogFragment {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         return dialog;
+    }
+
+    public void updateInvitation(int state) {
+
+        UpdateInvitationRequest req = new UpdateInvitationRequest();
+        req.setIdDestino(Backend.getInstance().getSession().getUserId());
+        req.setIdUsuario(invite.getInvitationSender().getUserId());
+        req.setEstado(String.valueOf(state));
+
+        Backend.getInstance().updateInvitation(req, new OnWSResponseListener<Boolean>() {
+            @Override
+            public void onWSResponse(Boolean response, long errorCode, String errorMsg) {
+                if (errorMsg == null) {
+                    InvitationDetailDialog.this.dismiss();
+                } else {
+
+                }
+            }
+        });
     }
 }

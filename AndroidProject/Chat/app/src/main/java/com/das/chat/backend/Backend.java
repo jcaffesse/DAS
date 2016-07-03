@@ -18,7 +18,9 @@ import com.das.chat.wsmodelmap.ListUsersResponse;
 import com.das.chat.wsmodelmap.LoginRequest;
 import com.das.chat.wsmodelmap.LoginResponse;
 import com.das.chat.wsmodelmap.RegisterRequest;
+import com.das.chat.wsmodelmap.SendInvitationRequest;
 import com.das.chat.wsmodelmap.SendMessageRequest;
+import com.das.chat.wsmodelmap.UpdateInvitationRequest;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -331,6 +333,63 @@ public class Backend
                 else
                 {
                     responseListener.onWSResponse(null, errorCode, errorMsg);
+                }
+            }
+        });
+        task.execute(params);
+    }
+
+    public void sendInvitation(SendInvitationRequest req, final OnWSResponseListener<Boolean> responseListener)
+    {
+        ChatWSTask task = new ChatWSTask();
+        WSParams params = new WSParams();
+
+        HttpPost get = new HttpPost(String.format("%s%s", WS_BASE_URL, WS_INVITATIONS_URL));
+        Log.d("REQUEST", String.format("%s%s", WS_BASE_URL, WS_INVITATIONS_URL));
+
+        params.setRequestWithBody(get, req.getForm());
+        params.addTokenHeader(session.getSessionToken());
+
+        task.setResponseListener(new OnWSResponseListener<String>()
+        {
+            @Override
+            public void onWSResponse(final String response, final long errorCode, final String errorMsg) {
+                if (errorMsg == null)
+                {
+                    responseListener.onWSResponse(true, errorCode, errorMsg);
+                }
+                else
+                {
+                    responseListener.onWSResponse(false, errorCode, errorMsg);
+                }
+            }
+        });
+        task.execute(params);
+    }
+
+    public void updateInvitation(UpdateInvitationRequest req, final OnWSResponseListener<Boolean> responseListener)
+    {
+        ChatWSTask task = new ChatWSTask();
+        WSParams params = new WSParams();
+
+        HttpPut put = new HttpPut(String.format("%s%s", WS_BASE_URL, WS_INVITATIONS_URL));
+        Log.d("REQUEST", String.format("%s%s", WS_BASE_URL, WS_INVITATIONS_URL));
+
+        params.setRequestWithBody(put, req.getForm());
+        params.addTokenHeader(session.getSessionToken());
+        Log.d("REQUEST", req.getForm());
+
+        task.setResponseListener(new OnWSResponseListener<String>()
+        {
+            @Override
+            public void onWSResponse(final String response, final long errorCode, final String errorMsg) {
+                if (errorMsg == null)
+                {
+                    responseListener.onWSResponse(true, errorCode, errorMsg);
+                }
+                else
+                {
+                    responseListener.onWSResponse(false, errorCode, errorMsg);
                 }
             }
         });
