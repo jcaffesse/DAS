@@ -7,7 +7,7 @@ import java.io.Serializable;
  */
 public class ChatInvitation implements Serializable{
     private String invitationOwner;
-    private ChatUser invitationReceiver;
+    private ChatUser invitationSender;
     private String invitationDate;
     private String invitationMessage;
     private String invitationStatus;
@@ -20,12 +20,12 @@ public class ChatInvitation implements Serializable{
         this.invitationOwner = invitationOwner;
     }
 
-    public ChatUser getInvitationReceiver() {
-        return invitationReceiver;
+    public ChatUser getInvitationSender() {
+        return invitationSender;
     }
 
-    public void setInvitationReceiver(ChatUser invitationReceiver) {
-        this.invitationReceiver = invitationReceiver;
+    public void setInvitationSender(ChatUser invitationSender) {
+        this.invitationSender = invitationSender;
     }
 
     public String getInvitationDate() {

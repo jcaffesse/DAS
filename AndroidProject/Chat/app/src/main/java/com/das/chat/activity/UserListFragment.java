@@ -2,6 +2,7 @@ package com.das.chat.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,15 +10,18 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.das.chat.dao.ChatInvitation;
 import com.das.chat.dao.ChatUser;
 import com.das.chat.R;
 import com.das.chat.adapter.UserListAdapter;
 import com.das.chat.backend.Backend;
 import com.das.chat.backend.OnWSResponseListener;
+import com.das.chat.dialog.InvitationDetailDialog;
+import com.das.chat.dialog.SendInvitationDialog;
 
 import java.util.ArrayList;
 
-public class UserListFragment extends Fragment{
+public class UserListFragment extends Fragment {
 
     ListView list;
     UserListAdapter adapter;
@@ -32,7 +36,7 @@ public class UserListFragment extends Fragment{
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d("ROOMS LIST ACTIVITY", adapter.getItem(i).toString());
+                showInviteDialog((ChatUser)adapter.getItem(i));
             }
         });
 
@@ -67,5 +71,11 @@ public class UserListFragment extends Fragment{
                 }
             }
         });
+    }
+
+    private void showInviteDialog(ChatUser usr) {
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        SendInvitationDialog editNameDialog = new SendInvitationDialog(usr);
+        editNameDialog.show(fm, "fragment_invitation");
     }
 }
