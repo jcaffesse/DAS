@@ -24,9 +24,9 @@ public class MSSQLInvitacionesDao extends MSSQLDao{
         Date fecha_invitacion = result.getTimestamp("fecha_invitacion");
         
         UsuarioBean usr = new UsuarioBean();
-            usr.setId(result.getInt("id_destino"));
+            usr.setId(result.getInt("id_usuario"));
         InvitacionBean invite = new InvitacionBean();
-            invite.setId_usuario(result.getInt("id_usuario"));
+            invite.setId_destino(result.getInt("id_destino"));
             invite.setFecha_invitacion(fecha_invitacion);
             invite.setMensaje_invitacion(result.getString("mensaje_invitacion"));
             invite.setEstado(result.getInt("estado_invitacion"));
@@ -35,7 +35,7 @@ public class MSSQLInvitacionesDao extends MSSQLDao{
             List<Bean> list = dao.select(usr);
             if (!list.isEmpty()) {
                 usr = UsuarioBean.class.cast(list.get(0));
-                invite.setUsr_destino(usr);
+                invite.setUsr_orig(usr);
             }
         } catch (SQLException e) {
             System.out.println("No es posible crear la Invitacion, el usuario destino"
@@ -52,8 +52,8 @@ public class MSSQLInvitacionesDao extends MSSQLDao{
         this.connect();
         
         this.setProcedure("dbo.insert_invitacion(?,?,?)");
-        this.setParameter(1, inv.getId_usuario());
-        this.setParameter(2, inv.getUsr_destino().getId());
+        this.setParameter(1, inv.getUsr_orig().getId());
+        this.setParameter(2, inv.getId_destino());
         this.setParameter(3, inv.getMensaje_invitacion());
         
         this.executeUpdate();
@@ -68,8 +68,8 @@ public class MSSQLInvitacionesDao extends MSSQLDao{
         this.connect();
         
         this.setProcedure("dbo.update_invitacion(?,?,?)");
-        this.setParameter(1, inv.getId_usuario());
-        this.setParameter(2, inv.getUsr_destino().getId());
+        this.setParameter(1, inv.getUsr_orig().getId());
+        this.setParameter(2, inv.getId_destino());
         this.setParameter(3, inv.getMensaje_invitacion());
         
         this.executeUpdate();
@@ -84,8 +84,8 @@ public class MSSQLInvitacionesDao extends MSSQLDao{
         this.connect();
         
         this.setProcedure("dbo.delete_invitacion(?,?)");
-        this.setParameter(1, inv.getId_usuario());
-        this.setParameter(2, inv.getUsr_destino().getId());
+        this.setParameter(1, inv.getUsr_orig().getId());
+        this.setParameter(2, inv.getId_destino());
         
         this.executeUpdate();
         

@@ -17,28 +17,28 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class InvitacionBean implements Bean {
     
-    private int id_usuario;
-    private UsuarioBean usr_destino;
+    private UsuarioBean usr_orig;
+    private int id_destino;
     private Date fecha_invitacion;
     private String mensaje_invitacion;
     private int estado_invitacion;
 
-    public int getId_usuario() {
-        return id_usuario;
+    public int getId_destino() {
+        return id_destino;
     }
 
     @XmlElement
-    public void setId_usuario(int id_usuario) {
-        this.id_usuario = id_usuario;
+    public void setId_destino(int id_destino) {
+        this.id_destino = id_destino;
     }
 
-    public UsuarioBean getUsr_destino() {
-        return usr_destino;
+    public UsuarioBean getUsr_orig() {
+        return usr_orig;
     }
 
     @XmlElement    
-    public void setUsr_destino(UsuarioBean usr) {
-        this.usr_destino = usr;
+    public void setUsr_orig(UsuarioBean usr) {
+        this.usr_orig = usr;
     }
 
     public Date getFecha_invitacion() {
@@ -70,10 +70,10 @@ public class InvitacionBean implements Bean {
     
     @Override
     public String toString() {
-        return "{ \"id_usuario\" : \"" + id_usuario + "\", \"usr_destino\" : " 
-            + usr_destino.toString() + ", \"fecha_invitacion\" : \"" + fecha_invitacion.toString() 
-            + "\", \"mensaje_invitacion\" : \"" + mensaje_invitacion +"\","
-            + " \"estado\" : \"" + estado_invitacion + "\" }";
+        return "{  \"usuario\" : " + usr_orig.toString() + ","
+            + "\"id_destino\" : \"" + id_destino + "\",\"fecha_invitacion\" : \"" 
+            + fecha_invitacion.toString() + "\", \"mensaje_invitacion\" : \"" 
+            + mensaje_invitacion +"\"," + " \"estado\" : \"" + estado_invitacion + "\" }";
     }
     
     @Override

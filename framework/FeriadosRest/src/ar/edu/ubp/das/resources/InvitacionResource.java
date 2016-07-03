@@ -83,10 +83,10 @@ public class InvitacionResource {
 
         try {
             UsuarioBean usr = new UsuarioBean();
-                usr.setId(Integer.parseInt(id_destino));
+                usr.setId(Integer.parseInt(id_usuario));
             InvitacionBean bean = new InvitacionBean();
-                bean.setId_usuario(Integer.parseInt(id_usuario));
-                bean.setUsr_destino(usr);
+                bean.setUsr_orig(usr);
+                bean.setId_destino(Integer.parseInt(id_destino));
                 bean.setMensaje_invitacion(mensaje_invitacion);
 
             Dao dao = DaoFactory.getDao("Invitaciones");
@@ -112,10 +112,10 @@ public class InvitacionResource {
 
         try {
             UsuarioBean usr = new UsuarioBean();
-                usr.setId(Integer.parseInt(id_destino));
+                usr.setId(Integer.parseInt(id_usuario));
             InvitacionBean bean = new InvitacionBean();
-                bean.setId_usuario(Integer.parseInt(id_usuario));
-                bean.setUsr_destino(usr);
+                bean.setUsr_orig(usr);
+                bean.setId_destino(Integer.parseInt(id_destino));
                 bean.setMensaje_invitacion(mensaje_invitacion);
 
             Dao dao = DaoFactory.getDao("Invitaciones");
@@ -137,10 +137,10 @@ public class InvitacionResource {
         ) {
         try {
             UsuarioBean usr = new UsuarioBean();
-                usr.setId(Integer.parseInt(id_destino));
+                usr.setId(Integer.parseInt(id_usuario));
             InvitacionBean bean = new InvitacionBean();
-                bean.setId_usuario(Integer.parseInt(id_usuario));
-                bean.setUsr_destino(usr);
+                bean.setUsr_orig(usr);
+                bean.setId_destino(Integer.parseInt(id_destino));
            
             Dao dao = DaoFactory.getDao("Invitaciones");
             dao.delete(bean);
