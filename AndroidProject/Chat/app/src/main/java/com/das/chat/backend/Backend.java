@@ -12,7 +12,6 @@ import com.das.chat.wsmodelmap.AddRoomRequest;
 import com.das.chat.wsmodelmap.EnterChatRoomGetMessagesResponse;
 import com.das.chat.wsmodelmap.EnterChatRoomRequest;
 import com.das.chat.wsmodelmap.EnterChatRoomGetUsersResponse;
-import com.das.chat.wsmodelmap.GetInvitationsRequest;
 import com.das.chat.wsmodelmap.GetInvitationsResponse;
 import com.das.chat.wsmodelmap.ListRoomsResponse;
 import com.das.chat.wsmodelmap.ListUsersResponse;
@@ -176,13 +175,11 @@ public class Backend
         task.execute(params);
     }
 
-    public void enterChatRoom(EnterChatRoomRequest req, final OnWSResponseListener<Boolean> responseListener)
+    public void changeChatRoomState(EnterChatRoomRequest req, final OnWSResponseListener<Boolean> responseListener)
     {
         ChatWSTask task = new ChatWSTask();
         WSParams params = new WSParams();
 
-        req.setIdUsuario(session.getUserId());
-        req.setEstado("1");
         HttpPut put = new HttpPut(String.format("%s%s", WS_BASE_URL, WS_USERS_ROOMS_URL));
         Log.d("REQUEST", String.format("%s%s", WS_BASE_URL, WS_USERS_ROOMS_URL));
 

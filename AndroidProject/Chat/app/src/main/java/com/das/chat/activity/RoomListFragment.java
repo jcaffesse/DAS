@@ -3,15 +3,12 @@ package com.das.chat.activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.das.chat.dao.ChatInvitation;
 import com.das.chat.dao.ChatMessage;
 import com.das.chat.dao.ChatRoom;
 import com.das.chat.dao.ChatUser;
@@ -56,9 +53,13 @@ public class RoomListFragment extends Fragment{
             public void onItemClick(final AdapterView<?> adapterView, View view, final int i, long l) {
                 final EnterChatRoomRequest req = new EnterChatRoomRequest();
                 final ChatRoom chatRoom = (ChatRoom) adapterView.getItemAtPosition(i);
+
                 req.setIdSala(chatRoom.getIdSala());
+                req.setIdUsuario(Backend.getInstance().getSession().getUserId());
+                req.setEstado("1");
+
                 ((MainActivity) getActivity()).showLoadingView(true);
-                Backend.getInstance().enterChatRoom(req, new OnWSResponseListener<Boolean>() {
+                Backend.getInstance().changeChatRoomState(req, new OnWSResponseListener<Boolean>() {
                     @Override
                     public void onWSResponse(Boolean response, long errorCode, String errorMsg) {
                         if (errorMsg == null) {

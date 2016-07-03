@@ -1,6 +1,5 @@
 package com.das.chat.activity;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -9,6 +8,9 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -85,6 +87,27 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
         Backend.getInstance().updateRoomAlert(chatRoom.getIdSala(), false);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.leave_room_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.logout:
+                finish();
+                break;
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private ServiceConnection timerServiceConnection = new ServiceConnection()
     {
         public void onServiceConnected(ComponentName className, IBinder service) {
@@ -102,6 +125,30 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
             serviceIsBind = false;
         }
     };
+
+    public void onLeaveRoomButtonPressed(View v) {
+        EnterChatRoomRequest req = new EnterChatRoomRequest();
+        req.setIdUsuario(Backend.getInstance().getSession().getUserId());
+        req.setIdSala(chatRoom.getIdSala());
+        req.setEstado("0");
+
+        Backend.getInstance().changeChatRoomState(req, new OnWSResponseListener<Boolean>() {
+            @Override
+            public void onWSResponse(Boolean response, long errorCode, String errorMsg) {
+                if (errorMsg == null) {
+
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(ChatActitivy.this, "Error al abandonar la sala", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }
+            }
+        });
+    }
 
     public void onSendButtonClicked(View v) {
         if(messageET.getText().length() == 0)
