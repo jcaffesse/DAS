@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
-    <system systemId="http://localhost:8080/FactorialService/FactorialService?WSDL" uri="src/conf/xml-resources/web-service-references/FactorialService/wsdl/localhost_8080/FactorialService/FactorialService.wsdl"/>
-    <system systemId="http://localhost:8080/FactorialService/FactorialService?xsd=1" uri="src/conf/xml-resources/web-service-references/FactorialService/wsdl/localhost_8080/FactorialService/FactorialService.xsd_1.xsd"/>
-</catalog>
