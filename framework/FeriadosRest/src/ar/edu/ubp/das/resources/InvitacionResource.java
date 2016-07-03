@@ -78,7 +78,7 @@ public class InvitacionResource {
     public Response addInvitacion(
             @FormParam("id_usuario") String id_usuario, 
             @FormParam("id_destino") String id_destino,
-            @FormParam("mensaje_invitacion") String mensaje_invitacion
+            @FormParam("mensaje") String mensaje_invitacion
         ) {
 
         try {
