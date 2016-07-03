@@ -148,6 +148,8 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
                 }
             }
         });
+
+        finish();
     }
 
     public void onSendButtonClicked(View v) {
