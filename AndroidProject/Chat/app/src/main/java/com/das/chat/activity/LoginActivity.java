@@ -11,9 +11,11 @@ import android.widget.Toast;
 import android.content.Intent;
 
 import com.das.chat.R;
+import com.das.chat.adapter.RoomListAdapter;
 import com.das.chat.backend.Backend;
 import com.das.chat.backend.OnWSResponseListener;
 import com.das.chat.dao.ChatInvitation;
+import com.das.chat.dao.ChatRoom;
 import com.das.chat.wsmodelmap.AddRoomRequest;
 import com.das.chat.wsmodelmap.LoginRequest;
 
@@ -45,6 +47,12 @@ public class LoginActivity extends Activity
         startActivity(i);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        showLoadingView(false);
+    }
+
     public void callLoginWS() {
         LoginRequest req = new LoginRequest();
         req.setUsername(usernameET.getText().toString());
@@ -55,9 +63,21 @@ public class LoginActivity extends Activity
             @Override
             public void onWSResponse(Boolean response, long errorCode, final String errorMsg) {
                 if (errorMsg == null) {
-                    Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(i);
-                    finish();
+
+                    Backend.getInstance().getRoomList(new OnWSResponseListener<Boolean>() {
+                        @Override
+                        public void onWSResponse(Boolean response, long errorCode, final String errorMsg) {
+                            if (errorMsg == null) {
+                                Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(i);
+                                finish();
+                            } else {
+                                showLoadingView(false);
+                            }
+
+                        }
+                    });
+
                 } else {
                     runOnUiThread(new Runnable() {
                         @Override
@@ -66,7 +86,6 @@ public class LoginActivity extends Activity
                         }
                     });
                 }
-                showLoadingView(false);
             }
         });
     }

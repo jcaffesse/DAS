@@ -29,24 +29,14 @@ public class RoomListFragment extends Fragment{
     @Override
     public void onStart() {
         super.onStart();
+        adapter = new RoomListAdapter(getActivity(), Backend.getInstance().getRooms());
+        list.setAdapter(adapter);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_room_list, container, false);
         list = (ListView) rootView.findViewById(R.id.list_view);
-
-        showLoadingView(true);
-        Backend.getInstance().getRoomList(new OnWSResponseListener<ArrayList<ChatRoom>>() {
-            @Override
-            public void onWSResponse(ArrayList<ChatRoom> response, long errorCode, final String errorMsg) {
-                if (errorMsg == null) {
-                    adapter = new RoomListAdapter(getActivity(), response);
-                    list.setAdapter(adapter);
-                }
-                showLoadingView(false);
-            }
-        });
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -76,17 +66,18 @@ public class RoomListFragment extends Fragment{
                                                     i.putExtra("messages", response);
                                                     i.putExtra("chatroom", chatRoom);
                                                     startActivity(i);
+                                                } else {
+                                                    ((MainActivity) getActivity()).showLoadingView(false);
                                                 }
-
-                                                ((MainActivity) getActivity()).showLoadingView(false);
                                             }
                                         });
-
                                     } else {
                                         ((MainActivity) getActivity()).showLoadingView(false);
                                     }
                                 }
                             });
+                        } else {
+                            ((MainActivity) getActivity()).showLoadingView(false);
                         }
                     }
                 });
@@ -101,16 +92,9 @@ public class RoomListFragment extends Fragment{
         super.onResume();
     }
 
-    public void showLoadingView (final boolean show) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (show) {
-                    rootView.findViewById(R.id.loading_layout).setVisibility(View.VISIBLE);
-                } else {
-                    rootView.findViewById(R.id.loading_layout).setVisibility(View.GONE);
-                }
-            }
-        });
+    @Override
+    public void onStop() {
+        super.onStop();
+        ((MainActivity) getActivity()).showLoadingView(false);
     }
 }

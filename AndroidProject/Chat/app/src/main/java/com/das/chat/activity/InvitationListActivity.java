@@ -1,9 +1,13 @@
 package com.das.chat.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -15,6 +19,7 @@ import com.das.chat.backend.Backend;
 import com.das.chat.backend.OnWSResponseListener;
 import com.das.chat.dao.ChatInvitation;
 import com.das.chat.dialog.InvitationDetailDialog;
+import com.das.chat.service.GeneralUpdateService;
 
 import java.util.ArrayList;
 
@@ -70,5 +75,35 @@ public class InvitationListActivity extends FragmentActivity {
                 }
             }
         });
+    }
+
+    public void onBackButtonPressed (View v) {
+        showLoadingView(false);
+        finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.invitation_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.action_logout:
+                stopService(new Intent(this, GeneralUpdateService.class));
+                Intent i = new Intent(this, LoginActivity.class);
+                startActivity(i);
+                Backend.getInstance().logout();
+                finish();
+                break;
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

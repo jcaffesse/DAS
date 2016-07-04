@@ -15,9 +15,6 @@ import com.das.chat.wsmodelmap.SendMessageRequest;
 
 import java.util.ArrayList;
 
-/**
- * Created by Pablo on 13/09/2015.
- */
 public class ChatListAdapter extends BaseAdapter
 {
     Context context;
@@ -52,26 +49,16 @@ public class ChatListAdapter extends BaseAdapter
 
     public void updateChatList(ArrayList<ChatMessage> msgList)
     {
-        if(msgList.size() == 0) {
-            Log.d("LOG", "empty msg list");
-            return;
-        }
-
-        Log.d("LOG", "check msg list");
         for (int i = messageList.size() -1; i >= 0; i--) {
             if (messageList.get(i).getDate() == null  && messageList.get(i).getIdUser().compareTo(Backend.getInstance().getSession().getUserId()) == 0) {
-                Log.d("LOG", "message not sent yet");
                 for (ChatMessage msg1 : msgList) {
-                    if (msg1.getMessage().compareTo(messageList.get(i).getMessage()) == 0 && msg1.getIdUser().compareTo(messageList.get(i).getIdUser()) == 0)
-                    {
-                        Log.d("LOG", "removed and updated message: " + messageList.get(i).getMessage());
-                        messageList.remove(i);
+                    if (msg1.getMessage().compareTo(messageList.get(i).getMessage()) == 0 && msg1.getIdUser().compareTo(messageList.get(i).getIdUser()) == 0) {
+                        messageList.set(i, msg1);
                     }
                 }
             }
         }
 
-        this.messageList.addAll(msgList);
         this.notifyDataSetChanged();
     }
 

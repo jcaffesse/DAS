@@ -90,7 +90,7 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.leave_room_menu, menu);
+        inflater.inflate(R.menu.chat_menu, menu);
         return true;
     }
 
@@ -98,7 +98,12 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
-            case R.id.logout:
+            case R.id.action_logout:
+                stopService(new Intent(this, GeneralUpdateService.class));
+                Intent i = new Intent(this, LoginActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+                Backend.getInstance().logout();
                 finish();
                 break;
             default:
@@ -182,7 +187,10 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
 
     @Override
     public void updateMessagesForChatRoom(ArrayList<ChatMessage> messages) {
-        Log.d("LOG", "new messages!!");
-        adapter.updateChatList(messages);
+        if(messages.size() > 0) {
+            adapter.updateChatList(messages);
+        }
     }
+
+
 }

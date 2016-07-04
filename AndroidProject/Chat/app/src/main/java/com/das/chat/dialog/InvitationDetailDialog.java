@@ -3,6 +3,7 @@ package com.das.chat.dialog;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -14,6 +15,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.das.chat.R;
+import com.das.chat.activity.InvitationListActivity;
+import com.das.chat.activity.MainActivity;
 import com.das.chat.backend.Backend;
 import com.das.chat.backend.OnWSResponseListener;
 import com.das.chat.dao.ChatInvitation;
@@ -78,11 +81,22 @@ public class InvitationDetailDialog extends DialogFragment {
         req.setIdUsuario(invite.getInvitationSender().getUserId());
         req.setEstado(String.valueOf(state));
 
+        ((InvitationListActivity)getActivity()).showLoadingView(true);
+
         Backend.getInstance().updateInvitation(req, new OnWSResponseListener<Boolean>() {
             @Override
             public void onWSResponse(Boolean response, long errorCode, String errorMsg) {
                 if (errorMsg == null) {
-                    InvitationDetailDialog.this.dismiss();
+                    Backend.getInstance().getRoomList(new OnWSResponseListener<Boolean>() {
+                        @Override
+                        public void onWSResponse(Boolean response, long errorCode, final String errorMsg) {
+                            if (errorMsg == null) {
+                                InvitationDetailDialog.this.dismiss();
+                            }
+                            ((InvitationListActivity)getActivity()).showLoadingView(false);
+                        }
+                    });
+
                 } else {
 
                 }

@@ -109,6 +109,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             case R.id.action_invites:
                 startActivity(new Intent(this, InvitationListActivity.class));
                 break;
+            case R.id.action_logout:
+                stopService(new Intent(this, GeneralUpdateService.class));
+                Intent i = new Intent(this, LoginActivity.class);
+                startActivity(i);
+                Backend.getInstance().logout();
+                finish();
+                break;
             default:
                 break;
         }
@@ -190,5 +197,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                 }
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        stopService(new Intent(this, GeneralUpdateService.class));
+        super.onDestroy();
     }
 }
