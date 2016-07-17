@@ -87,32 +87,6 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
         Backend.getInstance().updateRoomAlert(chatRoom.getIdSala(), false);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.chat_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
-            case R.id.action_logout:
-                stopService(new Intent(this, GeneralUpdateService.class));
-                Intent i = new Intent(this, LoginActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
-                Backend.getInstance().logout();
-                finish();
-                break;
-            default:
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     private ServiceConnection timerServiceConnection = new ServiceConnection()
     {
         public void onServiceConnected(ComponentName className, IBinder service) {

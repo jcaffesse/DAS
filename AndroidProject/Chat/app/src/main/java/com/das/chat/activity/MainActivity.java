@@ -20,8 +20,13 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.das.chat.R;
+import com.das.chat.adapter.UserListAdapter;
 import com.das.chat.backend.Backend;
+import com.das.chat.backend.OnWSResponseListener;
+import com.das.chat.dao.ChatUser;
 import com.das.chat.service.GeneralUpdateService;
+
+import java.util.ArrayList;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener, GeneralUpdateService.GeneralCallbacks {
 
@@ -110,11 +115,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                 startActivity(new Intent(this, InvitationListActivity.class));
                 break;
             case R.id.action_logout:
-                stopService(new Intent(this, GeneralUpdateService.class));
-                Intent i = new Intent(this, LoginActivity.class);
-                startActivity(i);
-                Backend.getInstance().logout();
-                finish();
+                onLogoutPressed();
                 break;
             default:
                 break;
@@ -203,5 +204,22 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     protected void onDestroy() {
         stopService(new Intent(this, GeneralUpdateService.class));
         super.onDestroy();
+    }
+
+    public void onLogoutPressed()
+    {
+        showLoadingView(true);
+        Backend.getInstance().logout(new OnWSResponseListener<Boolean>() {
+            @Override
+            public void onWSResponse(Boolean response, long errorCode, final String errorMsg) {
+                if (errorMsg == null) {
+                    stopService(new Intent(MainActivity.this, GeneralUpdateService.class));
+                    Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(i);
+                    finish();
+                }
+                showLoadingView(false);
+            }
+        });
     }
 }

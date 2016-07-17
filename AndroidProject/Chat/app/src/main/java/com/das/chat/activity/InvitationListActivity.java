@@ -81,29 +81,4 @@ public class InvitationListActivity extends FragmentActivity {
         showLoadingView(false);
         finish();
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.invitation_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
-            case R.id.action_logout:
-                stopService(new Intent(this, GeneralUpdateService.class));
-                Intent i = new Intent(this, LoginActivity.class);
-                startActivity(i);
-                Backend.getInstance().logout();
-                finish();
-                break;
-            default:
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }
