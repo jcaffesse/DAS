@@ -40,6 +40,7 @@ public class Backend
     private static final String WS_BASE_URL = "http://10.0.2.2:8080";
     private static final String WS_ROOMS_URL = "/salas";
     private static final String WS_LOGIN_URL = "/login";
+    private static final String WS_LOGOUT_URL = "/logout";
     private static final String WS_USERS_URL = "/usuarios";
     private static final String WS_USERS_ROOMS_URL = "/usuarios-salas";
     private static final String WS_MESSAGES_URL = "/mensajes";
@@ -69,12 +70,6 @@ public class Backend
     private Backend()
     {
         updateTime = ChatApplication.getAppContext().getSharedPreferences("com.das.chat.last_update_time", 0);
-    }
-
-    public void logout() {
-        users = null;
-        rooms = null;
-        session = null;
     }
 
     public ChatUser getUserById(String userId) {
@@ -163,6 +158,34 @@ public class Backend
         task.execute(params);
     }
 
+    public void logout(final OnWSResponseListener<Boolean> responseListener)
+    {
+        ChatWSTask task = new ChatWSTask();
+        WSParams params = new WSParams();
+
+        HttpPost post = new HttpPost(String.format("%s%s", WS_BASE_URL, WS_LOGOUT_URL));
+
+        params.setRequest(post);
+
+        task.setResponseListener(new OnWSResponseListener<String>()
+        {
+            @Override
+            public void onWSResponse(final String response, final long errorCode, final String errorMsg) {
+                if (errorMsg == null)
+                {
+                    users = null;
+                    rooms = null;
+                    session = null;
+                    responseListener.onWSResponse(true, errorCode, null);
+                }
+                else
+                {
+                    responseListener.onWSResponse(false, errorCode, errorMsg);
+                }
+            }
+        });
+        task.execute(params);
+    }
 
     public void register(RegisterRequest req, final OnWSResponseListener<Boolean> responseListener)
     {
