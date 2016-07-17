@@ -83,6 +83,7 @@ public class InvitacionResource {
             @FormParam("mensaje") String mensaje_invitacion
         ) {
 
+        List<Bean> list;
         try {
             UsuarioBean usr = new UsuarioBean();
                 usr.setId(Integer.parseInt(id_usuario));
@@ -92,9 +93,21 @@ public class InvitacionResource {
                 bean.setMensaje_invitacion(mensaje_invitacion);
 
             Dao dao = DaoFactory.getDao("Invitaciones");
-            dao.insert(bean);
-          
-            return Response.status(Response.Status.OK).build();
+            
+            list = dao.select(bean);
+            
+            if(list.isEmpty()) {
+                try {
+                    dao.insert(bean);
+                } catch (SQLException e) {
+                    System.out.println(e.getErrorCode()+ e.getMessage());
+                    return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+                }
+            } else {
+                return Response.status(Response.Status.OK).entity("El recurso ya existe").build();
+            }
+            
+            return Response.status(Response.Status.OK).entity(bean.toString()).build();
         } 
         catch (SQLException e) {
             System.out.println(e.getErrorCode()+ e.getMessage());

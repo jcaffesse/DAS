@@ -94,20 +94,31 @@ public class MSSQLInvitacionesDao extends MSSQLDao{
 
     @Override
     public List<Bean> select(Bean bean) throws SQLException {
-        UsuarioBean usr = UsuarioBean.class.cast(bean);
+        String beanClass = bean.getClass().getSimpleName();
         List<Bean> list;
-        Date ultimaAct = usr.getUltimaAct();
-        
-        
         this.connect();
-        if (ultimaAct != null) {
-            java.sql.Timestamp sqlUA = new java.sql.Timestamp(ultimaAct.getTime());
-            this.setProcedure("dbo.get_invitaciones_usuario(?, ?)");
-            this.setParameter(1, usr.getId());
-            this.setParameter(2, sqlUA.toString());
-        } else {
-            this.setProcedure("dbo.get_invitaciones_usuario(?)");
-            this.setParameter(1, usr.getId());
+        
+        if (beanClass.equals(UsuarioBean.class.getSimpleName())) {
+        
+            UsuarioBean usr = UsuarioBean.class.cast(bean);
+            Date ultimaAct = usr.getUltimaAct();
+            if (ultimaAct != null) {
+                java.sql.Timestamp sqlUA = new java.sql.Timestamp(ultimaAct.getTime());
+                this.setProcedure("dbo.get_invitaciones_usuario(?, ?)");
+                this.setParameter(1, usr.getId());
+                this.setParameter(2, sqlUA.toString());
+            } else {
+                this.setProcedure("dbo.get_invitaciones_usuario(?)");
+                this.setParameter(1, usr.getId());
+            }
+        } 
+        
+        if (beanClass.equals(InvitacionBean.class.getSimpleName())) {
+            InvitacionBean inv = InvitacionBean.class.cast(bean);
+            System.out.println("hello");
+            this.setProcedure("dbo.get_invitacion(?,?)");
+            this.setParameter(1, inv.getUsr_orig().getId());
+            this.setParameter(2, inv.getId_destino());
         }
         
         list = this.executeQuery();
