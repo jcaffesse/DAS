@@ -1,5 +1,6 @@
 package com.das.chat.backend;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
@@ -8,6 +9,7 @@ import com.das.chat.dao.ChatInvitation;
 import com.das.chat.dao.ChatMessage;
 import com.das.chat.dao.ChatRoom;
 import com.das.chat.dao.ChatUser;
+import com.das.chat.service.GeneralUpdateService;
 import com.das.chat.wsmodelmap.AddRoomRequest;
 import com.das.chat.wsmodelmap.EnterChatRoomGetMessagesResponse;
 import com.das.chat.wsmodelmap.EnterChatRoomRequest;
@@ -69,6 +71,12 @@ public class Backend
         updateTime = ChatApplication.getAppContext().getSharedPreferences("com.das.chat.last_update_time", 0);
     }
 
+    public void logout() {
+        users = null;
+        rooms = null;
+        session = null;
+    }
+
     public ChatUser getUserById(String userId) {
         for (ChatUser user : users) {
             if(user.getUserId().compareTo(userId) == 0) {
@@ -111,12 +119,17 @@ public class Backend
     }
 
     public void updateRoomAlert(String roomId, boolean alert) {
+
+        if(rooms == null)
+            return;
+
         for (ChatRoom room : rooms) {
-            if(room.getIdSala().compareTo(roomId) == 0) {
+            if (room.getIdSala().compareTo(roomId) == 0) {
                 room.setAlertaSala(alert);
                 break;
             }
         }
+
     }
 
     public ChatUser getSession() {
@@ -282,7 +295,7 @@ public class Backend
         task.execute(params);
     }
 
-    public void getRoomList(final OnWSResponseListener<ArrayList<ChatRoom>> responseListener)
+    public void getRoomList(final OnWSResponseListener<Boolean> responseListener)
     {
         ChatWSTask task = new ChatWSTask();
         WSParams params = new WSParams();
@@ -299,11 +312,11 @@ public class Backend
                 if (errorMsg == null)
                 {
                     rooms = ListRoomsResponse.initWithResponse(response);
-                    responseListener.onWSResponse(rooms, errorCode, null);
+                    responseListener.onWSResponse(true, errorCode, null);
                 }
                 else
                 {
-                    responseListener.onWSResponse(null, errorCode, errorMsg);
+                    responseListener.onWSResponse(false, errorCode, errorMsg);
                 }
             }
         });
