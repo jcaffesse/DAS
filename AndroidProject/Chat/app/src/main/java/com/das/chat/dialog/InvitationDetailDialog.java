@@ -91,9 +91,10 @@ public class InvitationDetailDialog extends DialogFragment {
                         @Override
                         public void onWSResponse(Boolean response, long errorCode, final String errorMsg) {
                             if (errorMsg == null) {
+                                ((InvitationListActivity)getActivity()).showLoadingView(false);
                                 InvitationDetailDialog.this.dismiss();
                             }
-                            ((InvitationListActivity)getActivity()).showLoadingView(false);
+
                         }
                     });
 

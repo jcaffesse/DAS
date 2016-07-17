@@ -16,7 +16,6 @@ public class RegisterActivity extends Activity {
     EditText usernameET;
     EditText emailET;
     EditText passwordET;
-    EditText repPasswordET;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

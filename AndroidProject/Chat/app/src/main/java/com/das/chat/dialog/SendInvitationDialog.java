@@ -47,6 +47,7 @@ public class SendInvitationDialog extends DialogFragment {
                 @Override
                 public void onClick(View v) {
                     sendInvitation();
+
                 }
             });
 

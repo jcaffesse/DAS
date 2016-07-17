@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.das.chat.application.ChatApplication;
 import com.das.chat.dao.ChatMessage;
 import com.das.chat.R;
 import com.das.chat.backend.Backend;
@@ -49,15 +50,19 @@ public class ChatListAdapter extends BaseAdapter
 
     public void updateChatList(ArrayList<ChatMessage> msgList)
     {
+        ArrayList<ChatMessage> auxMessages = new ArrayList<>();
+        auxMessages.addAll(msgList);
         for (int i = messageList.size() -1; i >= 0; i--) {
             if (messageList.get(i).getDate() == null  && messageList.get(i).getIdUser().compareTo(Backend.getInstance().getSession().getUserId()) == 0) {
                 for (ChatMessage msg1 : msgList) {
                     if (msg1.getMessage().compareTo(messageList.get(i).getMessage()) == 0 && msg1.getIdUser().compareTo(messageList.get(i).getIdUser()) == 0) {
                         messageList.set(i, msg1);
+                        auxMessages.remove(msg1);
                     }
                 }
             }
         }
+        messageList.addAll(auxMessages);
 
         this.notifyDataSetChanged();
     }

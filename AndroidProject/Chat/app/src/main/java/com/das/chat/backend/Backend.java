@@ -164,8 +164,10 @@ public class Backend
         WSParams params = new WSParams();
 
         HttpPost post = new HttpPost(String.format("%s%s", WS_BASE_URL, WS_LOGOUT_URL));
+        Log.d("REQUEST", String.format("%s%s", WS_BASE_URL, WS_LOGOUT_URL));
 
         params.setRequest(post);
+        params.addTokenHeader(session.getSessionToken());
 
         task.setResponseListener(new OnWSResponseListener<String>()
         {
@@ -380,10 +382,10 @@ public class Backend
         ChatWSTask task = new ChatWSTask();
         WSParams params = new WSParams();
 
-        HttpPost get = new HttpPost(String.format("%s%s", WS_BASE_URL, WS_INVITATIONS_URL));
+        HttpPost post = new HttpPost(String.format("%s%s", WS_BASE_URL, WS_INVITATIONS_URL));
         Log.d("REQUEST", String.format("%s%s", WS_BASE_URL, WS_INVITATIONS_URL));
 
-        params.setRequestWithBody(get, req.getForm());
+        params.setRequestWithBody(post, req.getForm());
         params.addTokenHeader(session.getSessionToken());
 
         task.setResponseListener(new OnWSResponseListener<String>()
