@@ -27,3 +27,6 @@ sqljdbc_4.0/
 trabajo-final.pdf
 consignas final dise\303\261o 8.pdf
 AndroidProject/Chat/.idea/
+/framework/ChatRest/target/
+/framework/ChatMVC3/build/
+/framework/ChatMVC3/dist/
