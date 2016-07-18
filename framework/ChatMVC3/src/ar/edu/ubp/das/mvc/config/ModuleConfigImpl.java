@@ -112,7 +112,6 @@ public final class ModuleConfigImpl {
 	}
 
 	private AliasConfig getAlias(String name) throws RuntimeException {
-            System.out.println("HOLAAAAA "+ name );
 		try {
 			if(this.alias.containsKey(name)) {
 				return this.alias.get(name);
@@ -170,7 +169,7 @@ public final class ModuleConfigImpl {
 	}
 	
 	public static DatasourceConfig getDatasourceById(String id) {
-		return ModuleConfigImpl.instance.getDatasource(id);
+            return ModuleConfigImpl.instance.getDatasource(id);
 	}
 	
 	public static ForwardConfig getForwardByName(String name) {

@@ -14,8 +14,8 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title><fmt:message key="titulo" bundle="${etq}" /></title>
-	<link type="text/css" rel="stylesheet" href="/util/StyleSheet.do/load=page,messages,chat" />
-	<script type="text/javascript" src="/util/Javascript.do/load=jquery,utils,chat"></script>
+	<link type="text/css" rel="stylesheet" href="/ChatMVC3//util/StyleSheet.do/load=page,chat" />
+	<script type="text/javascript" src="/ChatMVC3//util/Javascript.do/load=jquery,utils,chat"></script>
 	<script type="text/javascript">
 	jUtils.changeLang("etiquetas_js", "${lang}");
 	</script>
@@ -26,7 +26,7 @@
 	<div id="executing"></div>    
 	<div id="response"></div>
 	<div id="main">
-            <div id="test"><p>Hello World</p></div>
+            <div id="test"><p>Login</p></div>
 	</div>	
 </body>
 </html>

@@ -21,10 +21,10 @@ public class MSUsuariosDao extends DaoImpl {
     public DynaActionForm make(ResultSet result) throws SQLException {
         DynaActionForm form = new DynaActionForm();
             form.setItem("id_usuario", String.valueOf(result.getInt("id_usuario")));
-            form.setItem("nombre_usuario", String.valueOf(result.getInt("nombre_usuario")));
-            form.setItem("email_usuario", String.valueOf(result.getInt("email_usuario")));
+            form.setItem("nombre_usuario", result.getString("nombre_usuario"));
+            form.setItem("email_usuario",result.getString("email_usuario"));
             form.setItem("id_rol", String.valueOf(result.getInt("id_rol")));
-            form.setItem("color_usuario", String.valueOf(result.getInt("color_usuario")));
+            form.setItem("color_usuario", result.getString("color_usuario"));
             
         return form;
     }
@@ -78,8 +78,8 @@ public class MSUsuariosDao extends DaoImpl {
         List<DynaActionForm> list;
         
         this.connect();
-        
-        if (form.getItem("id_usuario") != null) {
+        System.out.println("Connected :" + form);
+        if (form != null && form.getItem("id_usuario") != null) {
             this.setProcedure("dbo.get_usuario(?,?)");
             this.setParameter(1, form.getItem("id_usuario"));
             this.setParameter(2, form.getItem("nombre_usuario"));

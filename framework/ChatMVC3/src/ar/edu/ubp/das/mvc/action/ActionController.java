@@ -70,7 +70,6 @@ public class ActionController extends HttpServlet {
     }
 
     private void processAction(HttpServletRequest request, HttpServletResponse response, String uri, Map<String, ParameterConfig> parameters) throws ServletException, IOException {
-                System.out.println("URI "+uri);
         String   aliasUrl = null;
         String   pathUrl  = null;
         String[] iuri     = uri.split("/");

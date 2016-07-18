@@ -19,12 +19,12 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Jav
  */
-public class LoginAction implements Action {
+public class UsuariosListAction implements Action {
 
     @Override
     public ForwardConfig execute(ActionMapping mapping, DynaActionForm form, HttpServletRequest request, HttpServletResponse response) throws SQLException, RuntimeException {
-       /* Dao dao = DaoFactory.getDao("Usuarios", "chat");
-        request.setAttribute("usuarios", dao.select(null));*/
+        Dao dao = DaoFactory.getDao("Usuarios", "chat");
+        request.setAttribute("usuarios", dao.select(null));
         return mapping.getForwardByName("success");
     }
     

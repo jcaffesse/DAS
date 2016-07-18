@@ -14,7 +14,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <title><fmt:message key="titulo" bundle="${etq}" /></title>
-    <link type="text/css" rel="stylesheet" href="/ChatMVC3/util/StyleSheet.do/load=page,chat" />
+    <link type="text/css" rel="stylesheet" href="/ChatMVC3/util/StyleSheet.do/load=page,messages,chat" />
     <script type="text/javascript" src="/ChatMVC3/util/Javascript.do/load=jquery,utils,chat"></script>
     <script type="text/javascript">
     jUtils.changeLang("etiquetas_js", "${lang}");
@@ -35,27 +35,27 @@
             </colgroup>
             <thead>
                 <tr>
-                    <th align="left"><fmt:message key="idSala" bundle="${etq}" /></th>
-                    <th align="right"><fmt:message key="sala" bundle="${etq}" /></th>
-                    <th align="right"><fmt:message key="tipo" bundle="${etq}" /></th>                    
-                    <th align="right"><fmt:message key="participantes" bundle="${etq}" /></th>
+                    <th align="left"><fmt:message key="idUsuario" bundle="${etq}" /></th>
+                    <th align="left"><fmt:message key="usuario" bundle="${etq}" /></th>
+                    <th align="left"><fmt:message key="email" bundle="${etq}" /></th>                    
+                    <th align="left"><fmt:message key="rol" bundle="${etq}" /></th>  
                 </tr>
             </thead>
             <tbody>
-                <c:forEach var="sala" items="${requestScope.salas}" varStatus="status">
+                <c:forEach var="usuario" items="${requestScope.usuarios}" varStatus="status">
                     <c:set var="index" value="${status.index}" scope="session"/>
                     <tr>
                         <td>
-                            <span>${sala.getItem('id_sala')}</span>
+                            <span>${usuario.getItem('id_usuario')}</span>
                         </td>
                         <td>
-                            <span>${sala.getItem('nombre_sala')}</span>
+                            <span>${usuario.getItem('nombre_usuario')}</span>
                         </td>
                         <td>
-                            <span>${sala.getItem('tipo_sala')}</span>
+                            <span>${usuario.getItem('email_usuario')}</span>
                         </td>
                         <td>
-                            <span>${sala.getItem('participantes')}</span>
+                            <span>${usuario.getItem('id_rol')}</span>
                         </td>
                     </tr> 
                 </c:forEach>
