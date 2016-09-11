@@ -36,9 +36,9 @@
             <thead>
                 <tr>
                     <th align="left"><fmt:message key="idSala" bundle="${etq}" /></th>
-                    <th align="right"><fmt:message key="sala" bundle="${etq}" /></th>
-                    <th align="right"><fmt:message key="tipo" bundle="${etq}" /></th>                    
-                    <th align="right"><fmt:message key="participantes" bundle="${etq}" /></th>
+                    <th align="left"><fmt:message key="sala" bundle="${etq}" /></th>
+                    <th align="left"><fmt:message key="tipo" bundle="${etq}" /></th>                    
+                    <th align="left"><fmt:message key="desc" bundle="${etq}" /></th>
                 </tr>
             </thead>
             <tbody>
@@ -46,16 +46,16 @@
                     <c:set var="index" value="${status.index}" scope="session"/>
                     <tr>
                         <td>
-                            <span>${sala.getItem('id_sala')}</span>
+                            <span>${sala.getId()}</span>
                         </td>
                         <td>
-                            <span>${sala.getItem('nombre_sala')}</span>
+                            <span>${sala.getNombre()}</span>
                         </td>
                         <td>
-                            <span>${sala.getItem('tipo_sala')}</span>
+                            <span>${sala.getTipo()}</span>
                         </td>
                         <td>
-                            <span>${sala.getItem('participantes')}</span>
+                            <span>${sala.getDesc()}</span>
                         </td>
                     </tr> 
                 </c:forEach>

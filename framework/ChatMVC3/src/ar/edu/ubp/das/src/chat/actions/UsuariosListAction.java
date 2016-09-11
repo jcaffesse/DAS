@@ -8,12 +8,27 @@ package ar.edu.ubp.das.src.chat.actions;
 import ar.edu.ubp.das.mvc.action.Action;
 import ar.edu.ubp.das.mvc.action.ActionMapping;
 import ar.edu.ubp.das.mvc.action.DynaActionForm;
+import ar.edu.ubp.das.mvc.beans.UsuarioBean;
 import ar.edu.ubp.das.mvc.config.ForwardConfig;
 import ar.edu.ubp.das.mvc.db.Dao;
 import ar.edu.ubp.das.mvc.db.DaoFactory;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import java.sql.SQLException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.LinkedList;
+import java.util.List;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
 
 /**
  *
@@ -23,8 +38,31 @@ public class UsuariosListAction implements Action {
 
     @Override
     public ForwardConfig execute(ActionMapping mapping, DynaActionForm form, HttpServletRequest request, HttpServletResponse response) throws SQLException, RuntimeException {
-        Dao dao = DaoFactory.getDao("Usuarios", "chat");
-        request.setAttribute("usuarios", dao.select(null));
+        
+        try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
+            String url = "http://localhost:8080/usuarios/";
+            HttpGet getRequest = new HttpGet(url);
+            getRequest.addHeader("Authorization", "BEARER 3bmdisqkr9i2ee8h49btbp6f1");
+            getRequest.addHeader("accept", "application/json");
+            
+            HttpResponse getResponse = httpClient.execute(getRequest);
+            HttpEntity responseEntity = getResponse.getEntity();
+            StatusLine responseStatus = getResponse.getStatusLine();
+            String restResp = EntityUtils.toString(responseEntity);	
+
+            if(responseStatus.getStatusCode() != 200) {
+            	throw new RuntimeException(restResp);
+            }
+            Gson gson = new Gson();
+            Type listType = new TypeToken<LinkedList<UsuarioBean>>(){}.getType();
+            List<UsuarioBean> usuarios = gson.fromJson(restResp, listType);
+            System.out.println("TEST" + usuarios);
+            request.setAttribute("usuarios", usuarios);
+
+        } catch (IOException | RuntimeException e) {
+            System.out.println("Error al intentar listar Usuarios " + e.getMessage());
+        }
+
         return mapping.getForwardByName("success");
     }
     

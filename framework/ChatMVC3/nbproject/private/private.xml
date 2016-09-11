@@ -3,14 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Dev/DAS/framework/ChatMVC3/src/ar/edu/ubp/das/mvc/config/ModuleConfigImpl.java</file>
-            <file>file:/C:/Dev/DAS/framework/ChatMVC3/WebContent/WEB-INF/web.xml</file>
-            <file>file:/C:/Dev/DAS/framework/ChatMVC3/WebContent/WEB-INF/config.xml</file>
-            <file>file:/C:/Dev/DAS/framework/ChatMVC3/src/ar/edu/ubp/das/src/chat/actions/LoginAction.java</file>
-            <file>file:/C:/Dev/DAS/framework/ChatMVC3/WebContent/tpls/chat/login.jsp</file>
-            <file>file:/C:/Dev/DAS/framework/ChatMVC3/WebContent/tpls/chat/listar-salas.jsp</file>
-            <file>file:/C:/Dev/DAS/framework/ChatMVC3/src/ar/edu/ubp/das/mvc/action/ActionController.java</file>
-            <file>file:/C:/Dev/DAS/framework/ChatMVC3/WebContent/WEB-INF/actions/chat-actions.xml</file>
+            <file>file:/C:/Dev/DAS/framework/ChatMVC3/src/ar/edu/ubp/das/mvc/db/DaoImpl.java</file>
+            <file>file:/C:/Dev/DAS/framework/ChatMVC3/src/ar/edu/ubp/das/mvc/db/DaoFactory.java</file>
+            <file>file:/C:/Dev/DAS/framework/ChatMVC3/src/ar/edu/das/mvc/service/ServiceFactory.java</file>
+            <file>file:/C:/Dev/DAS/framework/ChatMVC3/src/ar/edu/das/mvc/service/Service.java</file>
+            <file>file:/C:/Dev/DAS/framework/ChatMVC3/src/ar/edu/ubp/das/mvc/db/Dao.java</file>
         </group>
     </open-files>
 </project-private>

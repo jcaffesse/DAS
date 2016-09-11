@@ -46,16 +46,16 @@
                     <c:set var="index" value="${status.index}" scope="session"/>
                     <tr>
                         <td>
-                            <span>${usuario.getItem('id_usuario')}</span>
+                            <span>${usuario.getId()}</span>
                         </td>
                         <td>
-                            <span>${usuario.getItem('nombre_usuario')}</span>
+                            <span>${usuario.getNombre()}</span>
                         </td>
                         <td>
-                            <span>${usuario.getItem('email_usuario')}</span>
+                            <span>${usuario.getEmail()}</span>
                         </td>
                         <td>
-                            <span>${usuario.getItem('id_rol')}</span>
+                            <span>${usuario.getRol()}</span>
                         </td>
                     </tr> 
                 </c:forEach>

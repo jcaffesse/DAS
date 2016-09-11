@@ -7,6 +7,9 @@
         <action path="/Login.do" type="LoginAction">
             <forward name="success" path="/chat/login.jsp"/>
     	</action>
+        <action path="/Salas.do" type="SalasListAction">
+            <forward name="success" path="/chat/listar-salas.jsp"/>
+    	</action>
         <action path="/Usuarios.do" type="UsuariosListAction">
             <forward name="success" path="/chat/listar-usuarios.jsp"/>
     	</action>
