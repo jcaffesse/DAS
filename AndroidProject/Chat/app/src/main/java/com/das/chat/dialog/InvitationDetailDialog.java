@@ -92,9 +92,8 @@ public class InvitationDetailDialog extends DialogFragment {
                         public void onWSResponse(Boolean response, long errorCode, final String errorMsg) {
                             if (errorMsg == null) {
                                 ((InvitationListActivity)getActivity()).showLoadingView(false);
-                                InvitationDetailDialog.this.dismiss();
-                            }
 
+                            }
                         }
                     });
 
@@ -103,5 +102,7 @@ public class InvitationDetailDialog extends DialogFragment {
                 }
             }
         });
+
+        InvitationDetailDialog.this.dismiss();
     }
 }

@@ -81,12 +81,13 @@ public class SendInvitationDialog extends DialogFragment {
             @Override
             public void onWSResponse(Boolean response, long errorCode, String errorMsg) {
                 if (errorMsg == null) {
-                    SendInvitationDialog.this.dismiss();
+
                 } else {
 
                 }
             }
         });
 
+        SendInvitationDialog.this.dismiss();
     }
 }

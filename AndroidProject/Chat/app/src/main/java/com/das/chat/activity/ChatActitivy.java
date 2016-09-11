@@ -163,6 +163,7 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
     public void updateMessagesForChatRoom(ArrayList<ChatMessage> messages) {
         if(messages.size() > 0) {
             adapter.updateChatList(messages);
+            Backend.getInstance().setLastRoomUpdateTime(chatRoom.getIdSala());
         }
     }
 

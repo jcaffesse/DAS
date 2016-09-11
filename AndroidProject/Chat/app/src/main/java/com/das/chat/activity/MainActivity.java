@@ -33,6 +33,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     AppSectionsPagerAdapter mAppSectionsPagerAdapter;
     ViewPager mViewPager;
     private boolean serviceIsBind;
+    private boolean newInvites = false;
+
     private GeneralUpdateService serviceInstante;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -108,6 +110,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (newInvites) {
+            menu.findItem(R.id.action_invites).setIcon(R.drawable.ic_move_to_inbox_white_new);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
@@ -139,7 +149,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     @Override
     public void updateInvitations() {
-
+        newInvites = true;
+        invalidateOptionsMenu();
     }
 
     @Override

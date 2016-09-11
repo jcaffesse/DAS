@@ -38,7 +38,7 @@ import java.util.Date;
 public class Backend
 {
     private static final String WS_BASE_URL = "http://10.0.2.2:8080";
-    private static final String WS_ROOMS_URL = "/salas";
+    private static final String WS_ROOMS_URL = "/salas/usuario";
     private static final String WS_LOGIN_URL = "/login";
     private static final String WS_LOGOUT_URL = "/logout";
     private static final String WS_USERS_URL = "/usuarios";
@@ -90,7 +90,7 @@ public class Backend
     }
 
     public void setLastRoomUpdateTime(String chatRoomId) {
-        updateTime.edit().putString("com.das.chat.last_update_time.room_" + chatRoomId, Long.toString(new Date().getTime())).apply();
+        updateTime.edit().putString("com.das.chat.last_update_time.room_" + chatRoomId, Long.toString(new Date().getTime()+300)).apply();
     }
 
     public String getLastInvitationUpdateTime() {
@@ -280,9 +280,6 @@ public class Backend
             public void onWSResponse(final String response, final long errorCode, final String errorMsg) {
                 if (errorMsg == null) {
                     ArrayList<ChatMessage> messages = EnterChatRoomGetMessagesResponse.initWithResponse(response);
-                    if(messages.size() > 0) {
-                        setLastRoomUpdateTime(req.getIdSala());
-                    }
                     responseListener.onWSResponse(messages, errorCode, null);
                 } else {
                     responseListener.onWSResponse(null, errorCode, errorMsg);
