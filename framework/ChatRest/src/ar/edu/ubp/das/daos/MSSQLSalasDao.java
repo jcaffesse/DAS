@@ -12,6 +12,7 @@ import java.util.List;
 import ar.edu.ubp.das.beans.Bean;
 import ar.edu.ubp.das.beans.InvitacionBean;
 import ar.edu.ubp.das.beans.SalaBean;
+import ar.edu.ubp.das.beans.UsuarioBean;
 
 /**
  *
@@ -101,14 +102,20 @@ public class MSSQLSalasDao extends MSSQLDao {
 
     @Override
     public List<Bean> select(Bean bean) throws SQLException {
-        SalaBean sala = SalaBean.class.cast(bean);
         List<Bean> list;
         
         this.connect();
-        
-        if (bean != null && bean.getClass() == SalaBean.class) {
-            this.setProcedure("dbo.get_sala(?)");
-            this.setParameter(1, sala.getId());
+        if (bean != null) {
+            String beanClass = bean.getClass().getSimpleName();
+            if (beanClass.equals(SalaBean.class.getSimpleName())){
+                SalaBean sala = SalaBean.class.cast(bean);
+                this.setProcedure("dbo.get_sala(?)");
+                this.setParameter(1, sala.getId());
+            }
+            if (beanClass.equals(UsuarioBean.class.getSimpleName())) {
+                this.setProcedure("dbo.get_salas_usuario(?)");
+                this.setParameter(1, UsuarioBean.class.cast(bean).getId());
+            }
         } else {
             this.setProcedure("dbo.get_salas");
         }

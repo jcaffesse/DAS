@@ -19,10 +19,13 @@ import javax.ws.rs.core.Response;
 
 import ar.edu.ubp.das.beans.Bean;
 import ar.edu.ubp.das.beans.SalaBean;
+import ar.edu.ubp.das.beans.TokenBean;
+import ar.edu.ubp.das.beans.UsuarioBean;
 import ar.edu.ubp.das.daos.Dao;
 import ar.edu.ubp.das.daos.DaoFactory;
 import java.awt.Color;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 
@@ -33,6 +36,8 @@ import javax.ws.rs.PathParam;
 @Path("/salas")
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 public class SalaResource {
+    private static final String AUTHORIZATION_BEARER = "BEARER ";
+    
     @GET
     public Response getSalas() {
         try {
@@ -45,6 +50,39 @@ public class SalaResource {
             System.out.println(e.getErrorCode()+ e.getMessage());
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
+    }
+    
+    @GET
+    @Path("/usuario")
+    public Response getSalasAvail(
+        @HeaderParam("Authorization") String authHeader
+    ) {
+        String tokenString = authHeader.substring(AUTHORIZATION_BEARER.length());
+        TokenBean token = new TokenBean();
+            token.setToken(tokenString);
+        try {
+            Dao tokensDao = DaoFactory.getDao("Tokens");
+            List<Bean> tokenList = tokensDao.select(token);
+
+            if (!tokenList.isEmpty()) {
+                int id_usuario = TokenBean.class.cast(tokenList.get(0)).getId_usuario();
+                UsuarioBean user = new UsuarioBean();
+                    user.setId(id_usuario);
+                try {
+                    Dao dao = DaoFactory.getDao("Salas");
+                    List<Bean> list = dao.select(user);
+                    return Response.status(Response.Status.OK).entity(list.toString()).build();
+                } catch (SQLException ed) {
+                    return Response.status(Response.Status.BAD_REQUEST).entity(ed.getMessage()).build();
+                }
+            } else {
+                return Response.status(Response.Status.UNAUTHORIZED).build();
+            }
+        }
+        catch (SQLException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }            
+        
     }
     
     @GET
