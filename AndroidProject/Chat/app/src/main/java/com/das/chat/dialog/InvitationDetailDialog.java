@@ -52,6 +52,7 @@ public class InvitationDetailDialog extends DialogFragment {
                 @Override
                 public void onClick(View v) {
                     updateInvitation(1);
+                    InvitationDetailDialog.this.getDialog().hide();
                 }
             });
 
@@ -90,19 +91,18 @@ public class InvitationDetailDialog extends DialogFragment {
                     Backend.getInstance().getRoomList(new OnWSResponseListener<Boolean>() {
                         @Override
                         public void onWSResponse(Boolean response, long errorCode, final String errorMsg) {
-                            if (errorMsg == null) {
-                                ((InvitationListActivity)getActivity()).showLoadingView(false);
-
-                            }
+                            ((MainActivity) getActivity()).showLoadingView(false);
+                            InvitationDetailDialog.this.dismiss();
                         }
                     });
 
                 } else {
-
+                    ((MainActivity) getActivity()).showLoadingView(false);
+                    InvitationDetailDialog.this.dismiss();
                 }
             }
         });
 
-        InvitationDetailDialog.this.dismiss();
+
     }
 }

@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<FrameLayout
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android" >
@@ -26,7 +26,7 @@
     <include
         android:id="@+id/loading_layout"
         layout="@layout/loading_view"/>
-</FrameLayout>
+</RelativeLayout>
 
 
 

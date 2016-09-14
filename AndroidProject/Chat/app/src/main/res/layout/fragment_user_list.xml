@@ -28,8 +28,5 @@
         android:background="@drawable/background">
     </ListView>
 
-    <include
-    android:id="@+id/loading_layout"
-    layout="@layout/loading_view"/>
 
 </FrameLayout>

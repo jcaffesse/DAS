@@ -51,6 +51,16 @@ public class Backend
     private ArrayList<ChatRoom> rooms;
     private ChatUser session;
 
+    public boolean getShouldReloadRooms() {
+        return shouldReloadRooms;
+    }
+
+    public void setShouldReloadRooms(boolean shouldReloadRooms) {
+        this.shouldReloadRooms = shouldReloadRooms;
+    }
+
+    private boolean shouldReloadRooms = false;
+
     private SharedPreferences updateTime;
 
     private static synchronized void initInstance()
@@ -350,8 +360,8 @@ public class Backend
         ChatWSTask task = new ChatWSTask();
         WSParams params = new WSParams();
 
-        HttpGet get = new HttpGet(String.format("%s%s/%s?ultima_act=%s", WS_BASE_URL, WS_INVITATIONS_URL, session.getUserId(), date));
-        Log.d("REQUEST", String.format("%s%s/%s?ultima_act=%s", WS_BASE_URL, WS_INVITATIONS_URL, session.getUserId(), date));
+        HttpGet get = new HttpGet(String.format("%s%s/%s?ultima_act=%s", WS_BASE_URL, WS_INVITATIONS_URL, session.getUserId(), 0));
+        Log.d("REQUEST", String.format("%s%s/%s?ultima_act=%s", WS_BASE_URL, WS_INVITATIONS_URL, session.getUserId(), 0));
         params.setRequest(get);
         params.addTokenHeader(session.getSessionToken());
 
