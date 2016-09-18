@@ -7,16 +7,12 @@ package ar.edu.ubp.das.resources;
 
 import ar.edu.ubp.das.beans.Bean;
 import ar.edu.ubp.das.beans.TokenBean;
-import ar.edu.ubp.das.beans.UsuarioBean;
 import ar.edu.ubp.das.beans.UsuarioSalaBean;
 import ar.edu.ubp.das.daos.Dao;
 import ar.edu.ubp.das.daos.DaoFactory;
-import java.security.SecureRandom;
-import java.math.BigInteger;
 import java.sql.SQLException;
 import java.util.List;
 import javax.annotation.security.PermitAll;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
