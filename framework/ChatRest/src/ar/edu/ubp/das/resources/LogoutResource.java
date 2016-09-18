@@ -8,6 +8,7 @@ package ar.edu.ubp.das.resources;
 import ar.edu.ubp.das.beans.Bean;
 import ar.edu.ubp.das.beans.TokenBean;
 import ar.edu.ubp.das.beans.UsuarioBean;
+import ar.edu.ubp.das.beans.UsuarioSalaBean;
 import ar.edu.ubp.das.daos.Dao;
 import ar.edu.ubp.das.daos.DaoFactory;
 import java.security.SecureRandom;
@@ -43,15 +44,16 @@ public class LogoutResource {
         
         try {
             Dao tokensDao = DaoFactory.getDao("Tokens");
+            Dao usDao = DaoFactory.getDao("UsuariosSalas");
             List<Bean> list = tokensDao.select(token);
-
             if (!list.isEmpty()) {
-                try {
-                    tokensDao.delete(list.get(0));
-                    return Response.status(Response.Status.OK).build();
-                } catch (SQLException ed) {
-                    return Response.status(Response.Status.BAD_REQUEST).entity(ed.getMessage()).build();
-                }
+                UsuarioSalaBean usBean = new UsuarioSalaBean();
+                    usBean.setId_usuario(TokenBean.class.cast(list.get(0)).getId_usuario());
+                
+                tokensDao.delete(list.get(0));
+                usDao.delete(usBean);
+
+                return Response.status(Response.Status.OK).build();
             } else {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }

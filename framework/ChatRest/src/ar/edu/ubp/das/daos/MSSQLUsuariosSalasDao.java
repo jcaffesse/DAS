@@ -70,13 +70,17 @@ public class MSSQLUsuariosSalasDao extends MSSQLDao{
         UsuarioSalaBean usuarioSala = UsuarioSalaBean.class.cast(bean);
 		
         this.connect();
-		
-        this.setProcedure("dbo.delete_usuario_sala(?,?)");
-        this.setParameter(1, usuarioSala.getId_usuario());
-        this.setParameter(2, usuarioSala.getId_sala());
+
+        if(usuarioSala.getId_sala() != null) {
+            this.setProcedure("dbo.delete_usuario_sala(?,?)");
+            this.setParameter(1, usuarioSala.getId_usuario());
+            this.setParameter(2, usuarioSala.getId_sala());            
+        } else {
+            this.setProcedure("dbo.delete_usuario_sala(?)");
+            this.setParameter(1, usuarioSala.getId_usuario());
+        }
         
         this.executeUpdate();
-        
         this.disconnect();
     }
 
