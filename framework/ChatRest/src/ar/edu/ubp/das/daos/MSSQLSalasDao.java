@@ -13,6 +13,7 @@ import ar.edu.ubp.das.beans.Bean;
 import ar.edu.ubp.das.beans.InvitacionBean;
 import ar.edu.ubp.das.beans.SalaBean;
 import ar.edu.ubp.das.beans.UsuarioBean;
+import java.util.LinkedList;
 
 /**
  *
@@ -105,7 +106,7 @@ public class MSSQLSalasDao extends MSSQLDao {
         List<Bean> list;
         
         this.connect();
-        if (bean != null) {
+        try {
             String beanClass = bean.getClass().getSimpleName();
             if (beanClass.equals(SalaBean.class.getSimpleName())){
                 SalaBean sala = SalaBean.class.cast(bean);
@@ -116,7 +117,7 @@ public class MSSQLSalasDao extends MSSQLDao {
                 this.setProcedure("dbo.get_salas_usuario(?)");
                 this.setParameter(1, UsuarioBean.class.cast(bean).getId());
             }
-        } else {
+        } catch (NullPointerException e) {
             this.setProcedure("dbo.get_salas");
         }
         

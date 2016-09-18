@@ -7,6 +7,8 @@ package ar.edu.ubp.das.beans;
 
 import java.awt.Color;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -92,6 +94,16 @@ public class SalaBean implements Bean {
             +"\", \"desc_sala\" : \"" + descripcion +"\", \"tipo_sala\" : \"" + tipo + "\", \"color_sala\" : \"" + Integer.toString(color) + "\"}";
         return str;
     }
+    
+    public static List<Bean> getSalasPrivadas(List<Bean> salas) {
+        List<Bean> result = new LinkedList<>();
+        salas.stream()
+            .filter((element) -> (SalaBean.class.cast(element).getTipo().equals("private")))
+                .forEach((element) -> {
+            result.add(element);
+        });
+        return result;
+    }    
     
     
 }
