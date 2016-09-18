@@ -63,7 +63,6 @@ public class ChatListAdapter extends BaseAdapter
             }
         }
         messageList.addAll(auxMessages);
-
         this.notifyDataSetChanged();
     }
 

@@ -118,7 +118,9 @@ public class GeneralUpdateService extends Service {
                 Backend.getInstance().getInvitationList(Backend.getInstance().getLastInvitationUpdateTime(), new OnWSResponseListener<ArrayList<ChatInvitation>>() {
                     @Override
                     public void onWSResponse(ArrayList<ChatInvitation> response, long errorCode, String errorMsg) {
-                        generalCallbackClient.updateInvitations();
+                        if(response.size() > 0) {
+                            generalCallbackClient.updateInvitations();
+                        }
                         Log.d("SERVICE", "----------- UPDATING INVITES -----------");
                     }
                 });

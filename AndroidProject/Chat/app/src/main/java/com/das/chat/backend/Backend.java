@@ -38,7 +38,7 @@ import java.util.Date;
 public class Backend
 {
     private static final String WS_BASE_URL = "http://10.0.2.2:8080";
-    private static final String WS_ROOMS_URL = "/salas";
+    private static final String WS_ROOMS_URL = "/salas/usuario";
     private static final String WS_LOGIN_URL = "/login";
     private static final String WS_LOGOUT_URL = "/logout";
     private static final String WS_USERS_URL = "/usuarios";
@@ -50,6 +50,16 @@ public class Backend
     private ArrayList<ChatUser> users;
     private ArrayList<ChatRoom> rooms;
     private ChatUser session;
+
+    public boolean getShouldReloadRooms() {
+        return shouldReloadRooms;
+    }
+
+    public void setShouldReloadRooms(boolean shouldReloadRooms) {
+        this.shouldReloadRooms = shouldReloadRooms;
+    }
+
+    private boolean shouldReloadRooms = false;
 
     private SharedPreferences updateTime;
 
@@ -90,7 +100,7 @@ public class Backend
     }
 
     public void setLastRoomUpdateTime(String chatRoomId) {
-        updateTime.edit().putString("com.das.chat.last_update_time.room_" + chatRoomId, Long.toString(new Date().getTime())).apply();
+        updateTime.edit().putString("com.das.chat.last_update_time.room_" + chatRoomId, Long.toString(new Date().getTime()+300)).apply();
     }
 
     public String getLastInvitationUpdateTime() {
@@ -280,9 +290,6 @@ public class Backend
             public void onWSResponse(final String response, final long errorCode, final String errorMsg) {
                 if (errorMsg == null) {
                     ArrayList<ChatMessage> messages = EnterChatRoomGetMessagesResponse.initWithResponse(response);
-                    if(messages.size() > 0) {
-                        setLastRoomUpdateTime(req.getIdSala());
-                    }
                     responseListener.onWSResponse(messages, errorCode, null);
                 } else {
                     responseListener.onWSResponse(null, errorCode, errorMsg);
@@ -353,8 +360,8 @@ public class Backend
         ChatWSTask task = new ChatWSTask();
         WSParams params = new WSParams();
 
-        HttpGet get = new HttpGet(String.format("%s%s/%s?ultima_act=%s", WS_BASE_URL, WS_INVITATIONS_URL, session.getUserId(), date));
-        Log.d("REQUEST", String.format("%s%s/%s?ultima_act=%s", WS_BASE_URL, WS_INVITATIONS_URL, session.getUserId(), date));
+        HttpGet get = new HttpGet(String.format("%s%s/%s?ultima_act=%s", WS_BASE_URL, WS_INVITATIONS_URL, session.getUserId(), 0));
+        Log.d("REQUEST", String.format("%s%s/%s?ultima_act=%s", WS_BASE_URL, WS_INVITATIONS_URL, session.getUserId(), 0));
         params.setRequest(get);
         params.addTokenHeader(session.getSessionToken());
 

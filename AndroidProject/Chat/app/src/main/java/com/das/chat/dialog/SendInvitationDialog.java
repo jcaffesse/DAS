@@ -2,6 +2,7 @@ package com.das.chat.dialog;
 
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.das.chat.R;
+import com.das.chat.activity.InvitationListActivity;
+import com.das.chat.activity.MainActivity;
 import com.das.chat.backend.Backend;
 import com.das.chat.backend.OnWSResponseListener;
 import com.das.chat.dao.ChatInvitation;
@@ -47,7 +50,7 @@ public class SendInvitationDialog extends DialogFragment {
                 @Override
                 public void onClick(View v) {
                     sendInvitation();
-
+                    SendInvitationDialog.this.getDialog().hide();
                 }
             });
 
@@ -77,16 +80,26 @@ public class SendInvitationDialog extends DialogFragment {
         req.setIdDestino(usr.getUserId());
         req.setMensaje("Que te parece si chateamos en una sala privada?");
 
+        ((MainActivity) this.getActivity()).showLoadingView(true);
+
         Backend.getInstance().sendInvitation(req, new OnWSResponseListener<Boolean>() {
             @Override
             public void onWSResponse(Boolean response, long errorCode, String errorMsg) {
                 if (errorMsg == null) {
-                    SendInvitationDialog.this.dismiss();
+                    Backend.getInstance().getRoomList(new OnWSResponseListener<Boolean>() {
+                        @Override
+                        public void onWSResponse(Boolean response, long errorCode, final String errorMsg) {
+                            ((MainActivity) SendInvitationDialog.this.getActivity()).showLoadingView(false);
+                            SendInvitationDialog.this.dismiss();
+                        }
+                    });
                 } else {
-
+                    ((MainActivity) SendInvitationDialog.this.getActivity()).showLoadingView(false);
+                    SendInvitationDialog.this.dismiss();
                 }
             }
         });
+
 
     }
 }

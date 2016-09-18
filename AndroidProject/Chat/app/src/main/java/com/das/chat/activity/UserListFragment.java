@@ -40,7 +40,7 @@ public class UserListFragment extends Fragment {
             }
         });
 
-        showLoadingView(true);
+        //((MainActivity) getActivity()).showLoadingView(true);
         Backend.getInstance().getUserList(new OnWSResponseListener<ArrayList<ChatUser>>() {
             @Override
             public void onWSResponse(ArrayList<ChatUser> response, long errorCode, final String errorMsg) {
@@ -48,7 +48,7 @@ public class UserListFragment extends Fragment {
                     adapter = new UserListAdapter(getActivity(), response);
                     list.setAdapter(adapter);
                 }
-                showLoadingView(false);
+                ((MainActivity) getActivity()).showLoadingView(false);
             }
         });
 
@@ -58,19 +58,6 @@ public class UserListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-    }
-
-    public void showLoadingView (final boolean show) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (show) {
-                    rootView.findViewById(R.id.loading_layout).setVisibility(View.VISIBLE);
-                } else {
-                    rootView.findViewById(R.id.loading_layout).setVisibility(View.GONE);
-                }
-            }
-        });
     }
 
     private void showInviteDialog(ChatUser usr) {
