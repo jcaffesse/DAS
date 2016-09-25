@@ -26,12 +26,26 @@ public class MSSQLMensajesDao extends MSSQLDao{
     public Bean make(ResultSet result) throws SQLException {
         Date fecha_mensaje = result.getTimestamp("fecha_mensaje");
         
+        UsuarioBean usr = new UsuarioBean();
+            usr.setId(result.getInt("id_usuario"));
+        
         MensajeBean msj = new MensajeBean();
             msj.setId_mensaje(result.getInt("id_mensaje"));
             msj.setId_sala(result.getInt("id_sala"));
-            msj.setId_usuario(result.getInt("id_usuario"));
             msj.setFecha_mensaje(fecha_mensaje);
             msj.setMensaje(result.getString("texto_mensaje"));
+            
+        try {
+            Dao dao = DaoFactory.getDao("Usuarios");
+            List<Bean> list = dao.select(usr);
+            if (!list.isEmpty()) {
+                usr = UsuarioBean.class.cast(list.get(0));
+                msj.setUsuario(usr);
+            }
+        } catch (SQLException e) {
+            System.out.println("No es posible crear la Invitacion, el usuario destino"
+                + " no existe" + e.getErrorCode()+ e.getMessage());
+        }            
                         
         return msj;
     }
@@ -43,7 +57,7 @@ public class MSSQLMensajesDao extends MSSQLDao{
         this.connect();
         
         this.setProcedure("dbo.insert_mensaje(?,?,?)");
-        this.setParameter(1, msj.getId_usuario());
+        this.setParameter(1, msj.getUsuario().getId());
         this.setParameter(2, msj.getId_sala());
         this.setParameter(3, msj.getMensaje());
         

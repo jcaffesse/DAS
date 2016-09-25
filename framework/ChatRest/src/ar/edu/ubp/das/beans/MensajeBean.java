@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class MensajeBean implements Bean {
     
     private int id_mensaje;
-    private int id_usuario;
+    private UsuarioBean usuario;
     private int id_sala;
     private String mensaje;
     private Date fecha_mensaje;
@@ -32,13 +32,13 @@ public class MensajeBean implements Bean {
         this.id_mensaje = id_mensaje;
     }
 
-    public int getId_usuario() {
-        return id_usuario;
+    public UsuarioBean getUsuario() {
+        return usuario;
     }
 
     @XmlElement
-    public void setId_usuario(int id_usuario) {
-        this.id_usuario = id_usuario;
+    public void setUsuario(UsuarioBean u) {
+        this.usuario = u;
     }
 
     public int getId_sala() {
@@ -70,8 +70,8 @@ public class MensajeBean implements Bean {
 
     @Override
     public String toString() {
-        return "{ \"id_mensaje\" : \"" + id_mensaje + "\", \"id_usuario\" : \"" 
-            + id_usuario + "\", \"id_sala\" : \"" + id_sala 
+        return "{ \"id_mensaje\" : \"" + id_mensaje + "\", \"usuario\" : " 
+            + usuario.toString() + ", \"id_sala\" : \"" + id_sala 
             + "\", \"mensaje\" : \"" + mensaje +"\", \"fecha_mensaje\" : \""
             + fecha_mensaje.toString() + "\"}";
     }

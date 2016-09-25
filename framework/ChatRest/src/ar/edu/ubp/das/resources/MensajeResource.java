@@ -143,9 +143,11 @@ public class MensajeResource {
         @FormParam("mensaje") String mensaje
     ) {
         try {
+            UsuarioBean user = new UsuarioBean();
+                user.setId(Integer.parseInt(id_usuario));
             MensajeBean bean = new MensajeBean();
                 bean.setId_sala(Integer.parseInt(id_sala));
-                bean.setId_usuario(Integer.parseInt(id_usuario));
+                bean.setUsuario(user);
                 bean.setMensaje(mensaje);
 
             Dao dao = DaoFactory.getDao("Mensajes");
@@ -186,7 +188,6 @@ public class MensajeResource {
         @PathParam("id_mensaje") String id_mensaje   
     ) 
     {
-        System.out.println("bang bang");
         try {
             MensajeBean bean = new MensajeBean();
                 bean.setId_mensaje(Integer.parseInt(id_mensaje));

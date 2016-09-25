@@ -7,9 +7,7 @@ package ar.edu.ubp.das.resources;
 
 import ar.edu.ubp.das.beans.Bean;
 import ar.edu.ubp.das.beans.InvitacionBean;
-import ar.edu.ubp.das.beans.SalaBean;
 import ar.edu.ubp.das.beans.UsuarioBean;
-import ar.edu.ubp.das.beans.UsuarioSalaBean;
 import ar.edu.ubp.das.daos.Dao;
 import ar.edu.ubp.das.daos.DaoFactory;
 import java.sql.SQLException;
@@ -78,11 +76,10 @@ public class InvitacionResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public Response addInvitacion(
-            @FormParam("id_usuario") String id_usuario, 
-            @FormParam("id_destino") String id_destino,
-            @FormParam("mensaje") String mensaje_invitacion
-        ) {
-
+        @FormParam("id_usuario") String id_usuario, 
+        @FormParam("id_destino") String id_destino,
+        @FormParam("mensaje") String mensaje_invitacion
+    ) {
         List<Bean> list;
         try {
             UsuarioBean usr = new UsuarioBean();
