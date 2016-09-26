@@ -1,9 +1,11 @@
 package com.das.chat.wsmodelmap;
 
 import com.das.chat.dao.ChatMessage;
+import com.das.chat.dao.ChatUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -27,9 +29,14 @@ public class EnterChatRoomGetMessagesResponse {
             for(int i=0; i<resp.length(); i++)
             {
                 ChatMessage message = new ChatMessage();
+                ChatUser user = new ChatUser();
+                JSONObject usrJson = resp.getJSONObject(i).getJSONObject("usuario");
+                user.setUserId(usrJson.getString("id_usuario"));
+                user.setUserName(usrJson.getString("nombre_usuario"));
+                user.setUserEmail(usrJson.getString("email_usuario"));
 
                 message.setIdMessage(resp.getJSONObject(i).getString("id_mensaje"));
-                message.setIdUser(resp.getJSONObject(i).getString("id_usuario"));
+                message.setUser(user);
                 message.setIdChatRoom(resp.getJSONObject(i).getString("id_sala"));
                 message.setMessage(resp.getJSONObject(i).getString("mensaje"));
                 message.setDate(resp.getJSONObject(i).getString("fecha_mensaje"));

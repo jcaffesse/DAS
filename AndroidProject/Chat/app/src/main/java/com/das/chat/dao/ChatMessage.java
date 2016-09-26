@@ -9,7 +9,7 @@ public class ChatMessage implements Serializable{
 
     private String idMessage;
     private String idChatRoom;
-    private String idUser;
+    private ChatUser user;
     private String message;
     private String date;
 
@@ -29,12 +29,12 @@ public class ChatMessage implements Serializable{
         this.idChatRoom = idChatRoom;
     }
 
-    public String getIdUser() {
-        return idUser;
+    public ChatUser getUser() {
+        return user;
     }
 
-    public void setIdUser(String idUser) {
-        this.idUser = idUser;
+    public void setUser(ChatUser user) {
+        this.user = user;
     }
 
     public String getMessage() {

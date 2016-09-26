@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.das.chat.application.ChatApplication;
 import com.das.chat.dao.ChatMessage;
+import com.das.chat.dao.ChatUser;
 import com.das.chat.R;
 import com.das.chat.backend.Backend;
 import com.das.chat.wsmodelmap.SendMessageRequest;
@@ -53,9 +54,9 @@ public class ChatListAdapter extends BaseAdapter
         ArrayList<ChatMessage> auxMessages = new ArrayList<>();
         auxMessages.addAll(msgList);
         for (int i = messageList.size() -1; i >= 0; i--) {
-            if (messageList.get(i).getDate() == null  && messageList.get(i).getIdUser().compareTo(Backend.getInstance().getSession().getUserId()) == 0) {
+            if (messageList.get(i).getDate() == null  && messageList.get(i).getUser().getUserId().compareTo(Backend.getInstance().getSession().getUserId()) == 0) {
                 for (ChatMessage msg1 : msgList) {
-                    if (msg1.getMessage().compareTo(messageList.get(i).getMessage()) == 0 && msg1.getIdUser().compareTo(messageList.get(i).getIdUser()) == 0) {
+                    if (msg1.getMessage().compareTo(messageList.get(i).getMessage()) == 0 && msg1.getUser().getUserId().compareTo(messageList.get(i).getUser().getUserId()) == 0) {
                         messageList.set(i, msg1);
                         auxMessages.remove(msg1);
                     }
@@ -69,8 +70,10 @@ public class ChatListAdapter extends BaseAdapter
     public void addMessage(SendMessageRequest req)
     {
         ChatMessage myMsg = new ChatMessage();
+        ChatUser myUser = new ChatUser();
+            myUser.setUserId(req.getIdUsuario());
         myMsg.setMessage(req.getMessage());
-        myMsg.setIdUser(req.getIdUsuario());
+        myMsg.setUser(myUser);
         myMsg.setIdChatRoom(req.getIdSala());
         this.messageList.add(myMsg);
         this.notifyDataSetChanged();
@@ -82,10 +85,10 @@ public class ChatListAdapter extends BaseAdapter
         ChatMessage message = messageList.get(i);
         view = inflater.inflate(R.layout.my_chat_message_item, null);
 
-        if(message.getIdUser().compareTo(Backend.getInstance().getSession().getUserId()) != 0) {
+        if(message.getUser().getUserId().compareTo(Backend.getInstance().getSession().getUserId()) != 0) {
             view = inflater.inflate(R.layout.their_chat_message_item, null);
             TextView tv = (TextView) view.findViewById(R.id.message_owner);
-            tv.setText(Backend.getInstance().getUserById(message.getIdUser()).getUserName());
+            tv.setText(message.getUser().getUserName());
         }
 
         TextView tv = (TextView) view.findViewById(R.id.message_text);
