@@ -14,15 +14,15 @@ public class AddRoomRequest
     {
         String res = new String();
 
-        res += "nombre_sala=";
+        res += "nombre=";
         res += nombreSala;
         res += "&";
 
-        res += "desc_sala=";
+        res += "desc=";
         res += descSala;
         res += "&";
 
-        res += "tipo_sala=";
+        res += "tipo=";
         res += tipoSala;
 
         return res;

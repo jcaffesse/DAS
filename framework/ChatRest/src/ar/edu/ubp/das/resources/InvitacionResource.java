@@ -88,6 +88,7 @@ public class InvitacionResource {
                 bean.setUsr_orig(usr);
                 bean.setId_destino(Integer.parseInt(id_destino));
                 bean.setMensaje_invitacion(mensaje_invitacion);
+                bean.setFecha_invitacion(new Date());
 
             Dao dao = DaoFactory.getDao("Invitaciones");
             

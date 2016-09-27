@@ -48,6 +48,7 @@ public class RoomListFragment extends Fragment{
                 req.setIdUsuario(Backend.getInstance().getSession().getUserId());
                 req.setEstado("1");
 
+                ((MainActivity) getActivity()).showLoadingView(true);
 
                 Backend.getInstance().changeChatRoomState(req, new OnWSResponseListener<Boolean>() {
                     @Override

@@ -40,7 +40,6 @@ public class UserListFragment extends Fragment {
             }
         });
 
-        //((MainActivity) getActivity()).showLoadingView(true);
         Backend.getInstance().getUserList(new OnWSResponseListener<ArrayList<ChatUser>>() {
             @Override
             public void onWSResponse(ArrayList<ChatUser> response, long errorCode, final String errorMsg) {

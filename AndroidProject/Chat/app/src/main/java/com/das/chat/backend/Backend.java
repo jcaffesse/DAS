@@ -1,6 +1,5 @@
 package com.das.chat.backend;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
@@ -9,7 +8,6 @@ import com.das.chat.dao.ChatInvitation;
 import com.das.chat.dao.ChatMessage;
 import com.das.chat.dao.ChatRoom;
 import com.das.chat.dao.ChatUser;
-import com.das.chat.service.GeneralUpdateService;
 import com.das.chat.wsmodelmap.AddRoomRequest;
 import com.das.chat.wsmodelmap.EnterChatRoomGetMessagesResponse;
 import com.das.chat.wsmodelmap.EnterChatRoomRequest;
@@ -38,7 +36,8 @@ import java.util.Date;
 public class Backend
 {
     private static final String WS_BASE_URL = "http://10.0.2.2:8080";
-    private static final String WS_ROOMS_URL = "/salas/usuario";
+    private static final String WS_ROOMS_USERS_URL = "/salas/usuario";
+    private static final String WS_ROOMS_URL = "/salas";
     private static final String WS_LOGIN_URL = "/login";
     private static final String WS_LOGOUT_URL = "/logout";
     private static final String WS_USERS_URL = "/usuarios";
@@ -332,7 +331,7 @@ public class Backend
         ChatWSTask task = new ChatWSTask();
         WSParams params = new WSParams();
 
-        HttpGet get = new HttpGet(String.format("%s%s", WS_BASE_URL, WS_ROOMS_URL));
+        HttpGet get = new HttpGet(String.format("%s%s", WS_BASE_URL, WS_ROOMS_USERS_URL));
 
         params.setRequest(get);
         params.addTokenHeader(session.getSessionToken());
@@ -394,6 +393,7 @@ public class Backend
 
         params.setRequestWithBody(post, req.getForm());
         params.addTokenHeader(session.getSessionToken());
+        Log.d("REQUEST", req.getForm());
 
         task.setResponseListener(new OnWSResponseListener<String>()
         {
@@ -504,9 +504,12 @@ public class Backend
         WSParams params = new WSParams();
 
         HttpPost post = new HttpPost(String.format("%s%s", WS_BASE_URL, WS_ROOMS_URL));
+        Log.d("REQUEST", String.format("%s%s", WS_BASE_URL, WS_ROOMS_URL));
+
+        Log.d("REQUEST", req.getForm());
 
         params.setRequestWithBody(post, req.getForm());
-
+        params.addTokenHeader(session.getSessionToken());
 
         task.setResponseListener(new OnWSResponseListener<String>()
         {

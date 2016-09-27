@@ -22,6 +22,7 @@ import com.das.chat.backend.Backend;
 import com.das.chat.backend.OnWSResponseListener;
 import com.das.chat.dao.ChatInvitation;
 import com.das.chat.dao.ChatUser;
+import com.das.chat.wsmodelmap.AddRoomRequest;
 import com.das.chat.wsmodelmap.SendInvitationRequest;
 
 public class SendInvitationDialog extends DialogFragment {
@@ -78,7 +79,7 @@ public class SendInvitationDialog extends DialogFragment {
         SendInvitationRequest req = new SendInvitationRequest();
         req.setIdUsuario(Backend.getInstance().getSession().getUserId());
         req.setIdDestino(usr.getUserId());
-        req.setMensaje("Que te parece si chateamos en una sala privada?");
+        req.setMensaje("Que te parece");
 
         ((MainActivity) this.getActivity()).showLoadingView(true);
 
@@ -86,13 +87,32 @@ public class SendInvitationDialog extends DialogFragment {
             @Override
             public void onWSResponse(Boolean response, long errorCode, String errorMsg) {
                 if (errorMsg == null) {
-                    Backend.getInstance().getRoomList(new OnWSResponseListener<Boolean>() {
+
+                    AddRoomRequest req = new AddRoomRequest();
+                    req.setNombreSala("privadaza");
+                    req.setDescSala("privada");
+                    req.setTipoSala("private");
+
+                    Backend.getInstance().addRoom(req, new OnWSResponseListener<Boolean>() {
                         @Override
                         public void onWSResponse(Boolean response, long errorCode, final String errorMsg) {
-                            ((MainActivity) SendInvitationDialog.this.getActivity()).showLoadingView(false);
-                            SendInvitationDialog.this.dismiss();
+                            if(errorMsg == null) {
+                                Backend.getInstance().getRoomList(new OnWSResponseListener<Boolean>() {
+                                    @Override
+                                    public void onWSResponse(Boolean response, long errorCode, final String errorMsg) {
+                                        ((MainActivity) SendInvitationDialog.this.getActivity()).showLoadingView(false);
+                                        SendInvitationDialog.this.dismiss();
+                                    }
+                                });
+                            }
+                            else {
+                                ((MainActivity) SendInvitationDialog.this.getActivity()).showLoadingView(false);
+                                SendInvitationDialog.this.dismiss();
+                            }
                         }
                     });
+
+
                 } else {
                     ((MainActivity) SendInvitationDialog.this.getActivity()).showLoadingView(false);
                     SendInvitationDialog.this.dismiss();
