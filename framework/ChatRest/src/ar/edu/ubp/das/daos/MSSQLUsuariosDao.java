@@ -87,7 +87,6 @@ public class MSSQLUsuariosDao extends MSSQLDao {
         this.connect();
         
         if (usuario != null) {
-            System.out.println(usuario.toString());
             this.setProcedure("dbo.get_usuario(?,?)");
             try {
                 this.setParameter(1, usuario.getId());

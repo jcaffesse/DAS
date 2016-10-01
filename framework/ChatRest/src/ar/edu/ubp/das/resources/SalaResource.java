@@ -23,7 +23,6 @@ import ar.edu.ubp.das.beans.TokenBean;
 import ar.edu.ubp.das.beans.UsuarioBean;
 import ar.edu.ubp.das.daos.Dao;
 import ar.edu.ubp.das.daos.DaoFactory;
-import java.awt.Color;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.PUT;
@@ -132,7 +131,6 @@ public class SalaResource {
 
             Dao dao = DaoFactory.getDao("Salas");
             dao.insert(bean);
-          
             return Response.status(Response.Status.OK).build();
         } 
         catch (SQLException e) {

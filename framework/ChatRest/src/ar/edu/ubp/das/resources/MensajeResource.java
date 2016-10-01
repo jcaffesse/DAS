@@ -198,7 +198,6 @@ public class MensajeResource {
             return Response.status(Response.Status.OK).build();
         } 
         catch (SQLException e) {
-            System.out.println(e.getErrorCode()+ e.getMessage());
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }        
     }

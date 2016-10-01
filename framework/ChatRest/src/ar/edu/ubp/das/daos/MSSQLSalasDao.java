@@ -50,7 +50,7 @@ public class MSSQLSalasDao extends MSSQLDao {
         } else if (InvitacionBean.class.getSimpleName().equals(bean.getClass().getSimpleName())) {
             InvitacionBean inv = InvitacionBean.class.cast(bean);
             sala = new SalaBean();
-                sala.setNombre("Sala " + inv.getUsr_orig().getId() + inv.getId_destino());
+                sala.setNombre("Sala privada de " + inv.getUsr_orig().getNombre());
                 sala.setDesc("Sala privada");
                 sala.setTipo("private");
                 sala.createColor();
