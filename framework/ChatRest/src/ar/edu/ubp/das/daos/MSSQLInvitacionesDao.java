@@ -27,6 +27,7 @@ public class MSSQLInvitacionesDao extends MSSQLDao{
             usr.setId(result.getInt("id_usuario"));
         InvitacionBean invite = new InvitacionBean();
             invite.setId_destino(result.getInt("id_destino"));
+            invite.setId_sala(result.getInt("id_sala"));
             invite.setFecha_invitacion(fecha_invitacion);
             invite.setMensaje_invitacion(result.getString("mensaje_invitacion"));
             invite.setEstado(result.getInt("estado_invitacion"));
@@ -70,7 +71,7 @@ public class MSSQLInvitacionesDao extends MSSQLDao{
         this.setProcedure("dbo.update_invitacion(?,?,?)");
         this.setParameter(1, inv.getUsr_orig().getId());
         this.setParameter(2, inv.getId_destino());
-        this.setParameter(3, inv.getEstado());
+        this.setParameter(3, inv.getEstado().getValue());
         
         this.executeUpdate();
         
@@ -115,7 +116,6 @@ public class MSSQLInvitacionesDao extends MSSQLDao{
         
         if (beanClass.equals(InvitacionBean.class.getSimpleName())) {
             InvitacionBean inv = InvitacionBean.class.cast(bean);
-            System.out.println("hello");
             this.setProcedure("dbo.get_invitacion(?,?)");
             this.setParameter(1, inv.getUsr_orig().getId());
             this.setParameter(2, inv.getId_destino());

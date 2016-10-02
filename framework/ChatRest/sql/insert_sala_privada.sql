@@ -33,7 +33,13 @@ BEGIN
 	INSERT INTO dbo.UsuarioSala (id_usuario, id_sala, estado_usuario)
 		VALUES (@id_origen, @IdSala, 1);
 
-	INSERT INTO dbo.UsuarioSala (id_usuario, id_sala, estado_usuario)
-		VALUES (@id_destino, @IdSala, 1);		
-
+	IF EXISTS (
+		SELECT * FROM dbo.Invitacion
+		WHERE id_usuario = @id_origen AND id_destino = @id_destino
+	)
+		UPDATE 
+			dbo.Invitacion 
+		SET 
+			id_sala = @IdSala
+		WHERE id_usuario = @id_origen AND id_destino = @id_destino
 END

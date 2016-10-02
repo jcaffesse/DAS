@@ -7,7 +7,9 @@ package ar.edu.ubp.das.resources;
 
 import ar.edu.ubp.das.beans.Bean;
 import ar.edu.ubp.das.beans.InvitacionBean;
+import ar.edu.ubp.das.beans.TokenBean;
 import ar.edu.ubp.das.beans.UsuarioBean;
+import ar.edu.ubp.das.beans.UsuarioSalaBean;
 import ar.edu.ubp.das.daos.Dao;
 import ar.edu.ubp.das.daos.DaoFactory;
 import java.sql.SQLException;
@@ -17,6 +19,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -33,6 +36,7 @@ import javax.ws.rs.core.Response;
 @Path("/invitaciones")
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 public class InvitacionResource {
+    private static final String AUTHORIZATION_BEARER = "BEARER ";
     
     @GET
     @Path("/{id_usuario}")
@@ -104,6 +108,8 @@ public class InvitacionResource {
                     
                     Dao salaDao = DaoFactory.getDao("Salas");
                         salaDao.insert(invitacionBean);
+                        
+                    invitacionBean = InvitacionBean.class.cast(dao.select(invitacionBean).get(0));
                 } catch (SQLException e) {
                     System.out.println(e.getErrorCode()+ e.getMessage());
                     return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
@@ -111,7 +117,6 @@ public class InvitacionResource {
             } else {
                 return Response.status(Response.Status.CONFLICT).entity("El recurso ya existe").build();
             }
-            
             return Response.status(Response.Status.OK).entity(invitacionBean.toString()).build();
         } 
         catch (SQLException e) {
@@ -126,8 +131,12 @@ public class InvitacionResource {
     public Response updateInvitacion(
             @FormParam("id_usuario") String id_usuario, 
             @FormParam("id_destino") String id_destino,
-            @FormParam("estado") String estado
+            @FormParam("estado") String estado,
+            @HeaderParam("Authorization") String authHeader
         ) {
+        String tokenString = authHeader.substring(AUTHORIZATION_BEARER.length());
+        TokenBean token = new TokenBean();
+            token.setToken(tokenString);
 
         try {
             UsuarioBean usr = new UsuarioBean();
@@ -135,19 +144,27 @@ public class InvitacionResource {
             InvitacionBean bean = new InvitacionBean();
                 bean.setUsr_orig(usr);
                 bean.setId_destino(Integer.parseInt(id_destino));
-                bean.setEstado(Integer.parseInt(estado));
+                bean.setEstado(estado);
                 
             Dao dao = DaoFactory.getDao("Invitaciones");
             dao.update(bean);
+
+            /*Dao tokenDao = DaoFactory.getDao("Tokens");
+                token = TokenBean.class.cast(tokenDao.select(token).get(0));            
             
-            if (bean.getEstado() == 1) {
+          /*  if (bean.getEstado().compareTo(InvitacionBean.EstadoInvitacion.ACCEPTED) == 0
+                    && token.getId_usuario() == bean.getId_destino()) {
                 try {
-                    Dao salaDao = DaoFactory.getDao("Salas");
-                        salaDao.insert(bean);
+                    bean = InvitacionBean.class.cast(dao.select(bean).get(0));
+                    UsuarioSalaBean us = new UsuarioSalaBean();
+                        us.set
+                    
+                    Dao usuarioSalaDao = DaoFactory.getDao("UsuariosSalas");
+                        usuarioSalaDao.insert(bean);
                 } catch (SQLException s) {
                     return Response.status(Response.Status.BAD_REQUEST).entity(s.getMessage()).build();
                 }
-            }
+            }*/
             
             //estado = 2 DELETE inv
           

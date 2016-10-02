@@ -19,10 +19,30 @@ public class InvitacionBean implements Bean {
     
     private UsuarioBean usr_orig;
     private int id_destino;
+    private int id_sala;
     private Date fecha_invitacion;
     private String mensaje_invitacion;
-    private int estado_invitacion;
+    private EstadoInvitacion estado_invitacion;
 
+    public static enum EstadoInvitacion {
+        CREATED("creada"), READ("leida"), ACCEPTED("aceptada"), REJECTED("rechazada");
+
+        private final String name;
+        
+        private EstadoInvitacion(String name) {
+            this.name = name;
+        }
+        
+        public int getValue() {
+            return this.ordinal();
+        }
+        
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
+    
     public int getId_destino() {
         return id_destino;
     }
@@ -32,6 +52,15 @@ public class InvitacionBean implements Bean {
         this.id_destino = id_destino;
     }
 
+    public int getId_sala() {
+        return id_sala;
+    }
+    
+    @XmlElement
+    public void setId_sala(int id_sala){
+        this.id_sala = id_sala;
+    }
+    
     public UsuarioBean getUsr_orig() {
         return usr_orig;
     }
@@ -59,21 +88,37 @@ public class InvitacionBean implements Bean {
         this.mensaje_invitacion = mensaje_invitacion;
     }
 
-    public int getEstado() {
+    public EstadoInvitacion getEstado() {
         return estado_invitacion;
     }
 
     @XmlElement
+    public void setEstado(String estado) {
+        for (EstadoInvitacion value : EstadoInvitacion.values()) {
+            if (value.toString().equals(estado)) {
+                this.estado_invitacion = value;
+                break;
+            }
+        }
+    }
+    
     public void setEstado(int estado) {
+        this.estado_invitacion = EstadoInvitacion.values()[estado];
+    }
+    
+    @XmlElement
+    public void setEstado(EstadoInvitacion estado) {
         this.estado_invitacion = estado;
     }
     
     @Override
     public String toString() {
         return "{\"usuario\" : " + usr_orig.toString() + ","
-            + "\"id_destino\" : \"" + id_destino + "\",\"fecha_invitacion\" : \"" 
-            + fecha_invitacion.toString() + "\", \"mensaje_invitacion\" : \"" 
-            + mensaje_invitacion +"\"," + " \"estado\" : \"" + estado_invitacion + "\"}";
+            + "\"id_destino\" : \"" + id_destino + "\", "
+            + "\"id_sala\" : \"" + id_sala + "\", "
+            + "\"fecha_invitacion\" : \"" + fecha_invitacion.toString() + "\", "
+            + "\"mensaje_invitacion\" : \"" + mensaje_invitacion + "\", "
+            + "\"estado\" : \"" + estado_invitacion.toString() + "\"}";
     }
     
     @Override

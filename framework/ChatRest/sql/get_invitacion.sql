@@ -20,6 +20,7 @@ BEGIN
 	SELECT
 		id_usuario,
 		id_destino,
+		id_sala,
 		fecha_invitacion,
 		mensaje_invitacion,
 		estado_invitacion		
