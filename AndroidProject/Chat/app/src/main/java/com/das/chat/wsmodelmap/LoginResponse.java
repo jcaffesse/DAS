@@ -5,6 +5,8 @@ import com.das.chat.dao.ChatUser;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
+
 public class LoginResponse
 {
     public static ChatUser initWithResponse(String response)
@@ -18,6 +20,7 @@ public class LoginResponse
             login.setUserId(resp.getString("id"));
             login.setUserRolId(resp.getString("idRol"));
             login.setSessionToken(resp.getString("Auth-Token"));
+            login.setTime(Long.toString(new Date().getTime()));
         } catch (JSONException e) {
             e.printStackTrace();
         }

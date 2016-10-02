@@ -3,6 +3,7 @@ package com.das.chat.activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.das.chat.backend.OnWSResponseListener;
 import com.das.chat.wsmodelmap.EnterChatRoomRequest;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class RoomListFragment extends Fragment{
 
@@ -49,6 +51,7 @@ public class RoomListFragment extends Fragment{
                 req.setEstado("1");
 
                 ((MainActivity) getActivity()).showLoadingView(true);
+                ((MainActivity) getActivity()).serviceInstante.stopGeneralUpdateTimer();
 
                 Backend.getInstance().changeChatRoomState(req, new OnWSResponseListener<Boolean>() {
                     @Override
@@ -58,7 +61,7 @@ public class RoomListFragment extends Fragment{
                                 @Override
                                 public void onWSResponse(final ArrayList<ChatUser> response1, long errorCode, final String errorMsg) {
                                     if (errorMsg == null) {
-                                        Backend.getInstance().getChatRoomMessages(req, "0", new OnWSResponseListener<ArrayList<ChatMessage>>() {
+                                        Backend.getInstance().getChatRoomMessages(req, Backend.getInstance().getEnterRoomTime(chatRoom.getIdSala()), new OnWSResponseListener<ArrayList<ChatMessage>>() {
                                             @Override
                                             public void onWSResponse(ArrayList<ChatMessage> response, long errorCode, String errorMsg) {
                                                 if (errorMsg == null) {
@@ -91,6 +94,17 @@ public class RoomListFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void setMenuVisibility(final boolean visible) {
+        super.setMenuVisibility(visible);
+        if (visible) {
+            if (adapter != null) {
+                adapter.updateRoomList(Backend.getInstance().getRooms());
+                adapter.notifyDataSetChanged();
+            }
+        }
     }
 
     @Override

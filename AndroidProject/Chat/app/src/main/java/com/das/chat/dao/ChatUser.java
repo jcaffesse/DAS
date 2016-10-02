@@ -10,6 +10,16 @@ public class ChatUser implements Serializable{
     private String userName;
     private String userEmail;
     private String userRolId;
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    private String time;
     private int color;
 
     public int getColor() {
