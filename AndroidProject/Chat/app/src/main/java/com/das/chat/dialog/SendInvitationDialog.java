@@ -93,24 +93,19 @@ public class SendInvitationDialog extends DialogFragment {
                     req.setDescSala("privada");
                     req.setTipoSala("private");
 
-                    Backend.getInstance().addRoom(req, new OnWSResponseListener<Boolean>() {
-                        @Override
-                        public void onWSResponse(Boolean response, long errorCode, final String errorMsg) {
-                            if(errorMsg == null) {
-                                Backend.getInstance().getRoomList(new OnWSResponseListener<Boolean>() {
-                                    @Override
-                                    public void onWSResponse(Boolean response, long errorCode, final String errorMsg) {
-                                        ((MainActivity) SendInvitationDialog.this.getActivity()).showLoadingView(false);
-                                        SendInvitationDialog.this.dismiss();
-                                    }
-                                });
-                            }
-                            else {
+                    if(errorMsg == null) {
+                        Backend.getInstance().getRoomList(new OnWSResponseListener<Boolean>() {
+                            @Override
+                            public void onWSResponse(Boolean response, long errorCode, final String errorMsg) {
                                 ((MainActivity) SendInvitationDialog.this.getActivity()).showLoadingView(false);
                                 SendInvitationDialog.this.dismiss();
                             }
-                        }
-                    });
+                        });
+                    }
+                    else {
+                        ((MainActivity) SendInvitationDialog.this.getActivity()).showLoadingView(false);
+                        SendInvitationDialog.this.dismiss();
+                    }
 
 
                 } else {

@@ -28,6 +28,7 @@ import org.apache.http.client.methods.HttpPut;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  *
@@ -36,6 +37,7 @@ import java.util.Date;
 public class Backend
 {
     private static final String WS_BASE_URL = "http://10.0.2.2:8080";
+    //private static final String WS_BASE_URL = "http://25.136.78.82:8080";
     private static final String WS_ROOMS_USERS_URL = "/salas/usuario";
     private static final String WS_ROOMS_URL = "/salas";
     private static final String WS_LOGIN_URL = "/login";
@@ -48,6 +50,7 @@ public class Backend
     private static Backend instance = new Backend();
     private ArrayList<ChatUser> users;
     private ArrayList<ChatRoom> rooms;
+    private HashMap<String, String> myRooms;
     private ChatUser session;
 
     public boolean getShouldReloadRooms() {
@@ -70,6 +73,20 @@ public class Backend
         }
     }
 
+    public void setEnterRoomTime(String roomId, String time) {
+        if(!myRooms.containsKey(roomId)) {
+            myRooms.put(roomId, time);
+        }
+    }
+
+    public String getEnterRoomTime (String roomId) {
+        if (myRooms.containsKey(roomId)) {
+            return myRooms.get(roomId);
+        } else {
+            return Long.toString(new Date().getTime());
+        }
+    }
+
     public static Backend getInstance()
     {
         initInstance();
@@ -79,6 +96,7 @@ public class Backend
     private Backend()
     {
         updateTime = ChatApplication.getAppContext().getSharedPreferences("com.das.chat.last_update_time", 0);
+        myRooms = new HashMap<>();
     }
 
     public ChatUser getUserById(String userId) {
@@ -91,11 +109,11 @@ public class Backend
     }
 
     public void setLastInvitationUpdateTime() {
-        updateTime.edit().putString("com.das.chat.last_update_time.invites", Long.toString(new Date().getTime())).apply();
+        updateTime.edit().putString("com.das.chat.last_update_time.invites", Long.toString(new Date().getTime()+300)).apply();
     }
 
     public void setLastGeneralUpdateTime() {
-        updateTime.edit().putString("com.das.chat.last_update_time.general", Long.toString(new Date().getTime())).apply();
+        updateTime.edit().putString("com.das.chat.last_update_time.general", Long.toString(new Date().getTime()+300)).apply();
     }
 
     public void setLastRoomUpdateTime(String chatRoomId) {
@@ -107,11 +125,11 @@ public class Backend
     }
 
     public String getLastGeneralUpdateTime() {
-        return updateTime.getString("com.das.chat.last_update_time.general", "0");
+        return updateTime.getString("com.das.chat.last_update_time.general", session.getTime());
     }
 
     public String getLastRoomUpdateTime(String chatRoomId) {
-        return updateTime.getString("com.das.chat.last_update_time.room_" + chatRoomId, "0");
+        return updateTime.getString("com.das.chat.last_update_time.room_" + chatRoomId, Backend.getInstance().getEnterRoomTime(chatRoomId));
     }
 
     public ArrayList<ChatUser> getUsers() {
@@ -289,6 +307,9 @@ public class Backend
             public void onWSResponse(final String response, final long errorCode, final String errorMsg) {
                 if (errorMsg == null) {
                     ArrayList<ChatMessage> messages = EnterChatRoomGetMessagesResponse.initWithResponse(response);
+                    if(messages.size() > 0) {
+                        Backend.getInstance().setLastGeneralUpdateTime();
+                    }
                     responseListener.onWSResponse(messages, errorCode, null);
                 } else {
                     responseListener.onWSResponse(null, errorCode, errorMsg);
@@ -312,9 +333,9 @@ public class Backend
             @Override
             public void onWSResponse(final String response, final long errorCode, final String errorMsg) {
                 if (errorMsg == null) {
+                    Log.d("MESSAGES", "MESSAGES");
                     ArrayList<ChatMessage> messages = EnterChatRoomGetMessagesResponse.initWithResponse(response);
                     responseListener.onWSResponse(messages, errorCode, null);
-                    setLastGeneralUpdateTime();
                     for (ChatMessage message : messages) {
                         updateRoomAlert(message.getIdChatRoom(), true);
                     }

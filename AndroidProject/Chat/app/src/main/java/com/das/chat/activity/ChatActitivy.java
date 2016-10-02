@@ -30,6 +30,7 @@ import com.das.chat.wsmodelmap.EnterChatRoomRequest;
 import com.das.chat.wsmodelmap.SendMessageRequest;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ChatActitivy extends Activity implements GeneralUpdateService.ChatRoomCallbacks{
 
@@ -65,6 +66,7 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
         messageList.setAdapter(adapter);
         chatRoomImage.setColorFilter(chatRoom.getColor());
         chatRoomName.setText(chatRoom.getNombreSala());
+        Backend.getInstance().setEnterRoomTime(chatRoom.getIdSala(), Long.toString(new Date().getTime()));
     }
 
     @Override

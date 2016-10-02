@@ -138,6 +138,7 @@ public class GeneralUpdateService extends Service {
                         if (errorMsg == null) {
                             if(response.size() > 0) {
                                 generalCallbackClient.updateMessages();
+                                Backend.getInstance().setLastGeneralUpdateTime();
                             }
 
                             Log.d("SERVICE", "----------- UPDATING ALL MESSAGES -----------");
@@ -167,9 +168,21 @@ public class GeneralUpdateService extends Service {
         }, 0, 5000L);
     }
 
+    public void startGeneralTimers() {
+        startInvitationsTimer();
+        startGeneralMessagesTimer();
+    }
+
     public void stopChatRoomTimer() {
         chatRoomTimer.cancel();
         chatRoomTimer = null;
+    }
+
+    public void stopGeneralUpdateTimer() {
+        invitesTimer.cancel();
+        invitesTimer = null;
+        generalTimer.cancel();
+        generalTimer = null;
     }
 
     public interface GeneralCallbacks {

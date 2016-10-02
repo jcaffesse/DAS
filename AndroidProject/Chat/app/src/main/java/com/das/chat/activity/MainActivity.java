@@ -35,7 +35,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     private boolean serviceIsBind;
     private boolean newInvites = false;
 
-    private GeneralUpdateService serviceInstante;
+    public GeneralUpdateService serviceInstante;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +71,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     protected void onResume() {
         super.onResume();
         bindService(new Intent(this, GeneralUpdateService.class), timerServiceConnection, Context.BIND_AUTO_CREATE);
+
     }
 
     @Override
@@ -83,6 +84,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     protected void onRestart() {
         super.onRestart();
         updateMessages();
+        serviceInstante.startGeneralTimers();
     }
 
     private ServiceConnection timerServiceConnection = new ServiceConnection()
