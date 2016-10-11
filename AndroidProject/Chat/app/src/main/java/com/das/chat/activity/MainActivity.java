@@ -23,6 +23,7 @@ import com.das.chat.R;
 import com.das.chat.adapter.UserListAdapter;
 import com.das.chat.backend.Backend;
 import com.das.chat.backend.OnWSResponseListener;
+import com.das.chat.dao.ChatInvitation;
 import com.das.chat.dao.ChatUser;
 import com.das.chat.service.GeneralUpdateService;
 
@@ -150,8 +151,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
     @Override
-    public void updateInvitations() {
-        newInvites = true;
+    public void updateInvitations(ArrayList<ChatInvitation> invites) {
+        for (ChatInvitation invite : invites) {
+            if (invite.getInvitationStatus().compareTo("0")==0) {
+                newInvites = true;
+            }
+        }
         invalidateOptionsMenu();
     }
 

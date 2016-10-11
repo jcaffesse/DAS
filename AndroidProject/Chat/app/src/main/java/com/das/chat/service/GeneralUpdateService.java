@@ -119,7 +119,7 @@ public class GeneralUpdateService extends Service {
                     @Override
                     public void onWSResponse(ArrayList<ChatInvitation> response, long errorCode, String errorMsg) {
                         if(response.size() > 0) {
-                            generalCallbackClient.updateInvitations();
+                            generalCallbackClient.updateInvitations(response);
                         }
                         Log.d("SERVICE", "----------- UPDATING INVITES -----------");
                     }
@@ -186,7 +186,7 @@ public class GeneralUpdateService extends Service {
     }
 
     public interface GeneralCallbacks {
-        void updateInvitations();
+        void updateInvitations(ArrayList<ChatInvitation> invites);
         void updateMessages();
     }
 

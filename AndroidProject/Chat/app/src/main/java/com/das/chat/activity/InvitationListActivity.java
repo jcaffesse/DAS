@@ -20,6 +20,7 @@ import com.das.chat.backend.OnWSResponseListener;
 import com.das.chat.dao.ChatInvitation;
 import com.das.chat.dialog.InvitationDetailDialog;
 import com.das.chat.service.GeneralUpdateService;
+import com.das.chat.wsmodelmap.UpdateInvitationRequest;
 
 import java.util.ArrayList;
 
@@ -36,8 +37,22 @@ public class InvitationListActivity extends FragmentActivity {
 
         invitesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                showInviteDialog((ChatInvitation)adapter.getItem(position));
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                    UpdateInvitationRequest req = new UpdateInvitationRequest();
+                    req.setIdDestino(Backend.getInstance().getSession().getUserId());
+                    req.setIdUsuario(((ChatInvitation)adapter.getItem(position)).getInvitationSender().getUserId());
+                    req.setEstado("leida");
+
+                    showLoadingView(true);
+
+                    Backend.getInstance().updateInvitation(req, new OnWSResponseListener<Boolean>() {
+                        @Override
+                        public void onWSResponse(Boolean response, long errorCode, String errorMsg) {
+                            showInviteDialog((ChatInvitation)adapter.getItem(position));
+                            showLoadingView(false);
+
+                        }
+                    });
             }
         });
     }
