@@ -11,6 +11,15 @@ public class ChatInvitation implements Serializable{
     private String invitationDate;
     private String invitationMessage;
     private String invitationStatus;
+    private String invitationChatRoom;
+
+    public String getInvitationChatRoom() {
+        return invitationChatRoom;
+    }
+
+    public void setInvitationChatRoom(String invitationChatRoom) {
+        this.invitationChatRoom = invitationChatRoom;
+    }
 
     public String getInvitationOwner() {
         return invitationOwner;

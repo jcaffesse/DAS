@@ -33,6 +33,7 @@ public class GetInvitationsResponse
                 invite.setInvitationDate(resp.getJSONObject(i).getString("fecha_invitacion"));
                 invite.setInvitationMessage(resp.getJSONObject(i).getString("mensaje_invitacion"));
                 invite.setInvitationStatus(resp.getJSONObject(i).getString("estado"));
+                invite.setInvitationChatRoom(resp.getJSONObject(i).getString("id_sala"));
                 invitesArray.add(invite);
             }
 

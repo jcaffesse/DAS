@@ -19,6 +19,7 @@ import com.das.chat.wsmodelmap.LoginRequest;
 import com.das.chat.wsmodelmap.LoginResponse;
 import com.das.chat.wsmodelmap.RegisterRequest;
 import com.das.chat.wsmodelmap.SendInvitationRequest;
+import com.das.chat.wsmodelmap.SendInvitationResponse;
 import com.das.chat.wsmodelmap.SendMessageRequest;
 import com.das.chat.wsmodelmap.UpdateInvitationRequest;
 
@@ -85,6 +86,16 @@ public class Backend
         } else {
             return Long.toString(new Date().getTime());
         }
+    }
+
+    public ChatRoom getChatRoomById (String roomId) {
+        for (ChatRoom room : rooms) {
+            if(room.getIdSala().compareTo(roomId) == 0)
+            {
+                return room;
+            }
+        }
+        return null;
     }
 
     public static Backend getInstance()
@@ -404,7 +415,7 @@ public class Backend
         task.execute(params);
     }
 
-    public void sendInvitation(SendInvitationRequest req, final OnWSResponseListener<Boolean> responseListener)
+    public void sendInvitation(SendInvitationRequest req, final OnWSResponseListener<ChatInvitation> responseListener)
     {
         ChatWSTask task = new ChatWSTask();
         WSParams params = new WSParams();
@@ -422,11 +433,11 @@ public class Backend
             public void onWSResponse(final String response, final long errorCode, final String errorMsg) {
                 if (errorMsg == null)
                 {
-                    responseListener.onWSResponse(true, errorCode, errorMsg);
+                    responseListener.onWSResponse(SendInvitationResponse.initWithResponse(response), errorCode, errorMsg);
                 }
                 else
                 {
-                    responseListener.onWSResponse(false, errorCode, errorMsg);
+                    responseListener.onWSResponse(null, errorCode, errorMsg);
                 }
             }
         });

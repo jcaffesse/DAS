@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringDef;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +52,7 @@ public class InvitationDetailDialog extends DialogFragment {
             acceptBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    updateInvitation(1);
+                    updateInvitation("aceptada");
                     InvitationDetailDialog.this.getDialog().hide();
                 }
             });
@@ -59,7 +60,7 @@ public class InvitationDetailDialog extends DialogFragment {
             discardBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    updateInvitation(2);
+                    updateInvitation("cancelada");
                 }
             });
         }
@@ -75,12 +76,12 @@ public class InvitationDetailDialog extends DialogFragment {
         return dialog;
     }
 
-    public void updateInvitation(int state) {
+    public void updateInvitation(String state) {
 
         UpdateInvitationRequest req = new UpdateInvitationRequest();
         req.setIdDestino(Backend.getInstance().getSession().getUserId());
         req.setIdUsuario(invite.getInvitationSender().getUserId());
-        req.setEstado(String.valueOf(state));
+        req.setEstado(state);
 
         ((InvitationListActivity)getActivity()).showLoadingView(true);
 
