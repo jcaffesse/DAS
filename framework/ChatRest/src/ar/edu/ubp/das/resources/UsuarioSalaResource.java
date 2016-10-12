@@ -74,10 +74,11 @@ public class UsuarioSalaResource {
     }
     
     @DELETE
+    @Path("/{id_usuario}/{id_sala}")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response deleteUsuarioSala(
-        @FormParam("id_usuario") String id_usuario,
-        @FormParam("id_sala") String id_sala
+        @PathParam("id_usuario") String id_usuario,
+        @PathParam("id_sala") String id_sala
     ) {
         UsuarioSalaBean usuarioSala = new UsuarioSalaBean();
             usuarioSala.setId_usuario(Integer.parseInt(id_usuario));
