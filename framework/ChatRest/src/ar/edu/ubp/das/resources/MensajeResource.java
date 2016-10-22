@@ -64,22 +64,41 @@ public class MensajeResource {
     @Path("/sala/{id_sala}")
     public Response getMensajesSala(
         @PathParam("id_sala") String id_sala,
-        @QueryParam("ultima_act") String ultima_act
+        @QueryParam("id_mensaje") Integer id_mensaje
     ) {
-        Date ua = null;
-        if (ultima_act != null) {
-            try {
-                ua = new Date(Long.parseLong(ultima_act));
-            } catch (NumberFormatException l) {
-                return Response.status(Response.Status.BAD_REQUEST).entity(l.getMessage()).build();
-            }
-        }
+        
         try {
             SalaBean bean = new SalaBean();
-                bean.setId(Integer.parseInt(id_sala));
-            if (ua != null) {
-                bean.setUltimaAct(ua);
+            bean.setId(Integer.parseInt(id_sala));
+            bean.setMsgId(id_mensaje);
+            
+            try {
+                Dao dao = DaoFactory.getDao("Mensajes");
+                List<Bean> list = dao.select(bean);
+                if (list.isEmpty()) {
+                    return Response.status(Response.Status.OK).entity("[]").build();
+                } else {
+                    return Response.status(Response.Status.OK).entity(list.toString()).build();
+                }
             }
+            catch (SQLException e) {
+                return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+            }
+        } catch (NumberFormatException n) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(n.getMessage()).build();
+        }
+    }
+    
+    @GET
+    @Path("/sala_ultimo/{id_sala}")
+    public Response getUltimoMensajeSala(
+        @PathParam("id_sala") String id_sala
+    ) {
+        
+        try {
+            SalaBean bean = new SalaBean();
+            bean.setId(Integer.parseInt(id_sala));
+            
             try {
                 Dao dao = DaoFactory.getDao("Mensajes");
                 List<Bean> list = dao.select(bean);

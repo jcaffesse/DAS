@@ -8,9 +8,6 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -30,7 +27,6 @@ import com.das.chat.wsmodelmap.EnterChatRoomRequest;
 import com.das.chat.wsmodelmap.SendMessageRequest;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class ChatActitivy extends Activity implements GeneralUpdateService.ChatRoomCallbacks{
 
@@ -66,7 +62,8 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
         messageList.setAdapter(adapter);
         chatRoomImage.setColorFilter(chatRoom.getColor());
         chatRoomName.setText(chatRoom.getNombreSala());
-        Backend.getInstance().setEnterRoomTime(chatRoom.getIdSala(), Long.toString(new Date().getTime()));
+        //aca hay que meter el id del ultimo mensaje de la sala
+        //Backend.getInstance().setEnterRoomMessageId(chatRoom.getIdSala(), messages.get(messages.size()-1).getIdMessage());
     }
 
     @Override
@@ -165,7 +162,7 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
     public void updateMessagesForChatRoom(ArrayList<ChatMessage> messages) {
         if(messages.size() > 0) {
             adapter.updateChatList(messages);
-            Backend.getInstance().setLastRoomUpdateTime(chatRoom.getIdSala());
+            Backend.getInstance().setLastRoomUpdateTime(chatRoom.getIdSala(), messages.get(messages.size()-1).getIdMessage());
         }
     }
 

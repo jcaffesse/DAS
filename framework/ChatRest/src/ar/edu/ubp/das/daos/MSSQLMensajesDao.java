@@ -109,12 +109,18 @@ public class MSSQLMensajesDao extends MSSQLDao{
         if (beanClass.equals(SalaBean.class.getSimpleName())) {
             SalaBean sala = SalaBean.class.cast(bean);
             try {
-                Date ultimaAct = sala.getUltimaAct();
-                java.sql.Timestamp tmst = new java.sql.Timestamp(ultimaAct.getTime());
-                procedureName += ", ?)";
-                this.setProcedure(procedureName);
-                this.setParameter(1, sala.getId());
-                this.setParameter(2, tmst.toString());
+                
+                    procedureName += ", ?)";
+                    this.setProcedure(procedureName);
+                    this.setParameter(1, sala.getId());
+                    if(sala.getMsgId() != null) {
+                      this.setParameter(2, sala.getMsgId());
+                    } else {
+                        String s2 = null;
+                        this.setParameter(2, s2);
+                    }
+                 
+                
             } catch (NullPointerException e) {
                 procedureName += ")";
                 this.setProcedure(procedureName);
@@ -125,6 +131,7 @@ public class MSSQLMensajesDao extends MSSQLDao{
             try {
                 Date ultimaAct = usuario.getUltimaAct();
                 java.sql.Timestamp tmst = new java.sql.Timestamp(ultimaAct.getTime());
+                
                 procedureName = "dbo.get_mensajes_usuario_salas(?, ?)";
                 this.setProcedure(procedureName);
                 this.setParameter(1, usuario.getId());
