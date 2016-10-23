@@ -75,6 +75,7 @@ public class RoomListFragment extends Fragment{
                                                                 i.putExtra("messages", response);
                                                                 i.putExtra("chatroom", chatRoom);
                                                                 startActivity(i);
+
                                                             } else {
                                                                 ((MainActivity) getActivity()).showLoadingView(false);
                                                             }
@@ -83,7 +84,7 @@ public class RoomListFragment extends Fragment{
                                                 }
                                             });
                                         } else {
-                                            Backend.getInstance().getChatRoomMessages(req, Backend.getInstance().getEnterRoomMessageId(chatRoom.getIdSala()), new OnWSResponseListener<ArrayList<ChatMessage>>() {
+                                            Backend.getInstance().getChatRoomMessages(req, Backend.getInstance().getEnterRoomMessageId(req.getIdSala()), new OnWSResponseListener<ArrayList<ChatMessage>>() {
                                                 @Override
                                                 public void onWSResponse(ArrayList<ChatMessage> response, long errorCode, String errorMsg) {
                                                     if (errorMsg == null) {

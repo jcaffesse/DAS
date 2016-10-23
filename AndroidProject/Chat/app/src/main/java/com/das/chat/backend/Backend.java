@@ -77,7 +77,12 @@ public class Backend
     public void setEnterRoomMessageId(String roomId, String messageId) {
         if(!myRooms.containsKey(roomId)) {
             myRooms.put(roomId, messageId);
+            setLastRoomUpdateMessageId(roomId, messageId);
         }
+    }
+
+    public void removeEnterRoomMessageId(String roomId) {
+        myRooms.remove(roomId);
     }
 
     public String getEnterRoomMessageId(String roomId) {
@@ -127,7 +132,7 @@ public class Backend
         updateTime.edit().putString("com.das.chat.last_update_time.general", Long.toString(new Date().getTime()+300)).apply();
     }
 
-    public void setLastRoomUpdateTime(String chatRoomId, String messageId) {
+    public void setLastRoomUpdateMessageId(String chatRoomId, String messageId) {
         updateTime.edit().putString("com.das.chat.last_update_time.room_" + chatRoomId, messageId).apply();
     }
 
@@ -139,7 +144,7 @@ public class Backend
         return updateTime.getString("com.das.chat.last_update_time.general", session.getTime());
     }
 
-    public String getLastRoomUpdateTime(String chatRoomId) {
+    public String getLastRoomUpdateMessageId(String chatRoomId) {
         return updateTime.getString("com.das.chat.last_update_time.room_" + chatRoomId, "");
     }
 
@@ -303,8 +308,12 @@ public class Backend
         task.execute(params);
     }
 
-    public void getChatRoomMessages(final EnterChatRoomRequest req, String messageId, final OnWSResponseListener<ArrayList<ChatMessage>> responseListener)
+    public void getChatRoomMessages(final EnterChatRoomRequest req, final String messageId, final OnWSResponseListener<ArrayList<ChatMessage>> responseListener)
     {
+        if(messageId.isEmpty()) {
+            responseListener.onWSResponse(new ArrayList<ChatMessage>(), 0, null);
+            return;
+        }
         ChatWSTask task = new ChatWSTask();
         WSParams params = new WSParams();
 
@@ -319,7 +328,7 @@ public class Backend
                 if (errorMsg == null) {
                     ArrayList<ChatMessage> messages = EnterChatRoomGetMessagesResponse.initWithResponse(response);
                     if(messages.size() > 0) {
-                        Backend.getInstance().setLastGeneralUpdateTime();
+                        Backend.getInstance().setLastRoomUpdateMessageId(req.getIdSala(), messages.get(messages.size() -1).getIdMessage());
                     }
                     responseListener.onWSResponse(messages, errorCode, null);
                 } else {

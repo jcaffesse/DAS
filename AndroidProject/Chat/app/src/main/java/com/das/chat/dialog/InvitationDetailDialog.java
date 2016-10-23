@@ -16,14 +16,19 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.das.chat.R;
+import com.das.chat.activity.ChatActitivy;
 import com.das.chat.activity.InvitationListActivity;
 import com.das.chat.activity.MainActivity;
 import com.das.chat.backend.Backend;
 import com.das.chat.backend.OnWSResponseListener;
 import com.das.chat.dao.ChatInvitation;
+import com.das.chat.dao.ChatMessage;
 import com.das.chat.dao.ChatUser;
+import com.das.chat.wsmodelmap.EnterChatRoomRequest;
 import com.das.chat.wsmodelmap.SendInvitationRequest;
 import com.das.chat.wsmodelmap.UpdateInvitationRequest;
+
+import java.util.ArrayList;
 
 public class InvitationDetailDialog extends DialogFragment {
 
@@ -92,18 +97,58 @@ public class InvitationDetailDialog extends DialogFragment {
                     Backend.getInstance().getRoomList(new OnWSResponseListener<Boolean>() {
                         @Override
                         public void onWSResponse(Boolean response, long errorCode, final String errorMsg) {
-                            ((InvitationListActivity) getActivity()).showLoadingView(false);
-                            InvitationDetailDialog.this.dismiss();
+
+                            final EnterChatRoomRequest req = new EnterChatRoomRequest();
+
+                            req.setIdSala(invite.getInvitationChatRoom());
+                            req.setIdUsuario(Backend.getInstance().getSession().getUserId());
+                            req.setEstado("1");
+
+                            Backend.getInstance().changeChatRoomState(req, new OnWSResponseListener<Boolean>() {
+                                @Override
+                                public void onWSResponse(Boolean response, long errorCode, String errorMsg) {
+                                    if (errorMsg == null) {
+                                        Backend.getInstance().getChatRoomUsers(req, new OnWSResponseListener<ArrayList<ChatUser>>() {
+                                            @Override
+                                            public void onWSResponse(final ArrayList<ChatUser> response1, long errorCode, final String errorMsg) {
+                                                if (errorMsg == null) {
+                                                    Backend.getInstance().getChatRoomMessages(req, Backend.getInstance().getEnterRoomMessageId(invite.getInvitationChatRoom()), new OnWSResponseListener<ArrayList<ChatMessage>>() {
+                                                        @Override
+                                                        public void onWSResponse(ArrayList<ChatMessage> response, long errorCode, String errorMsg) {
+                                                            if (errorMsg == null) {
+
+                                                                ((InvitationListActivity) InvitationDetailDialog.this.getActivity()).showLoadingView(false);
+                                                                InvitationDetailDialog.this.dismiss();
+
+                                                                Intent i = new Intent(getActivity(), ChatActitivy.class);
+                                                                i.putExtra("users", response1);
+                                                                i.putExtra("messages", response);
+
+                                                                i.putExtra("chatroom", Backend.getInstance().getChatRoomById(invite.getInvitationChatRoom()));
+                                                                startActivity(i);
+                                                            } else {
+                                                                ((InvitationListActivity) getActivity()).showLoadingView(false);
+                                                            }
+                                                        }
+                                                    });
+                                                } else {
+                                                    ((InvitationListActivity) getActivity()).showLoadingView(false);
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        ((InvitationListActivity) getActivity()).showLoadingView(false);
+                                    }
+                                }
+                            });
                         }
                     });
-
-                } else {
-                    ((InvitationListActivity) getActivity()).showLoadingView(false);
+                }
+                else {
+                    ((MainActivity) InvitationDetailDialog.this.getActivity()).showLoadingView(false);
                     InvitationDetailDialog.this.dismiss();
                 }
             }
         });
-
-
     }
 }

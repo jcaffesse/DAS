@@ -84,7 +84,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     @Override
     protected void onRestart() {
         super.onRestart();
-        updateMessages();
+        //updateMessages();
         serviceInstante.startGeneralTimers();
     }
 
@@ -153,21 +153,21 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     @Override
     public void updateInvitations(ArrayList<ChatInvitation> invites) {
         for (ChatInvitation invite : invites) {
-            if (invite.getInvitationStatus().compareTo("0")==0) {
+            if (invite.getInvitationStatus().compareTo("creada")==0) {
                 newInvites = true;
             }
         }
         invalidateOptionsMenu();
     }
 
-    @Override
+    /*@Override
     public void updateMessages() {
         android.support.v4.app.Fragment fragment = getSupportFragmentManager().findFragmentByTag(
                 "android:switcher:" + mViewPager.getId() + ":" + mAppSectionsPagerAdapter.getItemId(0));
         if(fragment != null) {
             ((RoomListFragment) fragment).adapter.updateRoomList(Backend.getInstance().getRooms());
         }
-    }
+    }*/
 
     public static class AppSectionsPagerAdapter extends FragmentPagerAdapter {
 

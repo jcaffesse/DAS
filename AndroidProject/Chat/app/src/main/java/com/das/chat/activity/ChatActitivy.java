@@ -63,7 +63,7 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
         chatRoomImage.setColorFilter(chatRoom.getColor());
         chatRoomName.setText(chatRoom.getNombreSala());
         //aca hay que meter el id del ultimo mensaje de la sala
-        //Backend.getInstance().setEnterRoomMessageId(chatRoom.getIdSala(), messages.get(messages.size()-1).getIdMessage());
+
     }
 
     @Override
@@ -114,7 +114,8 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
             @Override
             public void onWSResponse(Boolean response, long errorCode, String errorMsg) {
                 if (errorMsg == null) {
-
+                    Backend.getInstance().setLastRoomUpdateMessageId(chatRoom.getIdSala(), "");
+                    Backend.getInstance().removeEnterRoomMessageId(chatRoom.getIdSala());
                 } else {
                     runOnUiThread(new Runnable() {
                         @Override
@@ -162,7 +163,7 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
     public void updateMessagesForChatRoom(ArrayList<ChatMessage> messages) {
         if(messages.size() > 0) {
             adapter.updateChatList(messages);
-            Backend.getInstance().setLastRoomUpdateTime(chatRoom.getIdSala(), messages.get(messages.size()-1).getIdMessage());
+            Backend.getInstance().setLastRoomUpdateMessageId(chatRoom.getIdSala(), messages.get(messages.size()-1).getIdMessage());
         }
     }
 
