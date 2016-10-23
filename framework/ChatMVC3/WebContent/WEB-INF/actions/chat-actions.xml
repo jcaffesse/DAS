@@ -6,10 +6,17 @@
     <action-mappings>
         <action path="/Login.do" type="LoginAction">
             <forward name="success" path="/chat/login.jsp"/>
+            <forward name="error" path="/util/failure.jsp"/>
+            <forward name="list" path="/chat/Salas.do" />
     	</action>
         <action path="/Salas.do" type="SalasListAction">
             <forward name="success" path="/chat/listar-salas.jsp"/>
+            <forward name="error" path="/util/failure.jsp"/>
     	</action>
+        <action path="/SalasJoin.do" type="SalasJoinAction" >
+            <forward name="userslist" path="/chat/Usuarios.do" />
+            <forward name="error" path="/util/failure.jsp"/>
+        </action>
         <action path="/Usuarios.do" type="UsuariosListAction">
             <forward name="success" path="/chat/listar-usuarios.jsp"/>
     	</action>

@@ -28,34 +28,41 @@
     <div id="main">
         <table class="width700">
             <colgroup>
-                <col width="100px"/>
-                <col width="300px"/>
-                <col width="120px"/>
-                <col width="180px"/>
+                <col width="200px"/>
+                <col width="200px"/>
+                <col width="150px"/>
+                <col width="150px"/>
             </colgroup>
             <thead>
                 <tr>
-                    <th align="left"><fmt:message key="idSala" bundle="${etq}" /></th>
                     <th align="left"><fmt:message key="sala" bundle="${etq}" /></th>
-                    <th align="left"><fmt:message key="tipo" bundle="${etq}" /></th>                    
                     <th align="left"><fmt:message key="desc" bundle="${etq}" /></th>
+                    <th align="left"><fmt:message key="tipo" bundle="${etq}" /></th>                    
+                    <th align="left"></th>
                 </tr>
             </thead>
             <tbody>
+                <c:set var="id_usuario" value="${empty requestScope.id_usuario ? 4 : requestScope.id_usuario}"/>
+                <c:set var="token" value="${empty requestScope.token ? '' : requestScope.token}"/>
                 <c:forEach var="sala" items="${requestScope.salas}" varStatus="status">
                     <c:set var="index" value="${status.index}" scope="session"/>
                     <tr>
                         <td>
-                            <span>${sala.getId()}</span>
-                        </td>
-                        <td>
                             <span>${sala.getNombre()}</span>
                         </td>
                         <td>
-                            <span>${sala.getTipo()}</span>
+                            <span>${sala.getDesc()}</span>
                         </td>
                         <td>
-                            <span>${sala.getDesc()}</span>
+                            <span>${sala.getTipo()}</span>                            
+                        </td>
+                        <td>
+                            <span>
+                                <a id="ingresar" href="#" 
+                                   onclick="jChat.ingresarSala('${id_usuario}', '${sala.getId()}', '${token}');return false;">
+                                    <fmt:message key="ingresar" bundle="${etq}" />
+                                </a>
+                            </span>
                         </td>
                     </tr> 
                 </c:forEach>
