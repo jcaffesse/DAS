@@ -146,7 +146,7 @@ public class GeneralUpdateService extends Service {
                     }
                 });
             }
-        }, 0, 5000L);
+        }, 0, 10000L);
     }
 
     public void startChatRoomTimer() {
@@ -165,7 +165,7 @@ public class GeneralUpdateService extends Service {
                     }
                 });
             }
-        }, 0, 5000L);
+        }, 0, 10000L);
     }
 
     public void startGeneralTimers() {

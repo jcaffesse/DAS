@@ -74,17 +74,17 @@ public class Backend
         }
     }
 
-    public void setEnterRoomTime(String roomId, String time) {
+    public void setEnterRoomMessageId(String roomId, String messageId) {
         if(!myRooms.containsKey(roomId)) {
-            myRooms.put(roomId, time);
+            myRooms.put(roomId, messageId);
         }
     }
 
-    public String getEnterRoomTime (String roomId) {
+    public String getEnterRoomMessageId(String roomId) {
         if (myRooms.containsKey(roomId)) {
             return myRooms.get(roomId);
         } else {
-            return Long.toString(new Date().getTime());
+            return "";
         }
     }
 
@@ -127,8 +127,8 @@ public class Backend
         updateTime.edit().putString("com.das.chat.last_update_time.general", Long.toString(new Date().getTime()+300)).apply();
     }
 
-    public void setLastRoomUpdateTime(String chatRoomId) {
-        updateTime.edit().putString("com.das.chat.last_update_time.room_" + chatRoomId, Long.toString(new Date().getTime()+300)).apply();
+    public void setLastRoomUpdateTime(String chatRoomId, String messageId) {
+        updateTime.edit().putString("com.das.chat.last_update_time.room_" + chatRoomId, messageId).apply();
     }
 
     public String getLastInvitationUpdateTime() {
@@ -140,7 +140,7 @@ public class Backend
     }
 
     public String getLastRoomUpdateTime(String chatRoomId) {
-        return updateTime.getString("com.das.chat.last_update_time.room_" + chatRoomId, Backend.getInstance().getEnterRoomTime(chatRoomId));
+        return updateTime.getString("com.das.chat.last_update_time.room_" + chatRoomId, "");
     }
 
     public ArrayList<ChatUser> getUsers() {
@@ -303,13 +303,13 @@ public class Backend
         task.execute(params);
     }
 
-    public void getChatRoomMessages(final EnterChatRoomRequest req, String date, final OnWSResponseListener<ArrayList<ChatMessage>> responseListener)
+    public void getChatRoomMessages(final EnterChatRoomRequest req, String messageId, final OnWSResponseListener<ArrayList<ChatMessage>> responseListener)
     {
         ChatWSTask task = new ChatWSTask();
         WSParams params = new WSParams();
 
-        HttpGet get = new HttpGet(String.format("%s%s/sala/%s?ultima_act=%s", WS_BASE_URL, WS_MESSAGES_URL, req.getIdSala(), date));
-        Log.d("REQUEST", String.format("%s%s/sala/%s?ultima_act=%s", WS_BASE_URL, WS_MESSAGES_URL, req.getIdSala(), date));
+        HttpGet get = new HttpGet(String.format("%s%s/sala/%s?id_mensaje=%s", WS_BASE_URL, WS_MESSAGES_URL, req.getIdSala(), messageId));
+        Log.d("REQUEST", String.format("%s%s/sala/%s?id_mensaje=%s", WS_BASE_URL, WS_MESSAGES_URL, req.getIdSala(), messageId));
         params.setRequest(get);
         params.addTokenHeader(session.getSessionToken());
 
@@ -322,6 +322,33 @@ public class Backend
                         Backend.getInstance().setLastGeneralUpdateTime();
                     }
                     responseListener.onWSResponse(messages, errorCode, null);
+                } else {
+                    responseListener.onWSResponse(null, errorCode, errorMsg);
+                }
+            }
+        });
+        task.execute(params);
+    }
+
+    public void getChatRoomLastMessage(final EnterChatRoomRequest req, final OnWSResponseListener<ChatMessage> responseListener)
+    {
+        ChatWSTask task = new ChatWSTask();
+        WSParams params = new WSParams();
+
+        HttpGet get = new HttpGet(String.format("%s%s/sala_ultimo/%s", WS_BASE_URL, WS_MESSAGES_URL, req.getIdSala()));
+        Log.d("REQUEST", String.format("%s%s/sala_ultimo/%s", WS_BASE_URL, WS_MESSAGES_URL, req.getIdSala()));
+        params.setRequest(get);
+        params.addTokenHeader(session.getSessionToken());
+
+        task.setResponseListener(new OnWSResponseListener<String>() {
+            @Override
+            public void onWSResponse(final String response, final long errorCode, final String errorMsg) {
+                if (errorMsg == null) {
+                    ArrayList<ChatMessage> messages = EnterChatRoomGetMessagesResponse.initWithResponse(response);
+                    if(messages.size() > 0) {
+                        Backend.getInstance().setLastGeneralUpdateTime();
+                    }
+                    responseListener.onWSResponse(messages.get(0), errorCode, null);
                 } else {
                     responseListener.onWSResponse(null, errorCode, errorMsg);
                 }

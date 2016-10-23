@@ -2,7 +2,6 @@ package com.das.chat.dialog;
 
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,19 +13,15 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.das.chat.R;
 import com.das.chat.activity.ChatActitivy;
-import com.das.chat.activity.InvitationListActivity;
 import com.das.chat.activity.MainActivity;
 import com.das.chat.backend.Backend;
 import com.das.chat.backend.OnWSResponseListener;
 import com.das.chat.dao.ChatInvitation;
 import com.das.chat.dao.ChatMessage;
-import com.das.chat.dao.ChatRoom;
 import com.das.chat.dao.ChatUser;
-import com.das.chat.wsmodelmap.AddRoomRequest;
 import com.das.chat.wsmodelmap.EnterChatRoomRequest;
 import com.das.chat.wsmodelmap.SendInvitationRequest;
 
@@ -115,7 +110,7 @@ public class SendInvitationDialog extends DialogFragment {
                                                 @Override
                                                 public void onWSResponse(final ArrayList<ChatUser> response1, long errorCode, final String errorMsg) {
                                                     if (errorMsg == null) {
-                                                        Backend.getInstance().getChatRoomMessages(req, Backend.getInstance().getEnterRoomTime(responseInvitation.getInvitationChatRoom()), new OnWSResponseListener<ArrayList<ChatMessage>>() {
+                                                        Backend.getInstance().getChatRoomMessages(req, Backend.getInstance().getEnterRoomMessageId(responseInvitation.getInvitationChatRoom()), new OnWSResponseListener<ArrayList<ChatMessage>>() {
                                                             @Override
                                                             public void onWSResponse(ArrayList<ChatMessage> response, long errorCode, String errorMsg) {
                                                                 if (errorMsg == null) {

@@ -23,7 +23,8 @@ public class SalaBean implements Bean {
     private String nombre;
     private String descripcion;
     private String tipo;
-    private Date ultima_act;
+    private Integer msgId;
+    
     private int color;
 
     public int getColor() {
@@ -54,10 +55,6 @@ public class SalaBean implements Bean {
         return this.tipo;
     }
     
-    public Date getUltimaAct() {
-        return this.ultima_act;
-    }
-    
     @XmlElement
     public void setId(Integer i) {
         this.id = i;
@@ -78,11 +75,15 @@ public class SalaBean implements Bean {
         this.tipo = t;
     }
     
-    @XmlElement
-    public void setUltimaAct(Date d) {
-        this.ultima_act = d;
+    public Integer getMsgId() {
+        return msgId;
     }
-    
+
+    @XmlElement
+    public void setMsgId(Integer msgId) {
+        this.msgId = msgId;
+    }
+
     @Override
     public int compareTo(Bean bean) {
         return 0;

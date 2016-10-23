@@ -92,13 +92,13 @@ public class InvitationDetailDialog extends DialogFragment {
                     Backend.getInstance().getRoomList(new OnWSResponseListener<Boolean>() {
                         @Override
                         public void onWSResponse(Boolean response, long errorCode, final String errorMsg) {
-                            ((MainActivity) getActivity()).showLoadingView(false);
+                            ((InvitationListActivity) getActivity()).showLoadingView(false);
                             InvitationDetailDialog.this.dismiss();
                         }
                     });
 
                 } else {
-                    ((MainActivity) getActivity()).showLoadingView(false);
+                    ((InvitationListActivity) getActivity()).showLoadingView(false);
                     InvitationDetailDialog.this.dismiss();
                 }
             }
