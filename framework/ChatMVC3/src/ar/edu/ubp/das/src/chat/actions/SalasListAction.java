@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -35,17 +36,19 @@ public class SalasListAction implements Action {
 
     @Override
     public ForwardConfig execute(ActionMapping mapping, DynaActionForm form, HttpServletRequest request, HttpServletResponse response) throws SQLException, RuntimeException {
-        
         try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
-            String url = "http://localhost:8080/salas/";
+            String url = "http://25.136.78.82:8080/salas/usuario";
             HttpGet getRequest = new HttpGet(url);
-            getRequest.addHeader("Authorization", "BEARER 3bmdisqkr9i2ee8h49btbp6f1");
+            String authToken = String.valueOf(request.getAttribute("token"));
+
+            System.out.println("TOKEN SALAS LIST: "+ authToken);
+            getRequest.addHeader("Authorization", "BEARER " + authToken);
             getRequest.addHeader("accept", "application/json");
             
-            HttpResponse getResponse = httpClient.execute(getRequest);
+            CloseableHttpResponse getResponse = httpClient.execute(getRequest);
             HttpEntity responseEntity = getResponse.getEntity();
             StatusLine responseStatus = getResponse.getStatusLine();
-            String restResp = EntityUtils.toString(responseEntity);	
+            String restResp = EntityUtils.toString(responseEntity);
 
             if(responseStatus.getStatusCode() != 200) {
             	throw new RuntimeException(restResp);
@@ -54,11 +57,13 @@ public class SalasListAction implements Action {
             Type listType = new TypeToken<LinkedList<SalaBean>>(){}.getType();
             List<SalaBean> salas = gson.fromJson(restResp, listType);
             request.setAttribute("salas", salas);
+            request.setAttribute("token", authToken);
+            return mapping.getForwardByName("success");
 
         } catch (IOException | RuntimeException e) {
-            System.out.println("Error al intentar listar Salas " + e.getMessage());
+           request.setAttribute("message", "Error al intentar listar Salas " + e.getMessage());
+           return mapping.getForwardByName("error");
         }
-            return mapping.getForwardByName("success");
     }
     
 }

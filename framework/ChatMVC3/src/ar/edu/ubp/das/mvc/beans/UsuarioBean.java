@@ -26,8 +26,8 @@ public class UsuarioBean implements Bean {
         return color_usuario;
     }
 
-    public void setColor(int color) {
-        this.color_usuario = color;
+    public void setColor(int color_usuario) {
+        this.color_usuario = color_usuario;
     }
 
     public void createColor() {
@@ -49,16 +49,16 @@ public class UsuarioBean implements Bean {
         return String.valueOf(rol_usuario);
     }
 
-    public void setId(Integer id) {
-        this.id_usuario = id;
+    public void setId(Integer id_usuario) {
+        this.id_usuario = id_usuario;
     }
     
-    public void setNombre(String nombre) {
-        this.nombre_usuario = nombre;
+    public void setNombre(String nombre_usuario) {
+        this.nombre_usuario = nombre_usuario;
     }
     
-    public void setEmail(String email) {
-        this.email_usuario = email;
+    public void setEmail(String email_usuario) {
+        this.email_usuario = email_usuario;
     }
 
     public void setIdRol(Integer id_rol) {

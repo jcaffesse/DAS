@@ -104,7 +104,7 @@ public class ActionController extends HttpServlet {
                     }
                 }
 
-                String              key;
+                String key;
                 Enumeration<String> paramKeys = request.getParameterNames();
                 while(paramKeys.hasMoreElements()) {
                      key = paramKeys.nextElement();
@@ -119,7 +119,10 @@ public class ActionController extends HttpServlet {
                 Enumeration<String> attrKeys = request.getAttributeNames();
                 while(attrKeys.hasMoreElements()) {
                     key = attrKeys.nextElement();
-                    form.setItem(key, String.valueOf(request.getAttribute(key)));
+                    //form.setItem(key, String.valueOf(request.getAttribute(key)));
+                }
+                if(request.getAttribute("token") != null) {
+                    form.setItem("token", String.valueOf(request.getAttribute("token")));
                 }
                 
                 Map<String, ForwardConfig> forwards = ModuleConfigImpl.getForwards();
@@ -134,8 +137,6 @@ public class ActionController extends HttpServlet {
                     try {
                         Action iaction = Action.class.cast(Class.forName(ModuleConfigImpl.getSrcPackage() + alias.getName() + ".actions." + action.getType()).newInstance());
                         
-                        System.out.println("ACTION: "+ iaction.toString());
-
                         forward = iaction.execute(mapping, form, request, response);
                         if(forward == null) {
                             if(action.isNoForward()) {
@@ -168,16 +169,17 @@ public class ActionController extends HttpServlet {
             forward = ModuleConfigImpl.getForwardByName("failure");
         }
         
-        this.doForward(request, response, forward, form, parameters);       
+        this.doForward(request, response, forward, form, parameters);
     }
     
     private void doForward(HttpServletRequest request, HttpServletResponse response, ForwardConfig forward, DynaActionForm form, Map<String, ParameterConfig> parameters) throws ServletException, IOException {
         if(!forward.isRedirect() && forward.getPath().indexOf(".do") > 0) {
+            
             Iterator<Map.Entry<String,Object>> it = form.getItems().entrySet().iterator();
             while (it.hasNext()) {
-                Map.Entry<String,Object> item = (Map.Entry<String,Object>) it.next();
+                HashMap.Entry<String,Object> item = (Map.Entry<String,Object>) it.next();
                 request.setAttribute(item.getKey(), item.getValue());
-            }           
+            }
             this.processAction(request, response, forward.getPath(), parameters);
         }
         else {
