@@ -26,7 +26,7 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 public class ActualizacionResource {
     @GET
-    @Path("/{id_sala}")
+    @Path("/sala/{id_sala}")
     public Response getActualizacionesPortal(
         @PathParam("id_sala") String id_sala
     ) {
