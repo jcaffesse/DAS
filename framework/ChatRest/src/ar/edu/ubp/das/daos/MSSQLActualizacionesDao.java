@@ -25,6 +25,7 @@ public class MSSQLActualizacionesDao extends MSSQLDao{
             act.setId_actualizacion(result.getInt("id_actualizacion"));
             act.setNombre_accion(result.getString("nombre_accion"));
             act.setNombre_tipo(result.getString("nombre_tipo"));
+            act.setId_dato(result.getInt("id_dato"));
             act.setFecha_actualizacion(fecha_act);
             act.setId_sala(result.getInt("id_sala"));
             
@@ -51,9 +52,11 @@ public class MSSQLActualizacionesDao extends MSSQLDao{
         ActualizacionBean act = ActualizacionBean.class.cast(bean);
         List<Bean> list;
         this.connect();
-        this.setProcedure("dbo.get_actualizaciones_portal()");
         if (act.getId_sala() > 0) {
+            this.setProcedure("dbo.get_actualizaciones_portal(?)");
             this.setParameter(1, act.getId_sala());
+        } else {
+            this.setProcedure("dbo.get_actualizaciones_portal()");
         }
         list = this.executeQuery();
         this.disconnect();
