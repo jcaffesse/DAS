@@ -105,11 +105,9 @@ public class MSSQLMensajesDao extends MSSQLDao{
 
         this.connect();
         
-        
         if (beanClass.equals(SalaBean.class.getSimpleName())) {
             SalaBean sala = SalaBean.class.cast(bean);
             try {
-                
                     procedureName += ", ?)";
                     this.setProcedure(procedureName);
                     this.setParameter(1, sala.getId());
@@ -119,8 +117,6 @@ public class MSSQLMensajesDao extends MSSQLDao{
                         String s2 = null;
                         this.setParameter(2, s2);
                     }
-                 
-                
             } catch (NullPointerException e) {
                 procedureName += ")";
                 this.setProcedure(procedureName);

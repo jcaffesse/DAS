@@ -53,8 +53,16 @@ public class MSSQLActualizacionesDao extends MSSQLDao{
         List<Bean> list;
         this.connect();
         if (act.getId_sala() > 0) {
-            this.setProcedure("dbo.get_actualizaciones_portal(?)");
-            this.setParameter(1, act.getId_sala());
+            Date ultimaAct = act.getUltima_act();
+            if (ultimaAct != null) {
+                java.sql.Timestamp sqlUA = new java.sql.Timestamp(ultimaAct.getTime());
+                this.setProcedure("dbo.get_actualizaciones_portal(?, ?)");
+                this.setParameter(1, act.getId_sala());
+                this.setParameter(2, sqlUA.toString());
+            } else {
+                this.setProcedure("dbo.get_actualizaciones_portal(?)");
+                this.setParameter(1, act.getId_sala());
+            }            
         } else {
             this.setProcedure("dbo.get_actualizaciones_portal()");
         }
