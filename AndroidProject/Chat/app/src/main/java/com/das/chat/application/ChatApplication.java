@@ -3,9 +3,7 @@ package com.das.chat.application;
 import android.app.Application;
 import android.content.Context;
 
-/**
- * Created by Pablo on 24/02/2015.
- */
+
 
 public class ChatApplication extends Application {
 

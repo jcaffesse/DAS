@@ -7,9 +7,7 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
-/**
- * Created by Pablo on 27/09/2015.
- */
+
 public class EnterChatRoomGetUsersResponse {
 
     public static ArrayList<ChatUser> initWithResponse(String response)

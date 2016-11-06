@@ -15,9 +15,7 @@ import com.das.chat.dao.ChatInvitation;
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
- * Created by Pablo on 13/09/2015.
- */
+
 public class InvitationListAdapter extends BaseAdapter
 {
     Context context;

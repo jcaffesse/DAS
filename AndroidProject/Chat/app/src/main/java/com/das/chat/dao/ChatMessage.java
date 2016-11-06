@@ -2,9 +2,7 @@ package com.das.chat.dao;
 
 import java.io.Serializable;
 
-/**
- * Created by pablo on 1/24/16.
- */
+
 public class ChatMessage implements Serializable{
 
     private String idMessage;

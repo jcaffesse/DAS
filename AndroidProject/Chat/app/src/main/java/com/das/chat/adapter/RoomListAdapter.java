@@ -16,9 +16,7 @@ import com.das.chat.R;
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
- * Created by Pablo on 13/09/2015.
- */
+
 public class RoomListAdapter extends BaseAdapter
 {
     Context mContext;

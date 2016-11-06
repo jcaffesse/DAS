@@ -12,6 +12,7 @@ import com.das.chat.backend.OnWSResponseListener;
 import com.das.chat.dao.ChatInvitation;
 import com.das.chat.dao.ChatMessage;
 import com.das.chat.dao.ChatRoom;
+import com.das.chat.dao.ChatUpdate;
 import com.das.chat.wsmodelmap.EnterChatRoomRequest;
 
 import java.util.ArrayList;
@@ -24,8 +25,10 @@ public class GeneralUpdateService extends Service {
     private Timer generalTimer = null;
     private Timer invitesTimer = null;
     private Timer chatRoomTimer = null;
+    private Timer chatRoomUpdatesTimer = null;
     GeneralCallbacks generalCallbackClient;
     ChatRoomCallbacks chatRoomCallbackClient;
+    ChatRoomUpdatesCallbacks chatRoomUpdatesCallbackClient;
     private ChatRoom chatRoomUpdating;
 
     public GeneralUpdateService() {
@@ -78,6 +81,12 @@ public class GeneralUpdateService extends Service {
             chatRoomTimer.cancel();
             chatRoomTimer = null;
         }
+
+        if (chatRoomUpdatesTimer != null) {
+            chatRoomUpdatesTimer.cancel();
+            chatRoomUpdatesTimer = null;
+        }
+
 
         stopForeground(true);
         Log.d("SERVICE", "------------- DESTROY -------------");
@@ -149,6 +158,27 @@ public class GeneralUpdateService extends Service {
         }, 0, 10000L);
     }
 
+    public void startChatRoomUpdatesTimer() {
+        chatRoomUpdatesTimer = new Timer();
+        chatRoomUpdatesTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                EnterChatRoomRequest req = new EnterChatRoomRequest();
+                req.setIdSala(String.valueOf(chatRoomUpdating.getIdSala()));
+                Backend.getInstance().getUpdates(chatRoomUpdating.getIdSala(), new OnWSResponseListener<ChatUpdate>() {
+                    @Override
+                    public void onWSResponse(ChatUpdate response, long errorCode, String errorMsg) {
+                        if (errorMsg == null) {
+                            chatRoomUpdatesCallbackClient.updateUpdatesForChatRoom(response);
+                            Log.d("SERVICE", "----------- UPDATING CHAT ROOM UPDATES " + chatRoomUpdating.getNombreSala() + "-----------");
+                        }
+                    }
+                });
+            }
+        }, 0, 20000L);
+
+    }
+
     public void startGeneralTimers() {
         startInvitationsTimer();
         //startGeneralMessagesTimer();
@@ -157,6 +187,11 @@ public class GeneralUpdateService extends Service {
     public void stopChatRoomTimer() {
         chatRoomTimer.cancel();
         chatRoomTimer = null;
+    }
+
+    public void stopChatRoomUpdatesTimer() {
+        chatRoomUpdatesTimer.cancel();
+        chatRoomUpdatesTimer = null;
     }
 
     public void stopGeneralUpdateTimer() {
@@ -175,6 +210,10 @@ public class GeneralUpdateService extends Service {
         void updateMessagesForChatRoom(ArrayList<ChatMessage> messages);
     }
 
+    public interface ChatRoomUpdatesCallbacks {
+        void updateUpdatesForChatRoom(ChatUpdate update);
+    }
+
     //Here Activity register to the service as Callbacks client
     public void registerGeneralUpdateClient(Activity activity) {
         this.generalCallbackClient = (GeneralCallbacks)activity;
@@ -183,6 +222,12 @@ public class GeneralUpdateService extends Service {
     //Here Activity register to the service as Callbacks client
     public void registerChatRoomClient(Activity activity, ChatRoom room){
         this.chatRoomCallbackClient = (ChatRoomCallbacks)activity;
+        this.chatRoomUpdating = room;
+    }
+
+    //Here Activity register to the service as Callbacks client
+    public void registerChatRoomUpdatesClient(Activity activity, ChatRoom room){
+        this.chatRoomUpdatesCallbackClient = (ChatRoomUpdatesCallbacks) activity;
         this.chatRoomUpdating = room;
     }
 

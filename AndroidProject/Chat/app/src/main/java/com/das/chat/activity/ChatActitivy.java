@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.das.chat.dao.ChatMessage;
 import com.das.chat.dao.ChatRoom;
+import com.das.chat.dao.ChatUpdate;
 import com.das.chat.dao.ChatUser;
 import com.das.chat.R;
 import com.das.chat.adapter.ChatListAdapter;
@@ -28,7 +29,8 @@ import com.das.chat.wsmodelmap.SendMessageRequest;
 
 import java.util.ArrayList;
 
-public class ChatActitivy extends Activity implements GeneralUpdateService.ChatRoomCallbacks{
+public class ChatActitivy extends Activity implements GeneralUpdateService.ChatRoomCallbacks, GeneralUpdateService.ChatRoomUpdatesCallbacks
+{
 
     ArrayList<ChatUser> users;
     ArrayList<ChatMessage> messages;
@@ -77,6 +79,7 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
     protected void onStop() {
         super.onStop();
         serviceInstante.stopChatRoomTimer();
+        serviceInstante.stopChatRoomUpdatesTimer();
         unbindService(timerServiceConnection);
     }
 
@@ -94,7 +97,9 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
             serviceInstante =  ((GeneralUpdateService.LocalBinder) service).getService();
             serviceIsBind = true;
             serviceInstante.registerChatRoomClient(ChatActitivy.this, chatRoom);
+            serviceInstante.registerChatRoomUpdatesClient(ChatActitivy.this, chatRoom);
             serviceInstante.startChatRoomTimer();
+            serviceInstante.startChatRoomUpdatesTimer();
         }
 
         public void onServiceDisconnected(ComponentName className) {
@@ -168,4 +173,10 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
     }
 
 
+    @Override
+    public void updateUpdatesForChatRoom(ChatUpdate updates) {
+        if(updates != null) {
+
+        }
+    }
 }
