@@ -7,12 +7,15 @@ import com.das.chat.application.ChatApplication;
 import com.das.chat.dao.ChatInvitation;
 import com.das.chat.dao.ChatMessage;
 import com.das.chat.dao.ChatRoom;
+import com.das.chat.dao.ChatUpdate;
 import com.das.chat.dao.ChatUser;
 import com.das.chat.wsmodelmap.AddRoomRequest;
 import com.das.chat.wsmodelmap.EnterChatRoomGetMessagesResponse;
 import com.das.chat.wsmodelmap.EnterChatRoomRequest;
 import com.das.chat.wsmodelmap.EnterChatRoomGetUsersResponse;
 import com.das.chat.wsmodelmap.GetInvitationsResponse;
+import com.das.chat.wsmodelmap.GetUpdatesRequest;
+import com.das.chat.wsmodelmap.GetUpdatesResponse;
 import com.das.chat.wsmodelmap.ListRoomsResponse;
 import com.das.chat.wsmodelmap.ListUsersResponse;
 import com.das.chat.wsmodelmap.LoginRequest;
@@ -31,10 +34,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-/**
- *
- * Created by Pablo Alday on 10/02/2015.
- */
 public class Backend
 {
     private static final String WS_BASE_URL = "http://10.0.2.2:8080";
@@ -47,6 +46,7 @@ public class Backend
     private static final String WS_USERS_ROOMS_URL = "/usuarios-salas";
     private static final String WS_MESSAGES_URL = "/mensajes";
     private static final String WS_INVITATIONS_URL = "/invitaciones";
+    private static final String WS_UPDATES_URL = "/actualizaciones";
 
     private static Backend instance = new Backend();
     private ArrayList<ChatUser> users;
@@ -277,6 +277,31 @@ public class Backend
                     responseListener.onWSResponse(true, errorCode, null);
                 } else {
                     responseListener.onWSResponse(false, errorCode, errorMsg);
+                }
+            }
+        });
+        task.execute(params);
+    }
+
+    public void getUpdates(String idSala, final OnWSResponseListener<ArrayList<ChatUpdate>> responseListener)
+    {
+        ChatWSTask task = new ChatWSTask();
+        WSParams params = new WSParams();
+
+        HttpGet get = new HttpGet(String.format("%s%s/sala/%s", WS_BASE_URL, WS_UPDATES_URL, idSala));
+        Log.d("REQUEST", String.format("%s%s/sala/%s", WS_BASE_URL, WS_UPDATES_URL, idSala));
+
+        params.setRequest(get);
+        params.addTokenHeader(session.getSessionToken());
+
+        task.setResponseListener(new OnWSResponseListener<String>() {
+            @Override
+            public void onWSResponse(final String response, final long errorCode, final String errorMsg) {
+                if (errorMsg == null) {
+                    ArrayList<ChatUpdate> updates = GetUpdatesResponse.initWithResponse(response);
+                    responseListener.onWSResponse(updates, errorCode, null);
+                } else {
+                    responseListener.onWSResponse(null, errorCode, errorMsg);
                 }
             }
         });

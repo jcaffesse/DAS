@@ -2,9 +2,7 @@ package com.das.chat.dao;
 
 import java.io.Serializable;
 
-/**
- * Created by pablo on 12/20/15.
- */
+
 public class ChatInvitation implements Serializable{
     private String invitationOwner;
     private ChatUser invitationSender;

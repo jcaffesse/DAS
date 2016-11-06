@@ -13,9 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-/**
- * Created by Pablo on 27/09/2015.
- */
+
 public class EnterChatRoomGetMessagesResponse {
 
     public static ArrayList<ChatMessage> initWithResponse(String response)
