@@ -6,7 +6,6 @@
 package ar.edu.ubp.das.beans;
 
 import java.util.Date;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -83,5 +82,5 @@ public class ActualizacionBean implements Bean {
     public int compareTo(Bean bean) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+   
 }

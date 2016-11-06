@@ -283,7 +283,7 @@ public class Backend
         task.execute(params);
     }
 
-    public void getUpdates(String idSala, final OnWSResponseListener<ArrayList<ChatUpdate>> responseListener)
+    public void getUpdates(String idSala, final OnWSResponseListener<ChatUpdate> responseListener)
     {
         ChatWSTask task = new ChatWSTask();
         WSParams params = new WSParams();
@@ -298,8 +298,8 @@ public class Backend
             @Override
             public void onWSResponse(final String response, final long errorCode, final String errorMsg) {
                 if (errorMsg == null) {
-                    ArrayList<ChatUpdate> updates = GetUpdatesResponse.initWithResponse(response);
-                    responseListener.onWSResponse(updates, errorCode, null);
+                    ChatUpdate update = GetUpdatesResponse.initWithResponse(response);
+                    responseListener.onWSResponse(update, errorCode, null);
                 } else {
                     responseListener.onWSResponse(null, errorCode, errorMsg);
                 }
