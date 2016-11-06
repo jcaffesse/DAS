@@ -19,6 +19,7 @@ public class ActualizacionBean implements Bean {
     private String nombre_tipo;
     private int id_dato;
     private Date fecha_actualizacion;
+    private Date ultima_act;
     private int id_sala;
 
     public int getId_actualizacion() {
@@ -68,6 +69,15 @@ public class ActualizacionBean implements Bean {
     public void setId_sala(int id_sala) {
         this.id_sala = id_sala;
     }
+
+    public Date getUltima_act() {
+        return ultima_act;
+    }
+
+    public void setUltima_act(Date ultima_act) {
+        this.ultima_act = ultima_act;
+    }
+    
     
     @Override
     public String toString(){

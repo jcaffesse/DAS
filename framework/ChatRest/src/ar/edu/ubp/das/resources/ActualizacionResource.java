@@ -10,11 +10,13 @@ import ar.edu.ubp.das.beans.Bean;
 import ar.edu.ubp.das.daos.Dao;
 import ar.edu.ubp.das.daos.DaoFactory;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -28,11 +30,21 @@ public class ActualizacionResource {
     @GET
     @Path("/sala/{id_sala}")
     public Response getActualizacionesPortal(
-        @PathParam("id_sala") String id_sala
+        @PathParam("id_sala") String id_sala,
+        @QueryParam("ultima_act") String ultima_act
     ) {
+        Date ua = null;
+        if (ultima_act != null) {
+            try {
+                ua = new Date(Long.parseLong(ultima_act));
+            } catch (NumberFormatException l) {
+                return Response.status(Response.Status.BAD_REQUEST).entity(l.getMessage()).build();
+            }
+        }        
         try {
             ActualizacionBean bean = new ActualizacionBean();
                 bean.setId_sala(Integer.parseInt(id_sala));
+                bean.setUltima_act(ua);
             try {
                 Dao dao = DaoFactory.getDao("Actualizaciones");
                 List<Bean> list = dao.select(bean);
@@ -49,5 +61,4 @@ public class ActualizacionResource {
             return Response.status(Response.Status.BAD_REQUEST).entity(n.getMessage()).build();
         }
     }
-    
 }

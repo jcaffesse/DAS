@@ -7,7 +7,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 ALTER PROCEDURE [dbo].[get_actualizaciones_portal]
 (
-	@id_sala int = NULL
+	@id_sala int = NULL,
+	@fecha_ultimo datetime = NULL
 )
 	-- Add the parameters for the stored procedure here
 AS
@@ -34,5 +35,7 @@ BEGIN
 	AND
 		(a.id_accion = '4')
 	AND
-		(a.id_sala = @id_sala)		
+		(a.id_sala = @id_sala)
+	AND
+		(a.fecha_actualizacion >= @fecha_ultimo OR @fecha_ultimo is NULL)
 END
