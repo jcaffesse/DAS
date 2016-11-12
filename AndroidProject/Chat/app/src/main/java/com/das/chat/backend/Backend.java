@@ -288,8 +288,8 @@ public class Backend
         ChatWSTask task = new ChatWSTask();
         WSParams params = new WSParams();
 
-        HttpGet get = new HttpGet(String.format("%s%s/sala/%s", WS_BASE_URL, WS_UPDATES_URL, idSala));
-        Log.d("REQUEST", String.format("%s%s/sala/%s", WS_BASE_URL, WS_UPDATES_URL, idSala));
+        HttpGet get = new HttpGet(String.format("%s%s/sala/%s?ultima_act=%s", WS_BASE_URL, WS_UPDATES_URL, idSala, getLastGeneralUpdateTime()));
+        Log.d("REQUEST", String.format("%s%s/sala/%s?ultima_act=%s", WS_BASE_URL, WS_UPDATES_URL, idSala, getLastGeneralUpdateTime()));
 
         params.setRequest(get);
         params.addTokenHeader(session.getSessionToken());
@@ -297,9 +297,10 @@ public class Backend
         task.setResponseListener(new OnWSResponseListener<String>() {
             @Override
             public void onWSResponse(final String response, final long errorCode, final String errorMsg) {
-                if (errorMsg == null) {
+                if (errorMsg == null && !response.isEmpty()) {
                     ChatUpdate update = GetUpdatesResponse.initWithResponse(response);
                     responseListener.onWSResponse(update, errorCode, null);
+                    Backend.getInstance().setLastGeneralUpdateTime();
                 } else {
                     responseListener.onWSResponse(null, errorCode, errorMsg);
                 }

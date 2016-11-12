@@ -18,9 +18,6 @@ public class GetUpdatesResponse {
         ChatUpdate update = new ChatUpdate();
         try {
             resp = new JSONObject(response);
-
-
-
             update.setUpdateId(resp.getString("id_actualizacion"));
             update.setActionName(resp.getString("nombre_accion"));
             update.setTypeName(resp.getString("nombre_tipo"));
