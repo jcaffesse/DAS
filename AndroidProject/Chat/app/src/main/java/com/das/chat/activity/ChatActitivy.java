@@ -175,8 +175,12 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
     @Override
     public void updateUpdatesForChatRoom(ChatUpdate updates) {
         if(updates != null) {
-            if(updates.getActionName().equalsIgnoreCase("delete")) {
+            if(updates.getActionName().equalsIgnoreCase("delete") && updates.getTypeName().equalsIgnoreCase("mensaje")) {
                 adapter.deleteMessage(updates.getActionId());
+            } else if(updates.getActionName().equalsIgnoreCase("delete") && updates.getTypeName().equalsIgnoreCase("usuariosala") && updates.getActionId().equalsIgnoreCase(Backend.getInstance().getSession().getUserId())) {
+                Backend.getInstance().setLastRoomUpdateMessageId(chatRoom.getIdSala(), "");
+                Backend.getInstance().removeEnterRoomMessageId(chatRoom.getIdSala());
+                finish();
             }
         }
     }
