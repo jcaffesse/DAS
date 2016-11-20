@@ -30,3 +30,6 @@ AndroidProject/Chat/.idea/
 /framework/ChatRest/target/
 /framework/ChatMVC3/build/
 /framework/ChatMVC3/dist/
+/framework/FeriadosMVC3/nbproject/private/
+/framework/FeriadosMVC3/build/
+/framework/FeriadosMVC3/dist/
