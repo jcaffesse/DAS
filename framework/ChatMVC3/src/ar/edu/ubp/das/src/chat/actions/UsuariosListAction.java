@@ -51,7 +51,6 @@ public class UsuariosListAction implements Action {
             if(responseStatus.getStatusCode() != 200) {
             	throw new RuntimeException(restResp);
             }
-            System.out.println("RESPONSE:" + restResp);
             Gson gson = new Gson();
             Type listType = new TypeToken<LinkedList<UsuarioBean>>(){}.getType();
             List<UsuarioBean> usuarios = gson.fromJson(restResp, listType);

@@ -2,23 +2,28 @@
 <actions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	     xsi:noNamespaceSchemaLocation="../schema/actions.xsd">
     <form-beans>
+        <form-bean name="Valid" type="ValidFormBean"/>
     </form-beans>
     <action-mappings>
         <action path="/Login.do" type="LoginAction">
             <forward name="success" path="/chat/login.jsp"/>
-            <forward name="error" path="/util/failure.jsp"/>
-            <forward name="list" path="/chat/Salas.do" />
     	</action>
-        <action path="/Salas.do" type="SalasListAction">
-            <forward name="success" path="/chat/listar-salas.jsp"/>
-            <forward name="error" path="/util/failure.jsp"/>
+        <action path="/Valid.do" type="ValidAction" validate="true" form="Valid">
+            <forward name="success" path="/ChatMVC3/chat/Dashboard.do" redirect="true"/>
+    	</action>        
+        <action path="/Dashboard.do" type="DashboardAction" secure="true">
+            <forward name="success" path="/chat/dashboard.jsp"/>
     	</action>
-        <action path="/SalasJoin.do" type="SalasJoinAction" >
-            <forward name="userslist" path="/chat/Usuarios.do" />
-            <forward name="error" path="/util/failure.jsp"/>
+        <action path="/SalasJoin.do" type="SalasJoinAction" secure="true">
+            <forward name="success" path="/ChatMVC3/chat/MessagesList.do" redirect="true"/>
         </action>
-        <action path="/Usuarios.do" type="UsuariosListAction">
+        <action path="/MessagesList.do" type="MessagesListAction" secure="true">
+            <forward name="success" path="/chat/listar-mensajes.jsp"/>
+    	</action>
+        <action path="/UsuariosList.do" type="UsuariosListAction" secure="true">
             <forward name="success" path="/chat/listar-usuarios.jsp"/>
     	</action>
+        <action path="/EliminarMensaje.do" type="EliminarMensajeAction" noforward="true" secure="true"/>
+        <action path="/ExpulsarUsuario.do" type="ExpulsarUsuarioAction" noforward="true" secure="true"/>
     </action-mappings>
 </actions>

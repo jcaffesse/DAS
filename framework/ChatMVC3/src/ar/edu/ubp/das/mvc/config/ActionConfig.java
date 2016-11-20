@@ -10,12 +10,14 @@ public final class ActionConfig {
 	private String  form;
 	private boolean validate;
 	private boolean noForward;
+        private boolean secure;
 	private Map<String, ParameterConfig> parameters;
 	private Map<String, ForwardConfig>   forwards;
 	
 	public ActionConfig() {
 		this.validate   = false;
 		this.noForward  = false;
+                this.secure = false;
 		this.parameters = new HashMap<String, ParameterConfig>();
 		this.forwards   = new HashMap<String, ForwardConfig>();
 	}
@@ -39,6 +41,10 @@ public final class ActionConfig {
 	public boolean isNoForward() {
 		return noForward;
 	}
+        
+        public boolean isSecure() {
+            return secure;
+        }
 	
 	public ParameterConfig getParameterByName(String name) {
 		if(this.parameters.containsKey(name)) {
@@ -81,6 +87,10 @@ public final class ActionConfig {
 	public void setNoForward(String noForward) {
 		this.noForward = noForward.isEmpty() ? false : noForward.equals("true") ? true : false;
 	}
+        
+        public void setSecure(String secure) {
+            this.secure = secure.isEmpty() ? false : secure.equals("true") ? true : false;
+        }
 
 	public void addParameter(ParameterConfig parameter) {
 		this.parameters.put(parameter.getName(), parameter);
@@ -94,7 +104,7 @@ public final class ActionConfig {
 	public String toString() {
 		return "ActionConfig [path=" + path + ", type=" + type + ", form="
 				+ form + ", validate=" + validate + ", noForward=" + noForward
-				+ ", parameters=" + parameters + ", forwards=" + forwards + "]";
+				+ ", secure=" + secure + ", parameters=" + parameters + ", forwards=" + forwards + "]";
 	}
 	
 }

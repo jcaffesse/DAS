@@ -19,7 +19,15 @@
   </context-param>
   <context-param>
     <param-name>action.default.path</param-name>
+    <param-value>/chat/Dashboard.do</param-value>
+  </context-param>
+  <context-param>
+    <param-name>action.login.path</param-name>
     <param-value>/chat/Login.do</param-value>
+  </context-param>
+  <context-param>
+    <param-name>rest.address</param-name>
+    <param-value>http://25.136.78.82:8080/</param-value>
   </context-param>
   <filter>
     <filter-name>UrlRewriteFilter</filter-name>

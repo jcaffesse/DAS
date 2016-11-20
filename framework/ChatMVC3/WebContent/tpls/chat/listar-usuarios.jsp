@@ -42,7 +42,7 @@
                 <td>
                     <span>
                         <a id="ingresar" href="#" 
-                           onclick="jChat.expulsarUsuario('${usuario.getId()}', '${id_sala}', '${token}');return false;">
+                           onclick="jChat.expulsarUsuario('${usuario.getId()}', '${id_sala}');return false;">
                             <fmt:message key="expulsar" bundle="${etq}" />
                         </a>
                     </span>

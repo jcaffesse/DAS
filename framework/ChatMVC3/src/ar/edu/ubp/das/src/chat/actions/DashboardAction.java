@@ -20,7 +20,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -32,16 +31,15 @@ import org.apache.http.util.EntityUtils;
  *
  * @author Jav
  */
-public class SalasListAction implements Action {
+public class DashboardAction implements Action {
 
     @Override
     public ForwardConfig execute(ActionMapping mapping, DynaActionForm form, HttpServletRequest request, HttpServletResponse response) throws SQLException, RuntimeException {
-       /* try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
+        try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
             String url = "http://25.136.78.82:8080/salas/usuario";
             HttpGet getRequest = new HttpGet(url);
-            String authToken = String.valueOf(request.getAttribute("token"));
+            String authToken = String.valueOf(request.getSession().getAttribute("token"));
 
-            System.out.println("TOKEN SALAS LIST: "+ authToken);
             getRequest.addHeader("Authorization", "BEARER " + authToken);
             getRequest.addHeader("accept", "application/json");
             
@@ -60,12 +58,10 @@ public class SalasListAction implements Action {
             request.setAttribute("token", authToken);
             return mapping.getForwardByName("success");
 
-        } catch (IOException | RuntimeException e) {
+        } catch (IOException e) {
            request.setAttribute("message", "Error al intentar listar Salas " + e.getMessage());
-           return mapping.getForwardByName("error");
-        }*/
-        return null;
+           return mapping.getForwardByName("failure");
+        }
     }
     
 }
-

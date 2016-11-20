@@ -23,6 +23,7 @@ import ar.edu.ubp.das.mvc.config.ForwardConfig;
 import ar.edu.ubp.das.mvc.config.ModuleConfigImpl;
 import ar.edu.ubp.das.mvc.config.ParameterConfig;
 
+
 /**
  * Servlet implementation class ActionController
  */
@@ -60,7 +61,7 @@ public class ActionController extends HttpServlet {
 
         String uri = request.getParameter("uri");
                uri = uri == null || uri.isEmpty() ? this.getServletContext().getInitParameter("action.default.path") : uri;
-               
+
         this.processAction(request, response, uri);
     }
     
@@ -85,14 +86,20 @@ public class ActionController extends HttpServlet {
         if(alias != null) {
             ActionConfig action = alias.getActionByPath(pathUrl);
             if(action != null) {
+                if(action.isSecure()) {
+                    action = this.checkToken(alias, action, request);
+                }
+
                 parameters.putAll(action.getParameters());
             
                 ActionMapping mapping = new ActionMapping();
                               mapping.setParameters(parameters);
                 
                 String formConfig = action.getForm();
+                System.out.println("formconfig "+formConfig);
                 if(!formConfig.isEmpty()) {
                     FormBeanConfig actionForm = alias.getFormBeanByName(formConfig);
+                    System.out.println("actionForm "+actionForm);
                     if(actionForm != null) {
                         try {
                             form = DynaActionForm.class.cast(Class.forName(ModuleConfigImpl.getSrcPackage() + alias.getName() + ".forms." + actionForm.getType()).newInstance());
@@ -104,7 +111,7 @@ public class ActionController extends HttpServlet {
                     }
                 }
 
-                String key;
+                String              key;
                 Enumeration<String> paramKeys = request.getParameterNames();
                 while(paramKeys.hasMoreElements()) {
                      key = paramKeys.nextElement();
@@ -119,10 +126,7 @@ public class ActionController extends HttpServlet {
                 Enumeration<String> attrKeys = request.getAttributeNames();
                 while(attrKeys.hasMoreElements()) {
                     key = attrKeys.nextElement();
-                    //form.setItem(key, String.valueOf(request.getAttribute(key)));
-                }
-                if(request.getAttribute("token") != null) {
-                    form.setItem("token", String.valueOf(request.getAttribute("token")));
+                    form.setItem(key, String.valueOf(request.getAttribute(key)));
                 }
                 
                 Map<String, ForwardConfig> forwards = ModuleConfigImpl.getForwards();
@@ -131,12 +135,13 @@ public class ActionController extends HttpServlet {
                                            
                 try {
                     if(action.isValidate()) {
+                        System.out.println("form validate"+ form.getName());
                         form.validate(mapping, request);
                     }
 
                     try {
                         Action iaction = Action.class.cast(Class.forName(ModuleConfigImpl.getSrcPackage() + alias.getName() + ".actions." + action.getType()).newInstance());
-                        
+
                         forward = iaction.execute(mapping, form, request, response);
                         if(forward == null) {
                             if(action.isNoForward()) {
@@ -169,17 +174,16 @@ public class ActionController extends HttpServlet {
             forward = ModuleConfigImpl.getForwardByName("failure");
         }
         
-        this.doForward(request, response, forward, form, parameters);
+        this.doForward(request, response, forward, form, parameters);       
     }
     
     private void doForward(HttpServletRequest request, HttpServletResponse response, ForwardConfig forward, DynaActionForm form, Map<String, ParameterConfig> parameters) throws ServletException, IOException {
         if(!forward.isRedirect() && forward.getPath().indexOf(".do") > 0) {
-            
             Iterator<Map.Entry<String,Object>> it = form.getItems().entrySet().iterator();
             while (it.hasNext()) {
-                HashMap.Entry<String,Object> item = (Map.Entry<String,Object>) it.next();
+                Map.Entry<String,Object> item = (Map.Entry<String,Object>) it.next();
                 request.setAttribute(item.getKey(), item.getValue());
-            }
+            }           
             this.processAction(request, response, forward.getPath(), parameters);
         }
         else {
@@ -215,5 +219,12 @@ public class ActionController extends HttpServlet {
         }           
         Locale.setDefault(new Locale(String.valueOf(request.getSession().getAttribute("lang"))));
     }
-    
+
+    private ActionConfig checkToken(AliasConfig alias, ActionConfig action, HttpServletRequest request) {
+        if(request.getSession().getAttribute("token") == null && alias.getName().equals("chat")) {
+            return alias.getActionByPath("/Login.do");
+        } else {
+            return action;
+        }
+    }
 }

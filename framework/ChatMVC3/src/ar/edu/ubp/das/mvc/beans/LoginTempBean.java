@@ -71,9 +71,9 @@ public class LoginTempBean implements Bean{
         return "["
             + "id: " + id + ", "
             + "nombre: " + nombre + ", " 
-            + "email_usuario " + email + ", "
-            + "idRol " + idRol + ", "
-            + "color_usuario " + Integer.toString(color)
+            + "email_usuario: " + email + ", "
+            + "idRol: " + idRol + ", "
+            + "color_usuario: " + Integer.toString(color)
             + "]";            
     }
 }

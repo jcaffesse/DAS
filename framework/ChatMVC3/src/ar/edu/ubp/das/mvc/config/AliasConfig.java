@@ -82,6 +82,7 @@ public final class AliasConfig {
 			                 actionConfig.setForm(String.valueOf(xPath.compile("@form").evaluate(actions.item(i), XPathConstants.STRING)));
 			                 actionConfig.setValidate(String.valueOf(xPath.compile("@validate").evaluate(actions.item(i), XPathConstants.STRING)));
 			                 actionConfig.setNoForward(String.valueOf(xPath.compile("@noforward").evaluate(actions.item(i), XPathConstants.STRING)));
+			                 actionConfig.setSecure(String.valueOf(xPath.compile("@secure").evaluate(actions.item(i), XPathConstants.STRING)));
                 
     			NodeList parameters = NodeList.class.cast(xPath.compile("./parameter").evaluate(actions.item(i), XPathConstants.NODESET));
     			for (int j = 0, jlen = parameters.getLength(); j < jlen; j++) {
