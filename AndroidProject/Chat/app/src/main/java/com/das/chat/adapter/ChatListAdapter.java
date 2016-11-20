@@ -79,6 +79,16 @@ public class ChatListAdapter extends BaseAdapter
         this.notifyDataSetChanged();
     }
 
+    public void deleteMessage(String idMessage) {
+        for (ChatMessage msg : messageList) {
+            if(msg.getIdMessage().equalsIgnoreCase(idMessage)) {
+                messageList.remove(msg);
+                notifyDataSetChanged();
+                break;
+            }
+        }
+    }
+
     @Override
     public View getView(int i, View view, ViewGroup viewGroup)
     {

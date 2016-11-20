@@ -128,8 +128,8 @@ public class Backend
         updateTime.edit().putString("com.das.chat.last_update_time.invites", Long.toString(new Date().getTime()+300)).apply();
     }
 
-    public void setLastGeneralUpdateTime() {
-        updateTime.edit().putString("com.das.chat.last_update_time.general", Long.toString(new Date().getTime()+300)).apply();
+    public void setLastGeneralUpdateTime(String chatRoomId) {
+        updateTime.edit().putString("com.das.chat.last_update_time.general_" + chatRoomId, Long.toString(new Date().getTime()+300)).apply();
     }
 
     public void setLastRoomUpdateMessageId(String chatRoomId, String messageId) {
@@ -140,8 +140,8 @@ public class Backend
         return updateTime.getString("com.das.chat.last_update_time.invites", "0");
     }
 
-    public String getLastGeneralUpdateTime() {
-        return updateTime.getString("com.das.chat.last_update_time.general", session.getTime());
+    public String getLastGeneralUpdateTime(String chatRoomId) {
+        return updateTime.getString("com.das.chat.last_update_time.general_" + chatRoomId, session.getTime());
     }
 
     public String getLastRoomUpdateMessageId(String chatRoomId) {
@@ -283,13 +283,13 @@ public class Backend
         task.execute(params);
     }
 
-    public void getUpdates(String idSala, final OnWSResponseListener<ChatUpdate> responseListener)
+    public void getUpdates(final String idSala, final OnWSResponseListener<ChatUpdate> responseListener)
     {
         ChatWSTask task = new ChatWSTask();
         WSParams params = new WSParams();
 
-        HttpGet get = new HttpGet(String.format("%s%s/sala/%s", WS_BASE_URL, WS_UPDATES_URL, idSala));
-        Log.d("REQUEST", String.format("%s%s/sala/%s", WS_BASE_URL, WS_UPDATES_URL, idSala));
+        HttpGet get = new HttpGet(String.format("%s%s/sala/%s?ultima_act=%s", WS_BASE_URL, WS_UPDATES_URL, idSala, getLastGeneralUpdateTime(idSala)));
+        Log.d("REQUEST", String.format("%s%s/sala/%s?ultima_act=%s", WS_BASE_URL, WS_UPDATES_URL, idSala, getLastGeneralUpdateTime(idSala)));
 
         params.setRequest(get);
         params.addTokenHeader(session.getSessionToken());
@@ -297,9 +297,10 @@ public class Backend
         task.setResponseListener(new OnWSResponseListener<String>() {
             @Override
             public void onWSResponse(final String response, final long errorCode, final String errorMsg) {
-                if (errorMsg == null) {
+                if (errorMsg == null && !response.isEmpty()) {
                     ChatUpdate update = GetUpdatesResponse.initWithResponse(response);
                     responseListener.onWSResponse(update, errorCode, null);
+                    Backend.getInstance().setLastGeneralUpdateTime(idSala);
                 } else {
                     responseListener.onWSResponse(null, errorCode, errorMsg);
                 }
@@ -379,9 +380,6 @@ public class Backend
             public void onWSResponse(final String response, final long errorCode, final String errorMsg) {
                 if (errorMsg == null) {
                     ArrayList<ChatMessage> messages = EnterChatRoomGetMessagesResponse.initWithResponse(response);
-                    if(messages.size() > 0) {
-                        Backend.getInstance().setLastGeneralUpdateTime();
-                    }
                     responseListener.onWSResponse(messages.get(0), errorCode, null);
                 } else {
                     responseListener.onWSResponse(null, errorCode, errorMsg);
