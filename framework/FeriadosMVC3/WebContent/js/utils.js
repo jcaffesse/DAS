@@ -18,7 +18,7 @@ jUtils = {
     },
 
     changeLang: function(filename, lang, root) {
-    	root = root == undefined ? '' : root;
+    	root = root == undefined ? '/FeriadosMVC3' : root;
         jQuery.i18n.properties({
             name: filename,
             path:  root + '/js/properties/',

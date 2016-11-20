@@ -21,7 +21,6 @@ public class GuardarAction implements Action {
 	@Override
 	public ForwardConfig execute(ActionMapping mapping, DynaActionForm form, HttpServletRequest request, HttpServletResponse response) throws SQLException, RuntimeException {
 		try {
-	        //Cuando el registro es nuevo este dato no se envía por REQUEST
 	        if(form.getItem("feriado_str") == null) {
 		        String patron = String.valueOf(request.getSession().getAttribute("formato"));
 		        Locale idioma = new Locale(String.valueOf(request.getSession().getAttribute("idioma")));

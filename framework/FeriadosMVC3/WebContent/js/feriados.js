@@ -150,6 +150,26 @@ var jFeriados = {
             }
         });
 	},
+        
+	test: function(index) {
+		jUtils.hiding("message");
+		jUtils.hiding("main", false);
+		jUtils.executing("response");
+		$.ajax({
+            url: "/FeriadosMVC3/feriados/Test.do",
+            type: "post",
+            dataType: "html",
+            error: function(hr){
+                jUtils.showing("message", hr.responseText);
+                jUtils.showing("main");
+                jUtils.hiding("response");
+            },
+            success: function(html) {
+                jUtils.showing("response", html);
+                $("input[type=text]:first", $("#response")).focus();
+            }
+        });
+	},        
 	
 	guardarIdiomas: function(index) {
 		jUtils.hiding("message");

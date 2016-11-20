@@ -16,8 +16,8 @@ public class ListadoAction implements Action {
 
 	@Override
 	public ForwardConfig execute(ActionMapping mapping, DynaActionForm form, HttpServletRequest request, HttpServletResponse response) throws SQLException, RuntimeException {
-		Dao dao = DaoFactory.getDao("Feriados", "feriados");
-		request.setAttribute("feriados", dao.select(null));
+		/*Dao dao = DaoFactory.getDao("Feriados", "feriados");
+		request.setAttribute("feriados", dao.select(null));*/
 		return mapping.getForwardByName("success");
 	}
 

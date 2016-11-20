@@ -24,9 +24,13 @@
     	<action path="/GuardarIdiomas.do" type="GuardarIdiomasAction" noforward="true" />
     	<action path="/Listado.do" type="ListadoAction">
     		<forward name="success" path="/feriados/listado.jsp"/>
+                <forward name="list" path="/feriados/Test.do" />
     	</action>
     	<action path="/ListadoIdiomas.do" type="ListadoIdiomasAction">
     		<forward name="success" path="/feriados/listado-idiomas.jsp"/>
+    	</action>
+        <action path="/Test.do" type="TestAction">
+            <forward name="success" path="/feriados/ListadoIdiomas.do"/>
     	</action>
     </action-mappings>
 </actions>

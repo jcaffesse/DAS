@@ -9,10 +9,10 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title><fmt:message key="titulo" bundle="${etq}" /></title>
-	<link type="text/css" rel="stylesheet" href="/util/StyleSheet.do/load=page,messages,jquery-ui,feriados" />
-	<script type="text/javascript" src="/util/Javascript.do/load=jquery,jquery.ui,jquery.datepicker.config,jquery.i18n.properties,utils,feriados"></script>
+	<link type="text/css" rel="stylesheet" href="/FeriadosMVC3//util/StyleSheet.do/load=page,messages,jquery-ui,feriados" />
+	<script type="text/javascript" src="/FeriadosMVC3/util/Javascript.do/load=jquery,jquery.ui,jquery.datepicker.config,jquery.i18n.properties,utils,feriados"></script>
 	<script type="text/javascript">
-	jUtils.changeLang("etiquetas_js", "${lang}");
+	jUtils.changeLang("etiquetas_js", "${lang}", "/FeriadosMVC3");
 	</script>
 </head>
 <body>
@@ -59,7 +59,10 @@
 		<br/>
 		<div class="width700">
 			<span class="fl"><a href="/feriados/Listado.do/lang=es"><fmt:message key="espanol" bundle="${etq}" /></a> <a href="/feriados/Listado.do/lang=en"><fmt:message key="ingles" bundle="${etq}" /></a></span>
-			<span class="fr"><a id="agregar" href="#" onclick="jFeriados.agregar();return false;"><fmt:message key="nuevo" bundle="${etq}" /></a></span>
+			<span class="fr">
+                            <a id="agregar" href="#" onclick="jFeriados.agregar();return false;"><fmt:message key="nuevo" bundle="${etq}" /></a>
+                            <a id="test" href="#" onclick="jFeriados.test();return false;"><fmt:message key="test" bundle="${etq}" /></a>
+                        </span>
 		</div>
 	</div>	
 </body>
