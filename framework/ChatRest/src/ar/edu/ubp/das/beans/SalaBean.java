@@ -23,9 +23,10 @@ public class SalaBean implements Bean {
     private String nombre;
     private String descripcion;
     private String tipo;
-    private Integer msgId;
-    
+    private Integer ultimo_mensaje;
+    private Date fecha_desde;
     private int color;
+
 
     public int getColor() {
         return color;
@@ -75,13 +76,21 @@ public class SalaBean implements Bean {
         this.tipo = t;
     }
     
-    public Integer getMsgId() {
-        return msgId;
+    public Integer getUltimoMsg() {
+        return ultimo_mensaje;
     }
 
     @XmlElement
-    public void setMsgId(Integer msgId) {
-        this.msgId = msgId;
+    public void setUltimoMsg(Integer ultimo_mensaje) {
+        this.ultimo_mensaje = ultimo_mensaje;
+    }
+    
+    public Date getFecha_desde() {
+        return fecha_desde;
+    }
+
+    public void setFecha_desde(Date fecha_desde) {
+        this.fecha_desde = fecha_desde;
     }
 
     @Override

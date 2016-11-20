@@ -100,25 +100,32 @@ public class MSSQLMensajesDao extends MSSQLDao{
         String procedureName = "dbo.get_mensajes_";
         String beanClass = bean.getClass().getSimpleName();
         
-        procedureName += beanClass.substring(0, beanClass.length()-4).toLowerCase() + "(?";
+        procedureName += beanClass.substring(0, beanClass.length()-4).toLowerCase();
         List<Bean> list;
 
         this.connect();
         
         if (beanClass.equals(SalaBean.class.getSimpleName())) {
             SalaBean sala = SalaBean.class.cast(bean);
-            try {
-                    procedureName += ", ?)";
-                    this.setProcedure(procedureName);
-                    this.setParameter(1, sala.getId());
-                    if(sala.getMsgId() != null) {
-                      this.setParameter(2, sala.getMsgId());
-                    } else {
-                        String s2 = null;
-                        this.setParameter(2, s2);
-                    }
-            } catch (NullPointerException e) {
-                procedureName += ")";
+            if(sala.getUltimoMsg() != null) {
+                //get mensajes con filtro de ultimo mensaje recibido
+                procedureName += "(?, ?)";
+                this.setProcedure(procedureName);
+                this.setParameter(1, sala.getId());
+                this.setParameter(2, sala.getUltimoMsg());
+            } else if(sala.getFecha_desde() != null) {
+                //get mensajes con filtro de fecha de login
+                Date fromDate = sala.getFecha_desde();
+                java.sql.Timestamp tmst = new java.sql.Timestamp(fromDate.getTime());
+                
+                procedureName += "(?, ?, ?)";
+                this.setProcedure(procedureName);
+                this.setParameter(1, sala.getId());
+                this.setParameter(2, "");
+                this.setParameter(3, tmst.toString());
+            } else {
+                //get mensajes historicos de sala
+                procedureName += "(?)";
                 this.setProcedure(procedureName);
                 this.setParameter(1, sala.getId());
             }
@@ -128,18 +135,21 @@ public class MSSQLMensajesDao extends MSSQLDao{
                 Date ultimaAct = usuario.getUltimaAct();
                 java.sql.Timestamp tmst = new java.sql.Timestamp(ultimaAct.getTime());
                 
+                //get mensajes visibles por un usuario en todas las salas con filtro de ultima_act
                 procedureName = "dbo.get_mensajes_usuario_salas(?, ?)";
                 this.setProcedure(procedureName);
                 this.setParameter(1, usuario.getId());
                 this.setParameter(2, tmst.toString());
             } catch (NullPointerException e) {
-                procedureName += ")";
+                //get mensajes visibles por un usuario en todas las salas historico
+                procedureName += "(?)";
                 this.setProcedure(procedureName);
                 this.setParameter(1, usuario.getId());
             }
         } else if (beanClass.equals(MensajeBean.class.getSimpleName())) {
             MensajeBean mensaje = MensajeBean.class.cast(bean);
-            procedureName += ")";
+            //get mensaje especifico
+            procedureName += "(?)";
             this.setProcedure(procedureName);
             this.setParameter(1, mensaje.getId_mensaje());
         }

@@ -64,13 +64,29 @@ public class MensajeResource {
     @Path("/sala/{id_sala}")
     public Response getMensajesSala(
         @PathParam("id_sala") String id_sala,
-        @QueryParam("id_mensaje") Integer id_mensaje
+        @QueryParam("ultimo_mensaje") String ultimo_mensaje,
+        @QueryParam("fecha_desde") String fecha_desde
     ) {
         
         try {
             SalaBean bean = new SalaBean();
             bean.setId(Integer.parseInt(id_sala));
-            bean.setMsgId(id_mensaje);
+            if(ultimo_mensaje != null) {
+                bean.setUltimoMsg(Integer.parseInt(ultimo_mensaje));
+            }
+            
+            Date ua = null;
+            if (fecha_desde != null) {
+                try {
+                    ua = new Date(Long.parseLong(fecha_desde));
+                } catch (NumberFormatException l) {
+                    return Response.status(Response.Status.BAD_REQUEST).entity(l.getMessage()).build();
+                }
+            }
+            
+            if(ua != null) {
+                bean.setFecha_desde(ua);
+            }
             
             try {
                 Dao dao = DaoFactory.getDao("Mensajes");
