@@ -89,7 +89,7 @@ public class Backend
         if (myRooms.containsKey(roomId)) {
             return myRooms.get(roomId);
         } else {
-            return "";
+            return "-1";
         }
     }
 
@@ -145,7 +145,7 @@ public class Backend
     }
 
     public String getLastRoomUpdateMessageId(String chatRoomId) {
-        return updateTime.getString("com.das.chat.last_update_time.room_" + chatRoomId, "");
+        return updateTime.getString("com.das.chat.last_update_time.room_" + chatRoomId, "-1");
     }
 
     public ArrayList<ChatUser> getUsers() {
@@ -336,10 +336,7 @@ public class Backend
 
     public void getChatRoomMessages(final EnterChatRoomRequest req, final String messageId, final OnWSResponseListener<ArrayList<ChatMessage>> responseListener)
     {
-        if(messageId.isEmpty()) {
-            responseListener.onWSResponse(new ArrayList<ChatMessage>(), 0, null);
-            return;
-        }
+
         ChatWSTask task = new ChatWSTask();
         WSParams params = new WSParams();
 
@@ -352,11 +349,17 @@ public class Backend
             @Override
             public void onWSResponse(final String response, final long errorCode, final String errorMsg) {
                 if (errorMsg == null) {
+
                     ArrayList<ChatMessage> messages = EnterChatRoomGetMessagesResponse.initWithResponse(response);
                     if(messages.size() > 0) {
                         Backend.getInstance().setLastRoomUpdateMessageId(req.getIdSala(), messages.get(messages.size() -1).getIdMessage());
                     }
-                    responseListener.onWSResponse(messages, errorCode, null);
+
+                    if(!messageId.equalsIgnoreCase("-1") || (messages.size() > 0 && messages.get(messages.size() -1).getUser().getUserId().equalsIgnoreCase(session.getUserId()))) {
+                        responseListener.onWSResponse(messages, errorCode, null);
+                    } else {
+                        responseListener.onWSResponse(new ArrayList<ChatMessage>(), errorCode, null);
+                    }
                 } else {
                     responseListener.onWSResponse(null, errorCode, errorMsg);
                 }

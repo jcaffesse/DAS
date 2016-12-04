@@ -123,7 +123,6 @@ public class InvitationDetailDialog extends DialogFragment {
                                                                 Intent i = new Intent(getActivity(), ChatActitivy.class);
                                                                 i.putExtra("users", response1);
                                                                 i.putExtra("messages", response);
-
                                                                 i.putExtra("chatroom", Backend.getInstance().getChatRoomById(invite.getInvitationChatRoom()));
                                                                 startActivity(i);
                                                             } else {
