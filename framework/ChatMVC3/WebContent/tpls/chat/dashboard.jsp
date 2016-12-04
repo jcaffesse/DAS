@@ -16,10 +16,10 @@
     </script>
 </head>
 <body>
-    <h1><fmt:message key="titulo" bundle="${etq}" /></h1>    
+    <h1><fmt:message key="titulo" bundle="${etq}" /></h1>
     <div id="executing"></div>    
     <div id="message"></div>
-    <div id="main">
+    <div id="dashboard">
         <table class="width700">
             <colgroup>
                 <col width="200px"/>

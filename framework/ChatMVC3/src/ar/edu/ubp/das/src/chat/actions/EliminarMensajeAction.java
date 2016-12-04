@@ -8,70 +8,61 @@ package ar.edu.ubp.das.src.chat.actions;
 import ar.edu.ubp.das.mvc.action.Action;
 import ar.edu.ubp.das.mvc.action.ActionMapping;
 import ar.edu.ubp.das.mvc.action.DynaActionForm;
-import ar.edu.ubp.das.mvc.beans.UsuarioBean;
 import ar.edu.ubp.das.mvc.config.ForwardConfig;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.net.URISyntaxException;
-import java.util.LinkedList;
-import java.util.List;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
 /**
  *
  * @author Jav
  */
-public class UsuariosListAction implements Action {
+
+public class EliminarMensajeAction implements Action {
 
     @Override
     public ForwardConfig execute(ActionMapping mapping, DynaActionForm form, HttpServletRequest request, HttpServletResponse response) throws SQLException, RuntimeException {
         try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
-            //prepare http get
-            String id_sala = (String) request.getSession().getAttribute("id_sala");
+            
+            //get request data
+            String id_mensaje = form.getItem("id_mensaje");
             String authToken = String.valueOf(request.getSession().getAttribute("token"));
             
             URIBuilder builder = new URIBuilder();
-                builder.setScheme("http").setHost("25.136.78.82").setPort(8080).setPath("/usuarios-salas/sala/" + id_sala);
+                builder.setScheme("http").setHost("25.136.78.82").setPort(8080).setPath("/mensajes/" + id_mensaje);
 
-            HttpGet getRequest = new HttpGet();
-                getRequest.setURI(builder.build());
-                getRequest.addHeader("Authorization", "BEARER " + authToken);
-                getRequest.addHeader("accept", "application/json");            
+            HttpDelete delete = new HttpDelete();
+                delete.setURI(builder.build());
+                delete.addHeader("Authorization", "BEARER " + authToken);
+                delete.addHeader("accept", "application/json");
             
-            CloseableHttpResponse getResponse = httpClient.execute(getRequest);
-            HttpEntity responseEntity = getResponse.getEntity();
-            StatusLine responseStatus = getResponse.getStatusLine();
-            String restResp = EntityUtils.toString(responseEntity);
+            CloseableHttpResponse deleteResponse = httpClient.execute(delete);
             
+            HttpEntity responseEntity = deleteResponse.getEntity();
+            StatusLine responseStatus = deleteResponse.getStatusLine();
+            String restResp = EntityUtils.toString(responseEntity);	
+
             if(responseStatus.getStatusCode() != 200) {
             	throw new RuntimeException(restResp);
             }
-            //parse message data from response
-            Gson gson = new Gson();
-            UsuarioBean[] usrList = gson.fromJson(restResp, UsuarioBean[].class);
-            request.setAttribute("usuarios", usrList);
-
+            
             return mapping.getForwardByName("success");
 
         } catch (IOException | URISyntaxException e) {
-            request.setAttribute("message", "Error al intentar listar Usuarios " + e.getMessage());
+            String id_mensaje = form.getItem("id_mensaje");
+            request.setAttribute("message", "Error al intentar eliminar mensaje " + id_mensaje + "; " + e.getMessage());
             return mapping.getForwardByName("error");
         }
-
-        
     }
     
 }

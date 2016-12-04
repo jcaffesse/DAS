@@ -25,5 +25,8 @@
     	</action>
         <action path="/EliminarMensaje.do" type="EliminarMensajeAction" noforward="true" secure="true"/>
         <action path="/ExpulsarUsuario.do" type="ExpulsarUsuarioAction" noforward="true" secure="true"/>
+        <action path="/ActualizarMensajes.do" type="ActualizarMensajesAction" secure="true">
+            <forward name="success" path="/chat/actualizar-mensajes.jsp"/>
+        </action>
     </action-mappings>
 </actions>

@@ -19,7 +19,7 @@
     <h1><fmt:message key="titulo" bundle="${etq}" /></h1>    
     <div id="executing"></div>    
     <div id="message"></div>
-    <div id="main">    
+    <div id="dashboard">    
         <form id="login-form">
             <table>
                 <tbody>
