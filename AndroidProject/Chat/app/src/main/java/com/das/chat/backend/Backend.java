@@ -343,8 +343,8 @@ public class Backend
         ChatWSTask task = new ChatWSTask();
         WSParams params = new WSParams();
 
-        HttpGet get = new HttpGet(String.format("%s%s/sala/%s?id_mensaje=%s", WS_BASE_URL, WS_MESSAGES_URL, req.getIdSala(), messageId));
-        Log.d("REQUEST", String.format("%s%s/sala/%s?id_mensaje=%s", WS_BASE_URL, WS_MESSAGES_URL, req.getIdSala(), messageId));
+        HttpGet get = new HttpGet(String.format("%s%s/sala/%s?ultimo_mensaje=%s", WS_BASE_URL, WS_MESSAGES_URL, req.getIdSala(), messageId));
+        Log.d("REQUEST", String.format("%s%s/sala/%s?ultimo_mensaje=%s", WS_BASE_URL, WS_MESSAGES_URL, req.getIdSala(), messageId));
         params.setRequest(get);
         params.addTokenHeader(session.getSessionToken());
 
@@ -370,8 +370,8 @@ public class Backend
         ChatWSTask task = new ChatWSTask();
         WSParams params = new WSParams();
 
-        HttpGet get = new HttpGet(String.format("%s%s/sala_ultimo/%s", WS_BASE_URL, WS_MESSAGES_URL, req.getIdSala()));
-        Log.d("REQUEST", String.format("%s%s/sala_ultimo/%s", WS_BASE_URL, WS_MESSAGES_URL, req.getIdSala()));
+        HttpGet get = new HttpGet(String.format("%s%s/sala/%s?ultimo_mensaje=-1", WS_BASE_URL, WS_MESSAGES_URL, req.getIdSala()));
+        Log.d("REQUEST", String.format("%s%s/sala/%s?ultimo_mensaje=-1", WS_BASE_URL, WS_MESSAGES_URL, req.getIdSala()));
         params.setRequest(get);
         params.addTokenHeader(session.getSessionToken());
 
