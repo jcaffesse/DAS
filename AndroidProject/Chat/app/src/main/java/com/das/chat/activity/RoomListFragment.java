@@ -60,49 +60,22 @@ public class RoomListFragment extends Fragment{
                             Backend.getInstance().getChatRoomUsers(req, new OnWSResponseListener<ArrayList<ChatUser>>() {
                                 @Override
                                 public void onWSResponse(final ArrayList<ChatUser> response1, long errorCode, final String errorMsg) {
-                                    if (errorMsg == null) {
-                                        if(Backend.getInstance().getEnterRoomMessageId(chatRoom.getIdSala()).isEmpty()) {
-                                            Backend.getInstance().getChatRoomLastMessage(req, new OnWSResponseListener<ChatMessage>() {
-                                                @Override
-                                                public void onWSResponse(ChatMessage response, long errorCode, String errorMsg) {
-                                                    Backend.getInstance().setEnterRoomMessageId(chatRoom.getIdSala(), response.getIdMessage());
-                                                    Backend.getInstance().getChatRoomMessages(req, Backend.getInstance().getEnterRoomMessageId(chatRoom.getIdSala()), new OnWSResponseListener<ArrayList<ChatMessage>>() {
-                                                        @Override
-                                                        public void onWSResponse(ArrayList<ChatMessage> response, long errorCode, String errorMsg) {
-                                                            if (errorMsg == null) {
-                                                                Intent i = new Intent(getActivity(), ChatActitivy.class);
-                                                                i.putExtra("users", response1);
-                                                                i.putExtra("messages", response);
-                                                                i.putExtra("chatroom", chatRoom);
-                                                                startActivity(i);
+                                if (errorMsg == null) {
 
-                                                            } else {
-                                                                ((MainActivity) getActivity()).showLoadingView(false);
-                                                            }
-                                                        }
-                                                    });
+                                        Backend.getInstance().getChatRoomMessages(req, Backend.getInstance().getEnterRoomMessageId(req.getIdSala()), new OnWSResponseListener<ArrayList<ChatMessage>>() {
+                                            @Override
+                                            public void onWSResponse(ArrayList<ChatMessage> response, long errorCode, String errorMsg) {
+                                                if (errorMsg == null) {
+                                                    Intent i = new Intent(getActivity(), ChatActitivy.class);
+                                                    i.putExtra("users", response1);
+                                                    i.putExtra("messages", response);
+                                                    i.putExtra("chatroom", chatRoom);
+                                                    startActivity(i);
+                                                } else {
+                                                    ((MainActivity) getActivity()).showLoadingView(false);
                                                 }
-                                            });
-                                        } else {
-                                            Backend.getInstance().getChatRoomMessages(req, Backend.getInstance().getEnterRoomMessageId(req.getIdSala()), new OnWSResponseListener<ArrayList<ChatMessage>>() {
-                                                @Override
-                                                public void onWSResponse(ArrayList<ChatMessage> response, long errorCode, String errorMsg) {
-                                                    if (errorMsg == null) {
-                                                        Intent i = new Intent(getActivity(), ChatActitivy.class);
-                                                        i.putExtra("users", response1);
-                                                        i.putExtra("messages", response);
-                                                        i.putExtra("chatroom", chatRoom);
-                                                        startActivity(i);
-                                                    } else {
-                                                        ((MainActivity) getActivity()).showLoadingView(false);
-                                                    }
-                                                }
-                                            });
-                                        }
-
-
-                                    } else {
-                                        ((MainActivity) getActivity()).showLoadingView(false);
+                                            }
+                                        });
                                     }
                                 }
                             });
