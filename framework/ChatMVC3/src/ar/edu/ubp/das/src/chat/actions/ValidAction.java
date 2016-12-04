@@ -37,7 +37,6 @@ public class ValidAction implements Action {
     @Override
     public ForwardConfig execute(ActionMapping mapping, DynaActionForm form, HttpServletRequest request, HttpServletResponse response) throws SQLException, RuntimeException {
         try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
-            System.out.println("valid!");
             HttpPost httpPost = new HttpPost("http://25.136.78.82:8080/login/");
             List <NameValuePair> params = new ArrayList <>();
             params.add(new BasicNameValuePair("nombre_usuario", form.getItem("user")));

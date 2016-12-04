@@ -7,13 +7,20 @@
 var jChat = {
     login: login,
     ingresarSala : ingresarSala,
-    mostrarSala : mostrarSala,
-    expulsarUsuario : expulsarUsuario
+    listarMensajes: listarMensajes,
+    listarUsuarios: listarUsuarios,
+    expulsarUsuario : expulsarUsuario,
+    borrarMensaje : borrarMensaje,
+    volverDashboard: volverDashboard,
+    actualizarMensajesWatcher: actualizarMensajesWatcher,
+    removerWatchers: removerWatchers
 };
+
+var mensajesWatcher;
 
 function login() {
     var params = $('#login-form input');
-
+    jChat.removerWatchers();
     $.ajax({
         url: "/ChatMVC3/chat/Valid.do/",
         type: "post",
@@ -24,9 +31,8 @@ function login() {
         },
         success: function(data) {
             var parsed = $.parseHTML(data);
-            console.log($(parsed).filter("div#main")[0].innerHTML);
             jUtils.hiding("message");
-            $('#main').html($(parsed).filter("div#main")[0].innerHTML);
+            $('#dashboard').html($(parsed).filter("div#dashboard")[0].innerHTML);
         }
     });
 };
@@ -41,30 +47,124 @@ function ingresarSala(id_sala){
             jUtils.showing("message", err.responseText);
         },
         success: function(data) {
+            jChat.removerWatchers();           
+            jChat.actualizarMensajesWatcher();
             jUtils.hiding("message");
-            $('#main').html(data);
+            jUtils.hiding("dashboard");
+            jUtils.showing("response", data);
         }
     });        
 };
 
-function mostrarSala(id_sala) {
+function listarMensajes(){
+    $.ajax({
+        url: "/ChatMVC3/chat/MessagesList.do",
+        type: "post",
+        dataType: "html",
+        data: {},
+        error: function(err){
+            jUtils.showing("message", err.responseText);
+        },
+        success: function(data) {
+            jChat.removerWatchers();
+            jChat.actualizarMensajesWatcher();
+            jUtils.hiding("message");
+            jUtils.hiding("dashboard");
+            jUtils.showing("response", data);
+        }
+    });      
+}
 
+function listarUsuarios(){
+    $.ajax({
+        url: "/ChatMVC3/chat/UsuariosList.do",
+        type: "post",
+        dataType: "html",
+        data: {},
+        error: function(err){
+            jUtils.showing("message", err.responseText);
+        },
+        success: function(data) {
+            jChat.removerWatchers();
+            jUtils.hiding("message");
+            jUtils.hiding("dashboard");
+            jUtils.showing("response", data);
+        }
+    });        
 };
 
 function expulsarUsuario(id_usuario, id_sala) {
-    $.post('/ChatMVC3/chat/ExpulsarUsuario.do', {id_usuario: id_usuario, id_sala: id_sala})
-        .done(function(data) {
-            alert(data);
+    $.ajax({
+        url: "/ChatMVC3/chat/ExpulsarUsuario.do",
+        type: "post",
+        dataType: "html",
+        data: {id_usuario: id_usuario, id_sala: id_sala},
+        error: function(err){
+            jUtils.showing("message", err.responseText);
+        },
+        success: function(data) {
+            jUtils.hiding("message");
+        }
+    });   
+};
+
+function borrarMensaje(id_mensaje){
+    $.ajax({
+        url: "/ChatMVC3/chat/EliminarMensaje.do",
+        type: "post",
+        dataType: "html",
+        data: {id_mensaje: id_mensaje},
+        error: function(err){
+            jUtils.showing("message", err.responseText);
+        },
+        success: function(data) {
+            jUtils.hiding("message");
+        }
+    });   
+};
+
+function volverDashboard() {
+    $.ajax({
+        url: "/ChatMVC3/chat/Dashboard.do",
+        type: "post",
+        dataType: "html",
+        data: {},
+        error: function(err){
+            jUtils.showing("message", err.responseText);
+        },
+        success: function(data) {
+            jChat.removerWatchers();
+            var parsed = $.parseHTML(data);
+            jUtils.hiding("message");
+            jUtils.hiding("response");
+            jUtils.showing("dashboard", $(parsed).filter("div#dashboard")[0].innerHTML);
+        }
+    });    
+};
+
+function actualizarMensajesWatcher() {
+    mensajesWatcher = setInterval(actualizarMensajes, 10*1000);
+
+    function actualizarMensajes() {
+        $.ajax({
+            url: "/ChatMVC3/chat/ActualizarMensajes.do",
+            type: "post",
+            dataType: "html",
+            data: {},
+            error: function(err){
+                jUtils.showing("message", err.responseText);
+            },
+            success: function(data) {
+                $("#response table").append(data);
+            }
         });
+    };
+};
+
+function removerWatchers() {
+    if (mensajesWatcher) {
+        clearInterval(mensajesWatcher);
+        mensajesWatcher = null;
+    }    
 }
 
-/*function expulsarUsuario(id_usuario, id_sala, token){
-    // $.post('/ChatMVC3/chat/ExpulsarUsuario.do', {id_usuario: id_usuario, id_sala: id_sala, token: token})
-    //     .done(function(data) {
-    //                 //$('#main').html(data);
-    // });
-    $.post('/ChatMVC3/chat/SalasJoin.do', {id_usuario: id_usuario, id_sala: id_sala, token: token})
-        .done(function(data) {
-            $('#main').html(data);
-    });    
-};*/

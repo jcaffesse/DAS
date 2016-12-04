@@ -5,7 +5,12 @@
  */
 package ar.edu.ubp.das.mvc.beans;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -18,7 +23,7 @@ public class MensajeBean implements Bean {
     private UsuarioBean usuario;
     private int id_sala;
     private String mensaje;
-    private Date fecha_mensaje;
+    private String fecha_mensaje;
     
     public int getId_mensaje() {
         return id_mensaje;
@@ -52,11 +57,14 @@ public class MensajeBean implements Bean {
         this.mensaje = mensaje;
     }
 
-    public Date getFecha_mensaje() {
-        return fecha_mensaje;
+    public String getFecha_mensaje() throws ParseException {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        Date fecha = format.parse(fecha_mensaje);
+        DateFormat pFormat = new SimpleDateFormat("d MMM HH:mm");
+        return pFormat.format(fecha);
     }
 
-    public void setFecha_mensaje(Date fecha_mensaje) {
+    public void setFecha_mensaje(String fecha_mensaje) {
         this.fecha_mensaje = fecha_mensaje;
     }
 
@@ -65,7 +73,7 @@ public class MensajeBean implements Bean {
         return "{ \"id_mensaje\" : \"" + id_mensaje + "\", \"usuario\" : " 
             + usuario.toString() + ", \"id_sala\" : \"" + id_sala 
             + "\", \"mensaje\" : \"" + mensaje +"\", \"fecha_mensaje\" : \""
-            + fecha_mensaje.toString() + "\"}";
+            + fecha_mensaje + "\"}";
     }
     
     @Override

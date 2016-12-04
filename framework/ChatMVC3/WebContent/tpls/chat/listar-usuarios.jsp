@@ -9,6 +9,8 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <fmt:setLocale value="${lang}" />
 <fmt:setBundle basename="ar.edu.ubp.das.src.chat.properties.etiquetas" var="etq" scope="session"/>
+<!DOCTYPE html>
+<h2><fmt:message key="usuariosSala" bundle="${etq}" /> <c:out value="${sessionScope.id_sala}"/></h2>
 <table class="width700">
     <colgroup>
         <col width="100px"/>
@@ -25,8 +27,7 @@
         </tr>
     </thead>
     <tbody>
-        <c:set var="id_sala" value="${empty requestScope.id_sala ? 4 : requestScope.id_sala}"/>
-        <c:set var="token" value="${empty requestScope.token ? '' : requestScope.token}"/>        
+        <c:set var="id_sala" value="${sessionScope.id_sala}"/>
         <c:forEach var="usuario" items="${requestScope.usuarios}" varStatus="status">
             <c:set var="index" value="${status.index}" scope="session"/>
             <tr>
@@ -51,4 +52,10 @@
         </c:forEach>
     </tbody>        
 </table>
+<br>
+<br>
+<div class="control-buttons">
+    <button type="button" onclick="jChat.volverDashboard(); return false;"><fmt:message key="volver" bundle="${etq}" /></button>
+    <button type="button" onclick="jChat.listarMensajes(); return false;"><fmt:message key="mensajes" bundle="${etq}" /></button>
+</div>
 
