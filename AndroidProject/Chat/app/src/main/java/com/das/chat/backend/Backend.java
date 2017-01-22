@@ -54,16 +54,6 @@ public class Backend
     private HashMap<String, String> myRooms;
     private ChatUser session;
 
-    public boolean getShouldReloadRooms() {
-        return shouldReloadRooms;
-    }
-
-    public void setShouldReloadRooms(boolean shouldReloadRooms) {
-        this.shouldReloadRooms = shouldReloadRooms;
-    }
-
-    private boolean shouldReloadRooms = false;
-
     private SharedPreferences updateTime;
 
     private static synchronized void initInstance()

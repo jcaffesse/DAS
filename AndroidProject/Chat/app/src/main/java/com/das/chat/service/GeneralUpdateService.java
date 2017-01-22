@@ -65,8 +65,6 @@ public class GeneralUpdateService extends Service {
 
     @Override
     public void onDestroy() {
-        stopSelf();
-
         if (generalTimer != null) {
             generalTimer.cancel();
             generalTimer = null;
@@ -87,11 +85,14 @@ public class GeneralUpdateService extends Service {
             chatRoomUpdatesTimer = null;
         }
 
+        stopSelf();
 
         stopForeground(true);
         Log.d("SERVICE", "------------- DESTROY -------------");
         super.onDestroy();
     }
+
+    
 
     public class LocalBinder extends Binder {
         public GeneralUpdateService getService() {
