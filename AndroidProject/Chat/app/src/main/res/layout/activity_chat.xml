@@ -59,6 +59,14 @@
             android:background="@drawable/ic_leave_room"
             android:layout_alignParentEnd="true"
             android:onClick="onLeaveRoomButtonPressed"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/back_btn"
+            android:layout_toLeftOf="@id/leave_room_btn"
+            android:background="@android:color/transparent"
+            android:id="@+id/user_list_btn"/>
     </RelativeLayout>
 
     <ListView
