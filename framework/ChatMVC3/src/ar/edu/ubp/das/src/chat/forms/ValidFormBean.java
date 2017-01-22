@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 public class ValidFormBean extends DynaActionForm {
     @Override
     public void validate(ActionMapping mapping, HttpServletRequest request) throws RuntimeException {
-        System.out.println("hello");
             if(this.getItem("user").isEmpty()) {
                     throw new RuntimeException("nombreUsuarioRequired");
             }
