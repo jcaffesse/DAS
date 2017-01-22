@@ -12,6 +12,7 @@ var jChat = {
     expulsarUsuario : expulsarUsuario,
     borrarMensaje : borrarMensaje,
     volverDashboard: volverDashboard,
+    listarTodosLosUsuarios: listarTodosLosUsuarios,
     actualizarMensajesWatcher: actualizarMensajesWatcher,
     removerWatchers: removerWatchers
 };
@@ -51,6 +52,7 @@ function ingresarSala(id_sala){
             jChat.actualizarMensajesWatcher();
             jUtils.hiding("message");
             jUtils.hiding("dashboard");
+            jUtils.hiding("botones");
             jUtils.showing("response", data);
         }
     });        
@@ -88,6 +90,25 @@ function listarUsuarios(){
             jChat.removerWatchers();
             jUtils.hiding("message");
             jUtils.hiding("dashboard");
+            jUtils.showing("response", data);
+        }
+    });        
+};
+
+function listarTodosLosUsuarios(){
+    $.ajax({
+        url: "/ChatMVC3/chat/TodosUsuariosList.do",
+        type: "post",
+        dataType: "html",
+        data: {},
+        error: function(err){
+            jUtils.showing("message", err.responseText);
+        },
+        success: function(data) {
+            jChat.removerWatchers();
+            jUtils.hiding("message");
+            jUtils.hiding("dashboard");
+            jUtils.hiding("botones");
             jUtils.showing("response", data);
         }
     });        
@@ -140,6 +161,8 @@ function volverDashboard() {
             jUtils.hiding("message");
             jUtils.hiding("response");
             jUtils.showing("dashboard", $(parsed).filter("div#dashboard")[0].innerHTML);
+            jUtils.showing("botones", $(parsed).filter("div#botones")[0].innerHTML);
+            
         }
     });    
 };

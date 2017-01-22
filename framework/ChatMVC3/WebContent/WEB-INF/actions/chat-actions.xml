@@ -23,6 +23,9 @@
         <action path="/UsuariosList.do" type="UsuariosListAction" secure="true">
             <forward name="success" path="/chat/listar-usuarios.jsp"/>
     	</action>
+        <action path="/TodosUsuariosList.do" type="TodosUsuariosListAction" secure="true">
+            <forward name="success" path="/chat/listar-todos-usuarios.jsp"/>
+    	</action>
         <action path="/EliminarMensaje.do" type="EliminarMensajeAction" noforward="true" secure="true" />
         <action path="/ExpulsarUsuario.do" type="ExpulsarUsuarioAction" noforward="true" secure="true"/>
         <action path="/ActualizarMensajes.do" type="ActualizarMensajesAction" secure="true">

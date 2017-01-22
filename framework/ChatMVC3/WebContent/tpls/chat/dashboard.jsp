@@ -62,6 +62,9 @@
             </tbody>        
         </table>
     </div>  
+    <div class="control-buttons" id="botones">
+        <button type="button" onclick="jChat.listarTodosLosUsuarios(); return false;"><fmt:message key="todosLosUsuarios" bundle="${etq}" /></button>
+    </div>
     <div id="response"></div>
 </body>
 </html>
