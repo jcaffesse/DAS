@@ -55,10 +55,12 @@ public class AuthenticationFilter implements ContainerRequestFilter
             if(method.isAnnotationPresent(DenyAll.class))
             {
                 requestContext.abortWith(this.forbiddenBuilder.build());
+                return;
             }
               
             if((authorization == null || authorization.isEmpty())) {
                 requestContext.abortWith(this.deniedBuilder.build());
+                return;
             } else {
                 try {
                     String authToken = authorization.get(0)
@@ -72,8 +74,8 @@ public class AuthenticationFilter implements ContainerRequestFilter
 
                         if(list.isEmpty()) {
                             requestContext.abortWith(this.deniedBuilder.build());
+                            return;
                         }
-
                         if(!tokensDao.valid(list.get(0))) {
                             requestContext.abortWith(this.reloginBuilder.build());
                         }
