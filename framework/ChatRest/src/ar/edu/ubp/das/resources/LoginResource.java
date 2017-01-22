@@ -31,7 +31,6 @@ import javax.ws.rs.core.Response;
  */
 
 @Path("/login")
-@PermitAll
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 public class LoginResource {
     private static final String AUTH_RESPONSE_HEADER = "Auth-Token";
@@ -39,6 +38,7 @@ public class LoginResource {
     private static final RolBean ADMIN_ROLE = new RolBean(100, "Administrador");
     
     @POST
+    @PermitAll
     public Response login(
         @FormParam("nombre_usuario") String nombre, 
         @FormParam("password") String password

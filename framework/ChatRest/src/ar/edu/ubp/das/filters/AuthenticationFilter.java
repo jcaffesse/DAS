@@ -57,7 +57,7 @@ public class AuthenticationFilter implements ContainerRequestFilter
         final MultivaluedMap<String, String> headers = requestContext.getHeaders();        
         final List<String> authorization = headers.get(AUTHORIZATION_HEADER);
         //Access allowed for all
-        if( !resourceInfo.getResourceClass().isAnnotationPresent(PermitAll.class))
+        if( method.isAnnotationPresent(PermitAll.class))
         {
             this.initBuilders();
             
