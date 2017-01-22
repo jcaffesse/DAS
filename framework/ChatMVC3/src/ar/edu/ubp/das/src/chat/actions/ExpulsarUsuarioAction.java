@@ -56,6 +56,8 @@ public class ExpulsarUsuarioAction implements Action {
             	throw new RuntimeException(restResp);
             }
             
+            request.getSession().setAttribute("token", null);
+            
             return mapping.getForwardByName("success");
 
         } catch (IOException | URISyntaxException e) {

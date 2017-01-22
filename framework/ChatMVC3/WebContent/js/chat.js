@@ -6,6 +6,7 @@
 
 var jChat = {
     login: login,
+    logout: logout,
     ingresarSala : ingresarSala,
     listarMensajes: listarMensajes,
     listarUsuarios: listarUsuarios,
@@ -33,6 +34,28 @@ function login() {
         success: function(data) {
             var parsed = $.parseHTML(data);
             jUtils.hiding("message");
+            $('#dashboard').html($(parsed).filter("div#dashboard")[0].innerHTML);
+            jUtils.showing("botones", $(parsed).filter("div#botones")[0].innerHTML);
+            jUtils.showing("logout", $(parsed).filter("div#logout")[0].innerHTML);
+        }
+    });
+};
+
+function logout() {
+    jChat.removerWatchers();
+    $.ajax({
+        url: "/ChatMVC3/chat/Logout.do/",
+        type: "post",
+        dataType: "html",
+        data: {},
+        error: function(err){
+            jUtils.showing("message", err.responseText);
+        },
+        success: function(data) {
+            var parsed = $.parseHTML(data);
+            jUtils.hiding("message");
+            jUtils.hiding("botones");
+            jUtils.hiding("logout");
             $('#dashboard').html($(parsed).filter("div#dashboard")[0].innerHTML);
         }
     });

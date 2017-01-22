@@ -27,6 +27,9 @@
             <forward name="success" path="/chat/listar-todos-usuarios.jsp"/>
     	</action>
         <action path="/EliminarMensaje.do" type="EliminarMensajeAction" noforward="true" secure="true" />
+        <action path="/Logout.do" type="LogoutAction" secure="true" >
+            <forward name="success" path="/ChatMVC3/chat/Login.do" redirect="true"/>
+    	</action>
         <action path="/ExpulsarUsuario.do" type="ExpulsarUsuarioAction" noforward="true" secure="true"/>
         <action path="/ActualizarMensajes.do" type="ActualizarMensajesAction" secure="true">
             <forward name="success" path="/chat/actualizar-mensajes.jsp"/>

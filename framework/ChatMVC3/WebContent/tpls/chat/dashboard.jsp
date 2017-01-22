@@ -17,6 +17,9 @@
 </head>
 <body>
     <h1><fmt:message key="titulo" bundle="${etq}" /></h1>
+    <div class="control-buttons" id="logout">
+        <button type="button" onclick="jChat.logout(); return false;"><fmt:message key="logout" bundle="${etq}" /></button>
+    </div>
     <div id="executing"></div>    
     <div id="message"></div>
     <div id="dashboard">
