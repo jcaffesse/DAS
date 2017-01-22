@@ -51,8 +51,8 @@ public class MessagesListAction implements Action {
             
             URIBuilder builder = new URIBuilder();
                 builder.setScheme("http").setHost("25.136.78.82").setPort(8080).setPath("/mensajes/sala/" + id_sala);
-                builder.setParameter("fecha_desde", "1474659819413");
-                //builder.setParameter("fecha_desde", login_tmst);
+                //builder.setParameter("fecha_desde", "1474659819413");
+                builder.setParameter("fecha_desde", login_tmst);
             HttpGet getRequest = new HttpGet();
                 getRequest.setURI(builder.build());
                 getRequest.addHeader("Authorization", "BEARER " + authToken);

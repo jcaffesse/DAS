@@ -30,7 +30,7 @@
         <c:set var="id_sala" value="${sessionScope.id_sala}"/>
         <c:forEach var="usuario" items="${requestScope.usuarios}" varStatus="status">
             <c:set var="index" value="${status.index}" scope="session"/>
-            <tr>
+            <tr id="usr-${usuario.getId()}">
                 <td>
                     <span>${usuario.getId()}</span>
                 </td>

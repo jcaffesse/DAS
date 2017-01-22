@@ -30,7 +30,7 @@
         <c:set var="user" value="${empty sessionScope.user ? requestScope.user : sessionScope.user}"/>
         <c:forEach var="mensaje" items="${requestScope.mensajes}" varStatus="status">
             <c:set var="index" value="${status.index}" scope="session"/>
-            <tr id="msg-${index}">
+            <tr id="msg-${mensaje.getId_mensaje()}">
                 <td>
                     <span>${mensaje.getUsuario().getNombre()}</span>
                 </td>
@@ -47,15 +47,7 @@
                             <fmt:message key="borrarMensaje" bundle="${etq}" />
                         </a>
                     </span>
-                </td>
-                <td>
-                    <span>
-                        <a id="ingresar" href="#" 
-                           onclick="jChat.expulsarUsuario('${mensaje.getUsuario().getId()}', '${sessionScope.id_sala}');return false;">
-                            <fmt:message key="expulsarUsuario" bundle="${etq}" />
-                        </a>
-                    </span>
-                </td>                
+                </td>           
             </tr>
         </c:forEach>
     </tbody>

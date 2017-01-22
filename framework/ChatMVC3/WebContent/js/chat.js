@@ -104,6 +104,7 @@ function expulsarUsuario(id_usuario, id_sala) {
         },
         success: function(data) {
             jUtils.hiding("message");
+            $('#usr-'+id_usuario).remove();
         }
     });   
 };
@@ -119,6 +120,7 @@ function borrarMensaje(id_mensaje){
         },
         success: function(data) {
             jUtils.hiding("message");
+            $('#msg-' + id_mensaje).remove();
         }
     });   
 };
