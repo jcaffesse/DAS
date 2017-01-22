@@ -37,8 +37,8 @@ public class LoginResource {
     private static final String AUTHORIZATION_BEARER = "BEARER ";
     private static final RolBean ADMIN_ROLE = new RolBean(100, "Administrador");
     
-    @POST
     @PermitAll
+    @POST
     public Response login(
         @FormParam("nombre_usuario") String nombre, 
         @FormParam("password") String password

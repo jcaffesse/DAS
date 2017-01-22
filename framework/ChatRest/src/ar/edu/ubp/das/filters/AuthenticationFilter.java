@@ -7,20 +7,15 @@ package ar.edu.ubp.das.filters;
 
 import ar.edu.ubp.das.beans.Bean;
 import ar.edu.ubp.das.beans.TokenBean;
-import ar.edu.ubp.das.beans.UsuarioBean;
 import ar.edu.ubp.das.daos.Dao;
 import ar.edu.ubp.das.daos.DaoFactory;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.annotation.Priority;
  
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -28,13 +23,8 @@ import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
  
-/**
- * This filter verify the access permissions for a user
- * based on username and passowrd provided in request
- * */
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 public class AuthenticationFilter implements ContainerRequestFilter
@@ -57,7 +47,7 @@ public class AuthenticationFilter implements ContainerRequestFilter
         final MultivaluedMap<String, String> headers = requestContext.getHeaders();        
         final List<String> authorization = headers.get(AUTHORIZATION_HEADER);
         //Access allowed for all
-        if( method.isAnnotationPresent(PermitAll.class))
+        if( !method.isAnnotationPresent(PermitAll.class))
         {
             this.initBuilders();
             
