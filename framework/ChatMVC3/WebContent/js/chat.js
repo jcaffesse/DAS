@@ -52,6 +52,7 @@ function logout() {
             jUtils.showing("message", err.responseText);
         },
         success: function(data) {
+            jChat.removerWatchers();
             var parsed = $.parseHTML(data);
             jUtils.hiding("message");
             jUtils.hiding("botones");
