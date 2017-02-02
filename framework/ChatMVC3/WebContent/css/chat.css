@@ -108,6 +108,12 @@ li {
     display: inline-block;
 }
 
+.logout-btn {
+    display: none;
+}
+
+/*list styles */
+
 .list-container {
     min-height: 200px;
     max-height: 400px;

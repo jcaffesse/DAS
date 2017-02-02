@@ -38,7 +38,7 @@ function login() {
             $('#dashboard').html($(parsed).filter("div#dashboard")[0].innerHTML);
             $('.login-logo').addClass('dashboard');
 
-            jUtils.showing("logout", $(parsed).filter("div#logout")[0].innerHTML);
+            jUtils.showing("logout-btn");
         }
     });
 };
@@ -56,7 +56,7 @@ function logout() {
             jChat.removerWatchers();
             var parsed = $.parseHTML(data);
             jUtils.hiding("message");
-            jUtils.hiding("logout");
+            jUtils.hiding("logout-btn");
             $('#dashboard').html($(parsed).filter("div#dashboard")[0].innerHTML);
         }
     });
@@ -76,6 +76,8 @@ function ingresarSala(id_sala){
             jChat.actualizarMensajesWatcher();*/
             jUtils.hiding("message");
             jUtils.hiding("dashboard");
+            jUtils.showing("logout-btn");
+            
             jUtils.showing("response", data);
             jChat.listarMensajes();
         }

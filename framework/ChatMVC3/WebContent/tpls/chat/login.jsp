@@ -22,7 +22,7 @@
             <img src="img/logo.png"/>
             <span><fmt:message key="titulo" bundle="${etq}" /></span>
         </div>
-        <div class="control-buttons" id="logout">
+        <div class="logout-btn col-xs-2 pull-right" id="logout">
             <button type="button" onclick="jChat.logout(); return false;"><fmt:message key="logout" bundle="${etq}" /></button>
         </div>
     </div>
