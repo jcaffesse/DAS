@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.util.Date;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.awt.Color;
 
 /**
  *
@@ -23,7 +24,7 @@ public class UsuarioBean implements Bean {
     private int color_usuario;
 
     public int getColor() {
-        return color_usuario;
+        return new Color(this.color_usuario).getRGB();
     }
 
     public void setColor(int color_usuario) {

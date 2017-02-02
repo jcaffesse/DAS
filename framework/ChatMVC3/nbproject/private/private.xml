@@ -5,7 +5,9 @@
         <group>
             <file>file:/C:/Dev/DAS/framework/ChatMVC3/src/ar/edu/ubp/das/src/chat/actions/MessagesListAction.java</file>
             <file>file:/C:/Dev/DAS/framework/ChatMVC3/src/ar/edu/ubp/das/src/chat/actions/UsuariosListAction.java</file>
+            <file>file:/C:/Dev/DAS/framework/ChatMVC3/src/ar/edu/ubp/das/mvc/beans/MensajeBean.java</file>
             <file>file:/C:/Dev/DAS/framework/ChatMVC3/WebContent/WEB-INF/actions/chat-actions.xml</file>
+            <file>file:/C:/Dev/DAS/framework/ChatMVC3/src/ar/edu/ubp/das/src/chat/actions/SalasJoinAction.java</file>
         </group>
     </open-files>
 </project-private>

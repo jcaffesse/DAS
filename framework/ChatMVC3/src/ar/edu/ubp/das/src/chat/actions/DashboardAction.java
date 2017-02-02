@@ -36,12 +36,12 @@ public class DashboardAction implements Action {
     @Override
     public ForwardConfig execute(ActionMapping mapping, DynaActionForm form, HttpServletRequest request, HttpServletResponse response) throws SQLException, RuntimeException {
         try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
-            String url = "http://25.136.78.82:8080/salas/usuario";
+            String url = "http://25.136.78.82:8080/salas";
             HttpGet getRequest = new HttpGet(url);
             String authToken = String.valueOf(request.getSession().getAttribute("token"));
 
             getRequest.addHeader("Authorization", "BEARER " + authToken);
-            getRequest.addHeader("accept", "application/json");
+            getRequest.addHeader("accept", "application/json; charset=ISO-8859-1");
             
             CloseableHttpResponse getResponse = httpClient.execute(getRequest);
             HttpEntity responseEntity = getResponse.getEntity();
@@ -51,11 +51,11 @@ public class DashboardAction implements Action {
             if(responseStatus.getStatusCode() != 200) {
             	throw new RuntimeException(restResp);
             }
+
             Gson gson = new Gson();
             Type listType = new TypeToken<LinkedList<SalaBean>>(){}.getType();
             List<SalaBean> salas = gson.fromJson(restResp, listType);
-            request.setAttribute("salas", salas);
-            request.setAttribute("token", authToken);
+            request.getSession().setAttribute("salas", salas);
             return mapping.getForwardByName("success");
 
         } catch (IOException e) {

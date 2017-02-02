@@ -47,7 +47,7 @@ public class ActualizarMensajesAction implements Action {
             HttpGet getRequest = new HttpGet();
                 getRequest.setURI(builder.build());
                 getRequest.addHeader("Authorization", "BEARER " + authToken);
-                getRequest.addHeader("accept", "application/json");
+                getRequest.addHeader("accept", "application/json; charset=ISO-8859-1");
             
             CloseableHttpResponse getResponse = httpClient.execute(getRequest);
             HttpEntity responseEntity = getResponse.getEntity();

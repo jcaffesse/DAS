@@ -10,12 +10,12 @@
     	</action>
         <action path="/Valid.do" type="ValidAction" validate="true" form="Valid">
             <forward name="success" path="/ChatMVC3/chat/Dashboard.do" redirect="true"/>
-    	</action>        
+    	</action>
         <action path="/Dashboard.do" type="DashboardAction" secure="true">
             <forward name="success" path="/chat/dashboard.jsp"/>
     	</action>
         <action path="/SalasJoin.do" type="SalasJoinAction" secure="true">
-            <forward name="success" path="/ChatMVC3/chat/MessagesList.do" redirect="true"/>
+            <forward name="success" path="/chat/detalle-sala.jsp"/>
         </action>
         <action path="/MessagesList.do" type="MessagesListAction" secure="true">
             <forward name="success" path="/chat/listar-mensajes.jsp"/>

@@ -9,58 +9,41 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <title><fmt:message key="titulo" bundle="${etq}" /></title>
-    <link type="text/css" rel="stylesheet" href="/ChatMVC3/util/StyleSheet.do/load=page,messages,jquery-ui,chat" />
+    <link type="text/css" rel="stylesheet" href="/ChatMVC3/util/StyleSheet.do/load=page,messages,jquery-ui,bootstrap,chat" />
     <script type="text/javascript" src="/ChatMVC3/util/Javascript.do/load=jquery,jquery.ui,jquery.i18n.properties,utils,chat"></script>
     <script type="text/javascript">
     jUtils.changeLang("etiquetas_js", "${lang}", "/ChatMVC3");
     </script>
 </head>
 <body>
-    <h1><fmt:message key="titulo" bundle="${etq}" /></h1>
+    <div class="login-logo">
+        <img src="img/logo.png"/>
+        <span><fmt:message key="titulo" bundle="${etq}" /></span>
+    </div>
     <div id="executing"></div>    
     <div id="message"></div>
-    <div id="dashboard">
-        <table class="width700">
-            <colgroup>
-                <col width="200px"/>
-                <col width="200px"/>
-                <col width="150px"/>
-                <col width="150px"/>
-            </colgroup>
-            <thead>
-                <tr>
-                    <th align="left"><fmt:message key="sala" bundle="${etq}" /></th>
-                    <th align="left"><fmt:message key="desc" bundle="${etq}" /></th>
-                    <th align="left"><fmt:message key="tipo" bundle="${etq}" /></th>                    
-                    <th align="left"></th>
-                </tr>
-            </thead>
-            <tbody>
+    <div id="dashboard" class="row">
+        <div class="col-md-3 border-cols"></div>
+        <div class="salas list-container col-md-6">
+            <ul>
                 <c:set var="user" value="${empty sessionScope.user ? requestScope.user : sessionScope.user}"/>
-                <c:forEach var="sala" items="${requestScope.salas}" varStatus="status">
+                <c:forEach var="sala" items="${sessionScope.salas}" varStatus="status">
                     <c:set var="index" value="${status.index}" scope="session"/>
-                    <tr>
-                        <td>
-                            <span>${sala.getNombre()}</span>
-                        </td>
-                        <td>
-                            <span>${sala.getDesc()}</span>
-                        </td>
-                        <td>
-                            <span>${sala.getTipo()}</span>                            
-                        </td>
-                        <td>
-                            <span>
-                                <a id="ingresar" href="#" 
-                                   onclick="jChat.ingresarSala('${sala.getId()}');return false;">
-                                    <fmt:message key="ingresar" bundle="${etq}" />
-                                </a>
+                    <li class="clearfix" onclick="jChat.ingresarSala('${sala.getId()}');return false;">
+                        <div class="col-xs-10">
+                            <span class="titulo"><strong>${sala.getNombre()}</strong></span>
+                            <span class="desc">${sala.getDesc()}</span>
+                        </div>
+                        <div class="col-xs-2">
+                            <span class="ingresar-img clearfix">
+                                <img id="ingresar" src="img/right-arrow-button.png"/>
                             </span>
-                        </td>
-                    </tr> 
+                        </div>
+                    </li>
                 </c:forEach>
-            </tbody>        
-        </table>
+            </ul>
+        </div>
+        <div class="col-md-3 border-cols"></div>
     </div>  
     <div id="response"></div>
 </body>

@@ -185,7 +185,7 @@ public class ActionController extends HttpServlet {
             this.processAction(request, response, forward.getPath(), parameters);
         }
         else {
-            response.setContentType("text/html;charset=ISO-8859-1");
+            response.setContentType("text/html;charset=UTF-8");
             if(forward.isRedirect()) {
                 response.sendRedirect(forward.getPath());
             }

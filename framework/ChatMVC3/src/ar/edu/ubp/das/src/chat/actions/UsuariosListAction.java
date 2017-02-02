@@ -8,20 +8,16 @@ package ar.edu.ubp.das.src.chat.actions;
 import ar.edu.ubp.das.mvc.action.Action;
 import ar.edu.ubp.das.mvc.action.ActionMapping;
 import ar.edu.ubp.das.mvc.action.DynaActionForm;
+import ar.edu.ubp.das.mvc.beans.SalaBean;
 import ar.edu.ubp.das.mvc.beans.UsuarioBean;
 import ar.edu.ubp.das.mvc.config.ForwardConfig;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import java.sql.SQLException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
-import java.util.List;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -40,11 +36,11 @@ public class UsuariosListAction implements Action {
     public ForwardConfig execute(ActionMapping mapping, DynaActionForm form, HttpServletRequest request, HttpServletResponse response) throws SQLException, RuntimeException {
         try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
             //prepare http get
-            String id_sala = (String) request.getSession().getAttribute("id_sala");
+            SalaBean sala = (SalaBean) request.getSession().getAttribute("sala");
             String authToken = String.valueOf(request.getSession().getAttribute("token"));
             
             URIBuilder builder = new URIBuilder();
-                builder.setScheme("http").setHost("25.136.78.82").setPort(8080).setPath("/usuarios-salas/sala/" + id_sala);
+                builder.setScheme("http").setHost("25.136.78.82").setPort(8080).setPath("/usuarios-salas/sala/" + sala.getId());
 
             HttpGet getRequest = new HttpGet();
                 getRequest.setURI(builder.build());

@@ -25,7 +25,7 @@
     <div id="executing"></div>    
     <div id="message" class="pull-right"></div>
     <div id="dashboard" class="row">
-        <div class="col-md-4"></div>
+        <div class="col-md-4 border-cols"></div>
         <div class="login-container col-md-4">
             <div class="greeting"><fmt:message key="greeting" bundle="${etq}" /></div>
             <form id="login-form">
@@ -42,35 +42,9 @@
                     onclick="jChat.login();return false;">
                     <fmt:message key="ingresar" bundle="${etq}" />
                 </button>
-               <!-- <table>
-                    <tbody>
-                        <tr>
-                            <td><fmt:message key="usuario" bundle="${etq}" />:</td>
-                            <td>
-                                <input class="login-input" type="text" id="login-user" name="user" value="" placeholder="<fmt:message key="nombreUsuario" bundle="${etq}" />" maxlength="64"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><fmt:message key="password" bundle="${etq}" />:</td>
-                            <td>
-                                <input class="login-input" type="password" id="login-pw" name="pw" value="" placeholder="<fmt:message key="password" bundle="${etq}" />" maxlength="64"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>
-                                <button class="login-btn" 
-                                    id="login-submit" 
-                                    onclick="jChat.login();return false;">
-                                    <fmt:message key="ingresar" bundle="${etq}" />
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>  -->
             </form>
         </div>
-        <div class="col-md-4"></div>
+        <div class="col-md-4 border-cols"></div>
     </div>  
     <div id="response"></div>
 </body>

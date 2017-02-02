@@ -13,12 +13,51 @@ body {
 	background-color: #6CA1AD !important;
 	font-family: Helvetica, Verdana, Arial, sans-serif;
 	font-size: 14px;
+    color: #393939;
 }
+ul{
+    margin: 0;
+    padding: 5px;
+}
+li {
+    display: block;
+    width: 80%;
+    margin: 10px auto;
+    border-radius: 2px;
+}
+
+.panel {
+    background-color: #EBF4FB !important;
+    padding: 30px;
+}
+
+.btn {
+    border-radius: 4px;
+    border: none;
+    background: #6CA1AD;
+    color: #FFF;
+    display: inline-block;   
+}
+
+.control-buttons {
+    float: left;
+    display: none;
+}
+
+.control-buttons .borrar-btn {
+    width: 20px;
+    height: 20px;
+    margin: 20px;
+}
+
+/*div.border-cols {
+    background-color: #433f4a;
+}*/
 
 /* Login Styles */
 .login-logo {
 	max-width: 500px;
-    margin: 5% auto 0;
+    margin: 3% auto 0;
     padding: 0 65px;
     font-size: 54px;
 }
@@ -27,7 +66,7 @@ body {
     background-color: #fff;
     height: 300px;
     padding: 30px 50px;
-    margin: auto;
+    margin: 50px auto;
 }
 
 .login-container .greeting {
@@ -66,4 +105,78 @@ body {
     border: none;
     background: #6CA1AD;
     color: #FFF;
+    display: inline-block;
+}
+
+.list-container {
+    min-height: 200px;
+    max-height: 400px;
+    overflow: hidden;
+    overflow-y: auto;
+    margin: 30px auto;
+}
+
+.salas.list-container li {
+    cursor: pointer;
+    padding: 6px;
+    height: 56px;
+    line-height: 18px;
+    font-size: 14px;
+    background: #EBF4FB;
+    width: 60%;
+}
+
+.salas.list-container .titulo {
+    font-size: 18px;
+    width: 100%;
+    padding: 3px 0;
+    float: left;
+}
+
+.salas.list-container .desc {
+    font-size: 14px;
+    float: left;
+}
+
+.salas.list-container img {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    float: right;
+    margin: 10px;
+}
+
+h2.titulo-sala {
+    margin-left: 50px;
+}
+
+.mensajes.list-container .mensaje{
+    padding: 6px;
+    line-height: 18px;
+    font-size: 14px;
+    background: #FFF;
+    width: 80%;
+    border-radius: 4px;
+    float: left;
+}
+
+.mensajes.list-container .nombre-usuario {
+    text-align: left;
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.mensajes.list-container .texto-mensaje {
+    text-align: right;
+    display: block;
+    width: 100%;
+    font-size: 14px;
+}
+
+.mensajes.list-container .fecha {
+    text-align: right;
+    width: 100%;
+    font-size: 8px;
+    display: block;
 }

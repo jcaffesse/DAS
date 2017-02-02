@@ -9,6 +9,7 @@ import ar.edu.ubp.das.mvc.action.Action;
 import ar.edu.ubp.das.mvc.action.ActionMapping;
 import ar.edu.ubp.das.mvc.action.DynaActionForm;
 import ar.edu.ubp.das.mvc.beans.LoginTempBean;
+import ar.edu.ubp.das.mvc.beans.SalaBean;
 import ar.edu.ubp.das.mvc.config.ForwardConfig;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -17,6 +18,7 @@ import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.http.HttpEntity;
@@ -65,7 +67,15 @@ public class SalasJoinAction implements Action {
             	throw new RuntimeException(restResp);
             }
             
-            request.getSession().setAttribute("id_sala", form.getItem("id_sala"));
+            //get user data from session storage
+            String salas = String.valueOf(request.getSession().getAttribute("salas"));
+            List<SalaBean> salaList = gson.fromJson(salas, new TypeToken<List<SalaBean>>(){}.getType());
+            SalaBean actual = salaList.stream()
+                .filter(s -> s.getId() == Integer.parseInt(form.getItem("id_sala")))
+                .collect(Collectors.toList()).get(0);
+            
+            request.getSession().setAttribute("sala", actual);
+            
             return mapping.getForwardByName("success");
 
         } catch (IOException e) {

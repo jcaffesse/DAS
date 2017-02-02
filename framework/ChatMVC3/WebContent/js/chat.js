@@ -13,7 +13,8 @@ var jChat = {
     borrarMensaje : borrarMensaje,
     volverDashboard: volverDashboard,
     actualizarMensajesWatcher: actualizarMensajesWatcher,
-    removerWatchers: removerWatchers
+    removerWatchers: removerWatchers,
+    mostrarBorrar: mostrarBorrar
 };
 
 var mensajesWatcher;
@@ -33,6 +34,7 @@ function login() {
             var parsed = $.parseHTML(data);
             jUtils.hiding("message");
             $('#dashboard').html($(parsed).filter("div#dashboard")[0].innerHTML);
+            $('.login-logo').addClass('dashboard');
         }
     });
 };
@@ -47,11 +49,12 @@ function ingresarSala(id_sala){
             jUtils.showing("message", err.responseText);
         },
         success: function(data) {
-            jChat.removerWatchers();           
-            jChat.actualizarMensajesWatcher();
+            /*jChat.removerWatchers();
+            jChat.actualizarMensajesWatcher();*/
             jUtils.hiding("message");
             jUtils.hiding("dashboard");
             jUtils.showing("response", data);
+            jChat.listarMensajes();
         }
     });        
 };
@@ -66,11 +69,11 @@ function listarMensajes(){
             jUtils.showing("message", err.responseText);
         },
         success: function(data) {
-            jChat.removerWatchers();
-            jChat.actualizarMensajesWatcher();
+            /*jChat.removerWatchers();
+            jChat.actualizarMensajesWatcher();*/
             jUtils.hiding("message");
-            jUtils.hiding("dashboard");
-            jUtils.showing("response", data);
+            $("#mensajes").append(data);
+            jChat.listarUsuarios();
         }
     });      
 }
@@ -85,10 +88,9 @@ function listarUsuarios(){
             jUtils.showing("message", err.responseText);
         },
         success: function(data) {
-            jChat.removerWatchers();
+            /*jChat.removerWatchers();*/
             jUtils.hiding("message");
-            jUtils.hiding("dashboard");
-            jUtils.showing("response", data);
+            $("#usuarios").append(data);
         }
     });        
 };
@@ -108,7 +110,7 @@ function expulsarUsuario(id_usuario, id_sala) {
     });   
 };
 
-function borrarMensaje(id_mensaje){
+function borrarMensaje(event, id_mensaje){
     $.ajax({
         url: "/ChatMVC3/chat/EliminarMensaje.do",
         type: "post",
@@ -118,7 +120,7 @@ function borrarMensaje(id_mensaje){
             jUtils.showing("message", err.responseText);
         },
         success: function(data) {
-            jUtils.hiding("message");
+            $(event.target).closest('li').remove();
         }
     });   
 };
@@ -166,5 +168,11 @@ function removerWatchers() {
         clearInterval(mensajesWatcher);
         mensajesWatcher = null;
     }    
+}
+ 
+function mostrarBorrar(e) {
+    $('.mensaje').removeClass('selected').siblings('.control-buttons').hide();
+    var mensaje = $(e.target).parent('.mensaje');
+    mensaje.addClass('selected').siblings('.control-buttons').show();
 }
 

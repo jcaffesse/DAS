@@ -10,11 +10,10 @@ import ar.edu.ubp.das.mvc.action.ActionMapping;
 import ar.edu.ubp.das.mvc.action.DynaActionForm;
 import ar.edu.ubp.das.mvc.beans.LoginTempBean;
 import ar.edu.ubp.das.mvc.beans.MensajeBean;
+import ar.edu.ubp.das.mvc.beans.SalaBean;
 import ar.edu.ubp.das.mvc.config.ForwardConfig;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 import javax.servlet.http.HttpServletRequest;
@@ -38,25 +37,21 @@ public class MessagesListAction implements Action {
     public ForwardConfig execute(ActionMapping mapping, DynaActionForm form, HttpServletRequest request, HttpServletResponse response) throws SQLException, RuntimeException {
         try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
             
-            //get user data from session storage
             Gson gson = new Gson();
-            Type usuarioType = new TypeToken<LoginTempBean>(){}.getType();
-            String sessUser = String.valueOf(request.getSession().getAttribute("user"));
-            LoginTempBean user = gson.fromJson(sessUser, usuarioType);
-            
+
             //prepare http get
-            String id_sala = (String) request.getSession().getAttribute("id_sala");
+            SalaBean sala = (SalaBean) request.getSession().getAttribute("sala");
             String login_tmst = (String) request.getSession().getAttribute("login_tmst");
             String authToken = String.valueOf(request.getSession().getAttribute("token"));
             
             URIBuilder builder = new URIBuilder();
-                builder.setScheme("http").setHost("25.136.78.82").setPort(8080).setPath("/mensajes/sala/" + id_sala);
+                builder.setScheme("http").setHost("25.136.78.82").setPort(8080).setPath("/mensajes/sala/" + sala.getId());
                 builder.setParameter("fecha_desde", "1474659819413");
                 //builder.setParameter("fecha_desde", login_tmst);
             HttpGet getRequest = new HttpGet();
                 getRequest.setURI(builder.build());
                 getRequest.addHeader("Authorization", "BEARER " + authToken);
-                getRequest.addHeader("accept", "application/json");
+                getRequest.addHeader("accept", "application/json; charset=ISO-8859-1");
             
             CloseableHttpResponse getResponse = httpClient.execute(getRequest);
             HttpEntity responseEntity = getResponse.getEntity();
@@ -73,7 +68,11 @@ public class MessagesListAction implements Action {
             if(msgList.length > 0) {
                 request.getSession().setAttribute("ultimo_mensaje", msgList[msgList.length-1].getId_mensaje());
             }
+            
+            System.out.println("mensajes "+ msgList.toString());
+            
             request.setAttribute("mensajes", msgList);
+            
             return mapping.getForwardByName("success");
 
         } catch (IOException | URISyntaxException e) {

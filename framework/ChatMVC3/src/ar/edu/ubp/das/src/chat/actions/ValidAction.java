@@ -54,6 +54,19 @@ public class ValidAction implements Action {
             
             Header authHeader = postResponse.getFirstHeader("Auth-Token");
             String headerValue = authHeader != null ? authHeader.getValue() : "";
+            
+            HttpPost adminPost = new HttpPost("http://25.136.78.82:8080/login/admin");
+                adminPost.addHeader("Authorization", "BEARER " + headerValue);
+                adminPost.addHeader("accept", "application/json");
+            
+            postResponse = httpClient.execute(adminPost);
+            responseEntity = postResponse.getEntity();
+            responseStatus = postResponse.getStatusLine();
+            String adminResp = EntityUtils.toString(responseEntity);
+            
+            if(responseStatus.getStatusCode() != 200) {
+                throw new RuntimeException(adminResp);
+            }
 
             request.getSession().setAttribute("user", restResp);
             request.getSession().setAttribute("token", headerValue);
