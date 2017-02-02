@@ -9,12 +9,14 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.das.chat.adapter.UserListAdapter;
 import com.das.chat.dao.ChatMessage;
 import com.das.chat.dao.ChatRoom;
 import com.das.chat.dao.ChatUpdate;
@@ -41,6 +43,7 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
     ListView messageList;
     ImageView chatRoomImage;
     ChatListAdapter adapter;
+    Button userListButton;
     private boolean serviceIsBind;
     private GeneralUpdateService serviceInstante;
 
@@ -53,6 +56,8 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
         messageET = (EditText) findViewById(R.id.enter_message_et);
         chatRoomImage = (ImageView) findViewById(R.id.chat_room_image);
         chatRoomName = (TextView) findViewById(R.id.chat_room_name);
+        userListButton = (Button) findViewById(R.id.user_list_btn);
+
 
         users = (ArrayList<ChatUser>)getIntent().getSerializableExtra("users");
         messages = (ArrayList<ChatMessage>)getIntent().getSerializableExtra("messages");
@@ -64,6 +69,14 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
         messageList.setAdapter(adapter);
         chatRoomImage.setColorFilter(chatRoom.getColor());
         chatRoomName.setText(chatRoom.getNombreSala());
+        userListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ChatActitivy.this, UserListActivity.class);
+                i.putExtra("users", users);
+                startActivity(i);
+            }
+        });
         //aca hay que meter el id del ultimo mensaje de la sala
 
     }

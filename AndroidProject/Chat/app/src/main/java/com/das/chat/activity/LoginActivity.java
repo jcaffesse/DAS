@@ -34,8 +34,8 @@ public class LoginActivity extends Activity
         usernameET = (EditText) findViewById(R.id.username_et);
         passwordET = (EditText) findViewById(R.id.password_et);
 
-        usernameET.setText("pablo");
-        passwordET.setText("12345");
+        usernameET.setText("javier");
+        passwordET.setText("qwerty");
     }
 
     public void loginButtonPressed(View v) {

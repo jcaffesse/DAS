@@ -40,9 +40,6 @@ public class ActualizarMensajesAction implements Action {
             String ultimo_mensaje = String.valueOf(request.getSession().getAttribute("ultimo_mensaje"));
             String authToken = String.valueOf(request.getSession().getAttribute("token"));
             
-            System.out.println("sala" + id_sala);
-            System.out.println("ult mensaje" + ultimo_mensaje);
-            
             URIBuilder builder = new URIBuilder();
                 builder.setScheme("http").setHost("25.136.78.82").setPort(8080).setPath("/mensajes/sala/" + id_sala);
                 builder.setParameter("ultimo_mensaje", ultimo_mensaje);

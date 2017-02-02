@@ -96,10 +96,8 @@ public class ActionController extends HttpServlet {
                               mapping.setParameters(parameters);
                 
                 String formConfig = action.getForm();
-                System.out.println("formconfig "+formConfig);
                 if(!formConfig.isEmpty()) {
                     FormBeanConfig actionForm = alias.getFormBeanByName(formConfig);
-                    System.out.println("actionForm "+actionForm);
                     if(actionForm != null) {
                         try {
                             form = DynaActionForm.class.cast(Class.forName(ModuleConfigImpl.getSrcPackage() + alias.getName() + ".forms." + actionForm.getType()).newInstance());
