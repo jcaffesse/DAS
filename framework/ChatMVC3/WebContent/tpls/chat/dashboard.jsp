@@ -16,9 +16,14 @@
     </script>
 </head>
 <body>
-    <div class="login-logo">
-        <img src="img/logo.png"/>
-        <span><fmt:message key="titulo" bundle="${etq}" /></span>
+    <div id="header" class="row">
+        <div class="login-logo">
+            <img src="img/logo.png"/>
+            <span><fmt:message key="titulo" bundle="${etq}" /></span>
+        </div>
+        <div class="control-buttons" id="logout">
+            <button type="button" onclick="jChat.logout(); return false;"><fmt:message key="logout" bundle="${etq}" /></button>
+        </div>
     </div>
     <div id="executing"></div>    
     <div id="message"></div>

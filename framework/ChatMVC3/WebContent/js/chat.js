@@ -6,12 +6,14 @@
 
 var jChat = {
     login: login,
+    logout: logout,
     ingresarSala : ingresarSala,
     listarMensajes: listarMensajes,
     listarUsuarios: listarUsuarios,
     expulsarUsuario : expulsarUsuario,
     borrarMensaje : borrarMensaje,
     volverDashboard: volverDashboard,
+    listarTodosLosUsuarios: listarTodosLosUsuarios,
     actualizarMensajesWatcher: actualizarMensajesWatcher,
     removerWatchers: removerWatchers,
     mostrarBorrar: mostrarBorrar
@@ -35,6 +37,27 @@ function login() {
             jUtils.hiding("message");
             $('#dashboard').html($(parsed).filter("div#dashboard")[0].innerHTML);
             $('.login-logo').addClass('dashboard');
+
+            jUtils.showing("logout", $(parsed).filter("div#logout")[0].innerHTML);
+        }
+    });
+};
+
+function logout() {
+    $.ajax({
+        url: "/ChatMVC3/chat/Logout.do/",
+        type: "post",
+        dataType: "html",
+        data: {},
+        error: function(err){
+            jUtils.showing("message", err.responseText);
+        },
+        success: function(data) {
+            jChat.removerWatchers();
+            var parsed = $.parseHTML(data);
+            jUtils.hiding("message");
+            jUtils.hiding("logout");
+            $('#dashboard').html($(parsed).filter("div#dashboard")[0].innerHTML);
         }
     });
 };
@@ -95,6 +118,24 @@ function listarUsuarios(){
     });        
 };
 
+function listarTodosLosUsuarios(){
+    $.ajax({
+        url: "/ChatMVC3/chat/TodosUsuariosList.do",
+        type: "post",
+        dataType: "html",
+        data: {},
+        error: function(err){
+            jUtils.showing("message", err.responseText);
+        },
+        success: function(data) {
+            jChat.removerWatchers();
+            jUtils.hiding("message");
+            jUtils.hiding("dashboard");
+            jUtils.showing("response", data);
+        }
+    });        
+};
+
 function expulsarUsuario(id_usuario, id_sala) {
     $.ajax({
         url: "/ChatMVC3/chat/ExpulsarUsuario.do",
@@ -106,6 +147,7 @@ function expulsarUsuario(id_usuario, id_sala) {
         },
         success: function(data) {
             jUtils.hiding("message");
+            $('#usr-'+id_usuario).remove();
         }
     });   
 };
