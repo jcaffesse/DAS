@@ -63,6 +63,7 @@ public class WSParams
     public void addTokenHeader(String token)
     {
         this.req.setHeader("Authorization", "BEARER " + token);
+        this.req.setHeader("Accept", "application/json; charset=ISO-8859-1 ");
     }
 
     public HttpRequestBase getRequest()
