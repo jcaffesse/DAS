@@ -34,8 +34,8 @@ public class LoginActivity extends Activity
         usernameET = (EditText) findViewById(R.id.username_et);
         passwordET = (EditText) findViewById(R.id.password_et);
 
-        usernameET.setText("javier");
-        passwordET.setText("qwerty");
+        usernameET.setText("test");
+        passwordET.setText("12345");
     }
 
     public void loginButtonPressed(View v) {
@@ -83,6 +83,7 @@ public class LoginActivity extends Activity
                         @Override
                         public void run() {
                             Toast.makeText(LoginActivity.this, "ChatUser incorrecto", Toast.LENGTH_SHORT).show();
+                            showLoadingView(false);
                         }
                     });
                 }

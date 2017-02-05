@@ -61,15 +61,21 @@ public class RoomListFragment extends Fragment{
                                 @Override
                                 public void onWSResponse(final ArrayList<ChatUser> response1, long errorCode, final String errorMsg) {
                                 if (errorMsg == null) {
-
-                                        Backend.getInstance().getChatRoomMessages(req, Backend.getInstance().getEnterRoomMessageId(req.getIdSala()), new OnWSResponseListener<ArrayList<ChatMessage>>() {
+                                        final String newInRoom = Backend.getInstance().getEnterRoomMessageId(req.getIdSala());
+                                        Backend.getInstance().getChatRoomMessages(req, newInRoom, new OnWSResponseListener<ArrayList<ChatMessage>>() {
                                             @Override
                                             public void onWSResponse(ArrayList<ChatMessage> response, long errorCode, String errorMsg) {
                                                 if (errorMsg == null) {
                                                     Intent i = new Intent(getActivity(), ChatActitivy.class);
                                                     i.putExtra("users", response1);
-                                                    i.putExtra("messages", response);
+                                                    if (newInRoom.compareTo("-1") == 0 ) {
+                                                        i.putExtra("messages", new ArrayList<>());
+                                                    } else {
+                                                        i.putExtra("messages", response);
+                                                    }
                                                     i.putExtra("chatroom", chatRoom);
+                                                    if(response.size() > 0)
+                                                    Backend.getInstance().setEnterRoomMessageId(chatRoom.getIdSala(), response.get(response.size()-1).getIdMessage());
                                                     startActivity(i);
                                                 } else {
                                                     ((MainActivity) getActivity()).showLoadingView(false);
