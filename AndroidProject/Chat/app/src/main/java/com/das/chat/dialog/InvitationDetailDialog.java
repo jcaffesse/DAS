@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.StringDef;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.das.chat.R;
-import com.das.chat.activity.ChatActitivy;
+import com.das.chat.activity.ChatActivity;
 import com.das.chat.activity.InvitationListActivity;
 import com.das.chat.activity.MainActivity;
 import com.das.chat.backend.Backend;
@@ -25,7 +24,6 @@ import com.das.chat.dao.ChatInvitation;
 import com.das.chat.dao.ChatMessage;
 import com.das.chat.dao.ChatUser;
 import com.das.chat.wsmodelmap.EnterChatRoomRequest;
-import com.das.chat.wsmodelmap.SendInvitationRequest;
 import com.das.chat.wsmodelmap.UpdateInvitationRequest;
 
 import java.util.ArrayList;
@@ -120,7 +118,7 @@ public class InvitationDetailDialog extends DialogFragment {
                                                                 ((InvitationListActivity) InvitationDetailDialog.this.getActivity()).showLoadingView(false);
                                                                 InvitationDetailDialog.this.dismiss();
 
-                                                                Intent i = new Intent(getActivity(), ChatActitivy.class);
+                                                                Intent i = new Intent(getActivity(), ChatActivity.class);
                                                                 i.putExtra("users", response1);
                                                                 i.putExtra("messages", response);
                                                                 i.putExtra("chatroom", Backend.getInstance().getChatRoomById(invite.getInvitationChatRoom()));

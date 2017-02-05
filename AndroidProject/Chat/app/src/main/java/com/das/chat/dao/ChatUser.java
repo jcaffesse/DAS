@@ -8,6 +8,18 @@ public class ChatUser implements Serializable{
     private String userName;
     private String userEmail;
     private String userRolId;
+    private String time;
+    private int color;
+    public ChatUser() {
+        super();
+    }
+
+    public ChatUser(String userId, String userName, String userEmail, String userRolId) {
+        this.userId = userId;
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.userRolId = userRolId;
+    }
 
     public String getTime() {
         return time;
@@ -16,9 +28,6 @@ public class ChatUser implements Serializable{
     public void setTime(String time) {
         this.time = time;
     }
-
-    private String time;
-    private int color;
 
     public int getColor() {
         return color;

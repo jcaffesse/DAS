@@ -26,7 +26,7 @@
         <activity
             android:name=".activity.AddRoomActivity"
             android:label="@string/title_activity_add_room"></activity>
-        <activity android:name=".activity.ChatActitivy"></activity>
+        <activity android:name=".activity.ChatActivity"></activity>
 
         <service
             android:name=".service.GeneralUpdateService"

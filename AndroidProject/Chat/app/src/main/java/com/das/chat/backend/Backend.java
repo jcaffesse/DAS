@@ -38,8 +38,8 @@ import java.util.Map;
 
 public class Backend
 {
-    //private static final String WS_BASE_URL = "http://10.0.2.2:8080";
-    private static final String WS_BASE_URL = "http://25.136.78.82:8080";
+    private static final String WS_BASE_URL = "http://10.0.2.2:8080";
+    //private static final String WS_BASE_URL = "http://25.136.78.82:8080";
     private static final String WS_ROOMS_USERS_URL = "/salas/usuario";
     private static final String WS_ROOMS_URL = "/salas";
     private static final String WS_LOGIN_URL = "/login";
@@ -293,7 +293,7 @@ public class Backend
         task.execute(params);
     }
 
-    public void getUpdates(final String idSala, final OnWSResponseListener<ChatUpdate> responseListener)
+    public void getUpdates(final String idSala, final OnWSResponseListener<ArrayList<ChatUpdate>> responseListener)
     {
         ChatWSTask task = new ChatWSTask();
         WSParams params = new WSParams();
@@ -308,7 +308,7 @@ public class Backend
             @Override
             public void onWSResponse(final String response, final long errorCode, final String errorMsg) {
                 if (errorMsg == null && !response.isEmpty()) {
-                    ChatUpdate update = GetUpdatesResponse.initWithResponse(response);
+                    ArrayList<ChatUpdate> update = GetUpdatesResponse.initWithResponse(response);
                     responseListener.onWSResponse(update, errorCode, null);
                     Backend.getInstance().setLastGeneralUpdateTime(idSala);
                 } else {

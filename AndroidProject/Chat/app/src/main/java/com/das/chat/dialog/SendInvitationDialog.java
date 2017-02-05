@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.das.chat.R;
-import com.das.chat.activity.ChatActitivy;
+import com.das.chat.activity.ChatActivity;
 import com.das.chat.activity.MainActivity;
 import com.das.chat.backend.Backend;
 import com.das.chat.backend.OnWSResponseListener;
@@ -118,7 +118,7 @@ public class SendInvitationDialog extends DialogFragment {
                                                                     ((MainActivity) SendInvitationDialog.this.getActivity()).showLoadingView(false);
                                                                     SendInvitationDialog.this.dismiss();
 
-                                                                    Intent i = new Intent(getActivity(), ChatActitivy.class);
+                                                                    Intent i = new Intent(getActivity(), ChatActivity.class);
                                                                     i.putExtra("users", response1);
                                                                     i.putExtra("messages", response);
 
