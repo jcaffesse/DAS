@@ -51,7 +51,7 @@ public class ActualizacionResource {
                 if (list.isEmpty()) {
                     return Response.status(Response.Status.OK).entity("").build();
                 } else {
-                    return Response.status(Response.Status.OK).entity(list.get(0)).build();
+                    return Response.status(Response.Status.OK).entity(list.toString()).build();
                 }
             }
             catch (SQLException e) {
