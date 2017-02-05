@@ -78,12 +78,12 @@ public class ChatWSTask extends AsyncTask<WSParams, Void, String>
             if(httpResponse.getHeaders("Content-Encoding").length > 0)
             {
                 InputStream is = new GZIPInputStream(httpResponse.getEntity().getContent());
-                response = new InputStreamReader(is, "UTF-8");
+                response = new InputStreamReader(is, "ISO-8859-1");
 
             }
             else
             {
-                response = new InputStreamReader(httpResponse.getEntity().getContent(), "UTF-8");
+                response = new InputStreamReader(httpResponse.getEntity().getContent(), "ISO-8859-1");
             }
 
             if(httpResponse.getStatusLine().getStatusCode() != 200)

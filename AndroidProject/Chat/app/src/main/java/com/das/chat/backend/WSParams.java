@@ -33,7 +33,7 @@ public class WSParams
         AbstractHttpEntity entity = null;
         try
         {
-            entity = new ByteArrayEntity(body.getBytes("UTF8"));
+            entity = new ByteArrayEntity(body.getBytes("ISO-8859-1"));
 
             entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded"));
 
