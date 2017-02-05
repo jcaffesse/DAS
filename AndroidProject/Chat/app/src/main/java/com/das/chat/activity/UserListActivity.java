@@ -28,14 +28,8 @@ public class UserListActivity extends FragmentActivity {
         userListListView = (ListView)findViewById(R.id.list_view);
 
         ArrayList<ChatUser> userList = Backend.getInstance().getUsers();
-        ArrayList<ChatUser> curUsers = (ArrayList) getIntent().getSerializableExtra("users");
-        for(ChatUser user : userList ) {
-            for(ChatUser curUser : curUsers) {
-                if(user.getUserId().compareTo(curUser.getUserId()) == 0) {
-                    userList.remove(user);
-                    break;
-                }
-            }
+        if(getIntent().hasExtra("users")) {
+            userList = (ArrayList) getIntent().getSerializableExtra("users");
         }
 
         final UserListAdapter adapter = new UserListAdapter(this, userList);

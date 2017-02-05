@@ -82,7 +82,7 @@ public class ChatListAdapter extends BaseAdapter
     public void deleteMessage(String idMessage) {
         for (ChatMessage msg : messageList) {
             if(msg.getIdMessage().equalsIgnoreCase(idMessage)) {
-                messageList.remove(msg);
+                msg.setDate("");
                 notifyDataSetChanged();
                 break;
             }
@@ -104,11 +104,16 @@ public class ChatListAdapter extends BaseAdapter
         TextView tv = (TextView) view.findViewById(R.id.message_text);
         tv.setText(message.getMessage());
         TextView tv1 = (TextView) view.findViewById(R.id.message_date);
+        tv1.setTextColor(context.getResources().getColor(android.R.color.black));
         if(message.getDate() == null) {
             tv1.setText("Enviando...");
+        } else if(message.getDate().isEmpty()) {
+            tv1.setText("ELIMINADO");
+            tv1.setTextColor(context.getResources().getColor(android.R.color.holo_red_dark));
         } else {
             tv1.setText(message.getDate());
         }
+
 
         return view;
     }

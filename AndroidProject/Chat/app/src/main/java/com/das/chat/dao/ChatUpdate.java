@@ -11,6 +11,16 @@ public class ChatUpdate implements Serializable{
     private String updateDate;
     private String roomId;
 
+    public ChatUser getUser() {
+        return user;
+    }
+
+    public void setUser(String userId, String userName, String userEmail, String userRolId) {
+        this.user = new ChatUser(userId, userName, userEmail, userRolId);
+    }
+
+    private ChatUser user;
+
     public String getUpdateId() {
         return updateId;
     }

@@ -3,7 +3,6 @@ package com.das.chat.activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import com.das.chat.backend.OnWSResponseListener;
 import com.das.chat.wsmodelmap.EnterChatRoomRequest;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class RoomListFragment extends Fragment{
 
@@ -66,7 +64,7 @@ public class RoomListFragment extends Fragment{
                                             @Override
                                             public void onWSResponse(ArrayList<ChatMessage> response, long errorCode, String errorMsg) {
                                                 if (errorMsg == null) {
-                                                    Intent i = new Intent(getActivity(), ChatActitivy.class);
+                                                    Intent i = new Intent(getActivity(), ChatActivity.class);
                                                     i.putExtra("users", response1);
                                                     if (newInRoom.compareTo("-1") == 0 ) {
                                                         i.putExtra("messages", new ArrayList<>());

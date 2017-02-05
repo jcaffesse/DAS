@@ -16,7 +16,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.das.chat.adapter.UserListAdapter;
 import com.das.chat.dao.ChatMessage;
 import com.das.chat.dao.ChatRoom;
 import com.das.chat.dao.ChatUpdate;
@@ -31,7 +30,7 @@ import com.das.chat.wsmodelmap.SendMessageRequest;
 
 import java.util.ArrayList;
 
-public class ChatActitivy extends Activity implements GeneralUpdateService.ChatRoomCallbacks, GeneralUpdateService.ChatRoomUpdatesCallbacks
+public class ChatActivity extends Activity implements GeneralUpdateService.ChatRoomCallbacks, GeneralUpdateService.ChatRoomUpdatesCallbacks
 {
 
     ArrayList<ChatUser> users;
@@ -59,6 +58,14 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
 
 
         users = (ArrayList<ChatUser>)getIntent().getSerializableExtra("users");
+
+        for(ChatUser user : users ) {
+            if(user.getUserId().compareTo(Backend.getInstance().getSession().getUserId()) == 0) {
+                users.remove(user);
+                break;
+            }
+        }
+
         messages = (ArrayList<ChatMessage>)getIntent().getSerializableExtra("messages");
         chatRoom = (ChatRoom) getIntent().getSerializableExtra("chatroom");
 
@@ -71,13 +78,28 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
         userListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(ChatActitivy.this, UserListActivity.class);
+                Intent i = new Intent(ChatActivity.this, UserListActivity.class);
                 i.putExtra("users", users);
                 startActivity(i);
             }
         });
         //aca hay que meter el id del ultimo mensaje de la sala
 
+    }
+
+    private void removeUser(String userId) {
+        for(ChatUser user : users ) {
+            if(user.getUserId().compareTo(userId) == 0) {
+                users.remove(user);
+                numberOfUsers.setText(Integer.toString(users.size()) + " usuarios en la sala");
+                break;
+            }
+        }
+    }
+
+    private void addUser(ChatUser user) {
+        users.add(user);
+        numberOfUsers.setText(Integer.toString(users.size()) + " usuarios en la sala");
     }
 
     @Override
@@ -107,8 +129,8 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
             Log.d("MainActivity", "------------- onServiceConnected -------------");
 
             serviceInstante =  ((GeneralUpdateService.LocalBinder) service).getService();
-            serviceInstante.registerChatRoomClient(ChatActitivy.this, chatRoom);
-            serviceInstante.registerChatRoomUpdatesClient(ChatActitivy.this, chatRoom);
+            serviceInstante.registerChatRoomClient(ChatActivity.this, chatRoom);
+            serviceInstante.registerChatRoomUpdatesClient(ChatActivity.this, chatRoom);
             serviceInstante.startChatRoomTimer();
             serviceInstante.startChatRoomUpdatesTimer();
         }
@@ -134,7 +156,7 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(ChatActitivy.this, "Error al abandonar la sala", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ChatActivity.this, "Error al abandonar la sala", Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -163,7 +185,7 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
                 if (errorMsg == null) {
 
                 } else {
-                    Toast.makeText(ChatActitivy.this, "Error al enviar mensaje", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChatActivity.this, "Error al enviar mensaje", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -182,14 +204,28 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
     }
 
     @Override
-    public void updateUpdatesForChatRoom(ChatUpdate updates) {
+    public void updateUpdatesForChatRoom(ArrayList<ChatUpdate> updates) {
+        boolean shouldFinish = false;
+
         if(updates != null) {
-            if(updates.getActionName().equalsIgnoreCase("delete") && updates.getTypeName().equalsIgnoreCase("mensaje")) {
-                adapter.deleteMessage(updates.getActionId());
-            } else if(updates.getActionName().equalsIgnoreCase("delete") && updates.getTypeName().equalsIgnoreCase("usuariosala") && updates.getActionId().equalsIgnoreCase(Backend.getInstance().getSession().getUserId())) {
-                Backend.getInstance().removeEnterRoomMessageId(chatRoom.getIdSala());
-                finish();
+            for (ChatUpdate update : updates) {
+                if(update.getActionName().equalsIgnoreCase("delete") && update.getTypeName().equalsIgnoreCase("mensaje")) {
+                    adapter.deleteMessage(update.getActionId());
+                }
+                if(update.getActionName().equalsIgnoreCase("create") && update.getTypeName().equalsIgnoreCase("usuariosala")) {
+                    addUser(update.getUser());
+                } else if(update.getActionName().equalsIgnoreCase("delete") && update.getTypeName().equalsIgnoreCase("usuariosala")) {
+                    if(update.getActionId().equalsIgnoreCase(Backend.getInstance().getSession().getUserId())) {
+                        Backend.getInstance().removeEnterRoomMessageId(chatRoom.getIdSala());
+                        shouldFinish = true;
+                    } else {
+                        removeUser(update.getActionId());
+                    }
+                }
             }
+        }
+        if(shouldFinish) {
+            finish();
         }
     }
 }

@@ -20,8 +20,9 @@
             android:id="@+id/message_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minWidth="50dp"
+            android:minWidth="65dp"
             android:textSize="18sp"
+            android:textColor="@android:color/black"
             android:text="prueba de un mensaje smuuuy largo que entre en 2 lineas"/>
 
         <TextView

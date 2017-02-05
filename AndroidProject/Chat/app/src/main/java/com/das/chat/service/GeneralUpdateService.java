@@ -166,9 +166,9 @@ public class GeneralUpdateService extends Service {
             public void run() {
                 EnterChatRoomRequest req = new EnterChatRoomRequest();
                 req.setIdSala(String.valueOf(chatRoomUpdating.getIdSala()));
-                Backend.getInstance().getUpdates(chatRoomUpdating.getIdSala(), new OnWSResponseListener<ChatUpdate>() {
+                Backend.getInstance().getUpdates(chatRoomUpdating.getIdSala(), new OnWSResponseListener<ArrayList<ChatUpdate>>() {
                     @Override
-                    public void onWSResponse(ChatUpdate response, long errorCode, String errorMsg) {
+                    public void onWSResponse(ArrayList<ChatUpdate> response, long errorCode, String errorMsg) {
                         if (errorMsg == null) {
                             chatRoomUpdatesCallbackClient.updateUpdatesForChatRoom(response);
                             Log.d("SERVICE", "----------- UPDATING CHAT ROOM UPDATES " + chatRoomUpdating.getNombreSala() + "-----------");
@@ -212,7 +212,7 @@ public class GeneralUpdateService extends Service {
     }
 
     public interface ChatRoomUpdatesCallbacks {
-        void updateUpdatesForChatRoom(ChatUpdate update);
+        void updateUpdatesForChatRoom(ArrayList<ChatUpdate> updates);
     }
 
     //Here Activity register to the service as Callbacks client
