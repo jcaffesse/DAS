@@ -1,6 +1,6 @@
 USE [finaldas]
 GO
-/****** Object:  StoredProcedure [dbo].[get_actualizaciones]. ******/
+/****** Object:  StoredProcedure [dbo].[get_actualizaciones_portal]    Script Date: 05/02/2017 01:40:55 p.m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -32,8 +32,6 @@ BEGIN
 		ON a.id_tipo = t.id_tipo
 	WHERE
 		(a.id_tipo = '1' OR a.id_tipo = '3')
-	AND
-		(a.id_accion = '4')
 	AND
 		(a.id_sala = @id_sala)
 	AND

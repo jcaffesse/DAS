@@ -7,6 +7,7 @@ package ar.edu.ubp.das.daos;
 
 import ar.edu.ubp.das.beans.ActualizacionBean;
 import ar.edu.ubp.das.beans.Bean;
+import ar.edu.ubp.das.beans.UsuarioBean;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
@@ -28,6 +29,22 @@ public class MSSQLActualizacionesDao extends MSSQLDao{
             act.setId_dato(result.getInt("id_dato"));
             act.setFecha_actualizacion(fecha_act);
             act.setId_sala(result.getInt("id_sala"));
+            
+        if(act.getNombre_tipo().equals("UsuarioSala")) {
+            try {
+                UsuarioBean usr = new UsuarioBean();
+                    usr.setId(act.getId_dato());
+                Dao dao = DaoFactory.getDao("Usuarios");
+                List<Bean> usrList = dao.select(usr);
+                if (!usrList.isEmpty()) {
+                    usr = UsuarioBean.class.cast(usrList.get(0));
+                    act.setUsuario(usr);
+                }
+            } catch (SQLException e) {
+                System.out.println("No es posible crear la Invitacion, el usuario destino"
+                    + " no existe" + e.getErrorCode()+ e.getMessage());
+            }             
+        }
             
         return act;
     }

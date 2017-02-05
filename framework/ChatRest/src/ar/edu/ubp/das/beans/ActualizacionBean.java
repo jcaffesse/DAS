@@ -20,6 +20,7 @@ public class ActualizacionBean implements Bean {
     private Date fecha_actualizacion;
     private Date ultima_act;
     private int id_sala;
+    private UsuarioBean usuario;
 
     public int getId_actualizacion() {
         return id_actualizacion;
@@ -77,15 +78,30 @@ public class ActualizacionBean implements Bean {
         this.ultima_act = ultima_act;
     }
     
+    public UsuarioBean getUsuario() {
+        return this.usuario;
+    }
+    
+    public void setUsuario(UsuarioBean u) {
+        this.usuario = u;
+    }
     
     @Override
     public String toString(){
-        return "{ \"id_actualizacion\" : \"" + id_actualizacion + "\", "
+        String result = "{ \"id_actualizacion\" : \"" + id_actualizacion + "\", "
             + "\"nombre_accion\" : \"" + nombre_accion + "\", "
             + "\"nombre_tipo\" : \"" + nombre_tipo + "\", "
             + "\"id_dato\" : \"" + id_dato + "\", "
             + "\"fecha_actualizacion\" : \"" + fecha_actualizacion + "\", "
-            + "\"id_sala\" : \"" + id_sala + "\" }";
+            + "\"id_sala\" : \"" + id_sala + "\" ";
+         
+        if(usuario != null) {
+            result += ",\"usuario\" : " + usuario.toString() + " }";
+        } else {
+            result += " }";
+        }
+
+        return result;
     }
     
     @Override
