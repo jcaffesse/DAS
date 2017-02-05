@@ -44,7 +44,6 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
     ImageView chatRoomImage;
     ChatListAdapter adapter;
     Button userListButton;
-    private boolean serviceIsBind;
     private GeneralUpdateService serviceInstante;
 
     @Override
@@ -108,7 +107,6 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
             Log.d("MainActivity", "------------- onServiceConnected -------------");
 
             serviceInstante =  ((GeneralUpdateService.LocalBinder) service).getService();
-            serviceIsBind = true;
             serviceInstante.registerChatRoomClient(ChatActitivy.this, chatRoom);
             serviceInstante.registerChatRoomUpdatesClient(ChatActitivy.this, chatRoom);
             serviceInstante.startChatRoomTimer();
@@ -118,7 +116,6 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
         public void onServiceDisconnected(ComponentName className) {
             Log.d("MainActivity", "----------- onServiceDisconnected ------------");
             serviceInstante = null;
-            serviceIsBind = false;
         }
     };
 
@@ -132,7 +129,6 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
             @Override
             public void onWSResponse(Boolean response, long errorCode, String errorMsg) {
                 if (errorMsg == null) {
-                    Backend.getInstance().setLastRoomUpdateMessageId(chatRoom.getIdSala(), "");
                     Backend.getInstance().removeEnterRoomMessageId(chatRoom.getIdSala());
                 } else {
                     runOnUiThread(new Runnable() {
@@ -191,7 +187,6 @@ public class ChatActitivy extends Activity implements GeneralUpdateService.ChatR
             if(updates.getActionName().equalsIgnoreCase("delete") && updates.getTypeName().equalsIgnoreCase("mensaje")) {
                 adapter.deleteMessage(updates.getActionId());
             } else if(updates.getActionName().equalsIgnoreCase("delete") && updates.getTypeName().equalsIgnoreCase("usuariosala") && updates.getActionId().equalsIgnoreCase(Backend.getInstance().getSession().getUserId())) {
-                Backend.getInstance().setLastRoomUpdateMessageId(chatRoom.getIdSala(), "");
                 Backend.getInstance().removeEnterRoomMessageId(chatRoom.getIdSala());
                 finish();
             }

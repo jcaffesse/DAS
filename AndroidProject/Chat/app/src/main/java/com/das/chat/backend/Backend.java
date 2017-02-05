@@ -33,11 +33,13 @@ import org.apache.http.client.methods.HttpPut;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class Backend
 {
-    private static final String WS_BASE_URL = "http://10.0.2.2:8080";
-    //private static final String WS_BASE_URL = "http://25.136.78.82:8080";
+    //private static final String WS_BASE_URL = "http://10.0.2.2:8080";
+    private static final String WS_BASE_URL = "http://25.136.78.82:8080";
     private static final String WS_ROOMS_USERS_URL = "/salas/usuario";
     private static final String WS_ROOMS_URL = "/salas";
     private static final String WS_LOGIN_URL = "/login";
@@ -73,12 +75,24 @@ public class Backend
 
     public void removeEnterRoomMessageId(String roomId) {
         myRooms.remove(roomId);
+        deleteLastRoomUpdateMessageId(roomId);
+    }
+
+    public void removeAllEnterRoomMessageId() {
+        Iterator it = myRooms.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            myRooms.remove(pair.getKey());
+            deleteLastRoomUpdateMessageId(pair.getKey().toString());
+            System.out.println(pair.getKey() + " = " + pair.getValue());
+        }
     }
 
     public String getEnterRoomMessageId(String roomId) {
         if (myRooms.containsKey(roomId)) {
             return myRooms.get(roomId);
         } else {
+            Backend.getInstance().setLastGeneralUpdateTime(roomId);
             return "-1";
         }
     }
@@ -124,6 +138,11 @@ public class Backend
 
     public void setLastRoomUpdateMessageId(String chatRoomId, String messageId) {
         updateTime.edit().putString("com.das.chat.last_update_time.room_" + chatRoomId, messageId).apply();
+        setEnterRoomMessageId(chatRoomId, messageId);
+    }
+
+    public void deleteLastRoomUpdateMessageId(String chatRoomId) {
+        updateTime.edit().remove("com.das.chat.last_update_time.room_" + chatRoomId).apply();
     }
 
     public String getLastInvitationUpdateTime() {
@@ -211,6 +230,7 @@ public class Backend
                     users = null;
                     rooms = null;
                     session = null;
+                    removeAllEnterRoomMessageId();
                     responseListener.onWSResponse(true, errorCode, null);
                 }
                 else
