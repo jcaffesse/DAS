@@ -33,7 +33,7 @@ import javax.ws.rs.PathParam;
  * @author Javier
  */
 @Path("/salas")
-@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+@Produces(MediaType.APPLICATION_JSON + ";charset=ISO-8859-1")
 public class SalaResource {
     private static final String AUTHORIZATION_BEARER = "BEARER ";
     
@@ -115,7 +115,7 @@ public class SalaResource {
     
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=ISO-8859-1")
     public Response addSala(
             @FormParam("nombre") String nombre, 
             @FormParam("desc") String desc,
@@ -142,7 +142,7 @@ public class SalaResource {
     @PUT
     @Path("/{id_sala}")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=ISO-8859-1")
     public Response updateSala(
             @PathParam("id_sala") String id_sala,
             @FormParam("nombre") String nombre, 

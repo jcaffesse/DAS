@@ -62,10 +62,9 @@ public class ValidAction implements Action {
             postResponse = httpClient.execute(adminPost);
             responseEntity = postResponse.getEntity();
             responseStatus = postResponse.getStatusLine();
-            String adminResp = EntityUtils.toString(responseEntity);
             
             if(responseStatus.getStatusCode() != 200) {
-                throw new RuntimeException(adminResp);
+                throw new RuntimeException("Accesso restringido a Administradores");
             }
 
             request.getSession().setAttribute("user", restResp);
@@ -74,8 +73,9 @@ public class ValidAction implements Action {
 
             return mapping.getForwardByName("success");
 
-        } catch (IOException e) {
+        } catch (IOException | RuntimeException e) {
             request.setAttribute("message", "Error al realizar login: " + e.getMessage());
+            response.setStatus(400);
             return mapping.getForwardByName("failure");
         }
     }

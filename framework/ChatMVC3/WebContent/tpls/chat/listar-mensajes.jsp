@@ -10,6 +10,7 @@
 <fmt:setLocale value="${lang}" />
 <fmt:setBundle basename="ar.edu.ubp.das.src.chat.properties.etiquetas" var="etq" scope="session"/>
 <!DOCTYPE html>
+<h3 class="subtitle">Mensajes</h3>
 <ul>
     <c:forEach var="mensaje" items="${requestScope.mensajes}" varStatus="status">
         <c:set var="index" value="${status.index}" scope="session"/>

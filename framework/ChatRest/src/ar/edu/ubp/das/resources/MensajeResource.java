@@ -106,33 +106,6 @@ public class MensajeResource {
     }
     
     @GET
-    @Path("/sala_ultimo/{id_sala}")
-    public Response getUltimoMensajeSala(
-        @PathParam("id_sala") String id_sala
-    ) {
-        
-        try {
-            SalaBean bean = new SalaBean();
-            bean.setId(Integer.parseInt(id_sala));
-            
-            try {
-                Dao dao = DaoFactory.getDao("Mensajes");
-                List<Bean> list = dao.select(bean);
-                if (list.isEmpty()) {
-                    return Response.status(Response.Status.OK).entity("[]").build();
-                } else {
-                    return Response.status(Response.Status.OK).entity(list.toString()).build();
-                }
-            }
-            catch (SQLException e) {
-                return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
-            }
-        } catch (NumberFormatException n) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(n.getMessage()).build();
-        }
-    }
-    
-    @GET
     @Path("/usuario/{id_usuario}")
     public Response getMensajesUser(
         @PathParam("id_usuario") String id_usuario,

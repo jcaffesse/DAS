@@ -12,12 +12,12 @@
 <!DOCTYPE html>
 <div class="col-md-2 border-cols"></div>
 <div class="col-md-8 panel">
-    <c:set var="salaActual" value="${!empty requestScope.sala_actual ? requestScope.sala_actual : sessionScope.sala_actual}"/>
+    <c:set var="sala" value="${sessionScope.sala}"/>
     <div class="titulo-sala col-md-12">
         <span><fmt:message key="detalleSala" bundle="${etq}" /> <strong>${sala.getNombre()}</strong></span>
     </div>
     <div class="titulo-sala col-md-12">
-        <span><fmt:message key="participantes" bundle="${etq}" /> <strong>123</strong></span>
+        <span><fmt:message key="participantes" bundle="${etq}" /> <strong class="participantes"></strong></span>
     </div>
     <div id="mensajes" class="mensajes list-container col-md-7">
     </div>

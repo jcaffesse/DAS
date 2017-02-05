@@ -13,9 +13,13 @@ import ar.edu.ubp.das.mvc.beans.MensajeBean;
 import ar.edu.ubp.das.mvc.beans.SalaBean;
 import ar.edu.ubp.das.mvc.config.ForwardConfig;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.http.HttpEntity;
@@ -46,8 +50,7 @@ public class MessagesListAction implements Action {
             
             URIBuilder builder = new URIBuilder();
                 builder.setScheme("http").setHost("25.136.78.82").setPort(8080).setPath("/mensajes/sala/" + sala.getId());
-                builder.setParameter("fecha_desde", "1474659819413");
-                //builder.setParameter("fecha_desde", login_tmst);
+                builder.setParameter("fecha_desde", login_tmst);
 
             HttpGet getRequest = new HttpGet();
                 getRequest.setURI(builder.build());
@@ -64,15 +67,14 @@ public class MessagesListAction implements Action {
             }
             
             //parse message data from response
-            MensajeBean[] msgList = gson.fromJson(restResp, MensajeBean[].class);
+            Type listType = new TypeToken<LinkedList<MensajeBean>>(){}.getType();
+            List<MensajeBean> mensajes = gson.fromJson(restResp, listType);
             
-            if(msgList.length > 0) {
-                request.getSession().setAttribute("ultimo_mensaje", msgList[msgList.length-1].getId_mensaje());
+            if(!mensajes.isEmpty()) {
+                request.getSession().setAttribute("ultimo_mensaje", mensajes.get(mensajes.size() -1).getId_mensaje());
             }
             
-            System.out.println("mensajes "+ msgList.toString());
-            
-            request.setAttribute("mensajes", msgList);
+            request.setAttribute("mensajes", mensajes);
             
             return mapping.getForwardByName("success");
 

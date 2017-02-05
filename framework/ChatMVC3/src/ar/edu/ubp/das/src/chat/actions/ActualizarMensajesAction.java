@@ -9,11 +9,16 @@ import ar.edu.ubp.das.mvc.action.Action;
 import ar.edu.ubp.das.mvc.action.ActionMapping;
 import ar.edu.ubp.das.mvc.action.DynaActionForm;
 import ar.edu.ubp.das.mvc.beans.MensajeBean;
+import ar.edu.ubp.das.mvc.beans.SalaBean;
 import ar.edu.ubp.das.mvc.config.ForwardConfig;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.http.HttpEntity;
@@ -34,14 +39,17 @@ public class ActualizarMensajesAction implements Action {
     @Override
     public ForwardConfig execute(ActionMapping mapping, DynaActionForm form, HttpServletRequest request, HttpServletResponse response) throws SQLException, RuntimeException {
         try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
-            
             //prepare http get
-            String id_sala = String.valueOf(request.getSession().getAttribute("id_sala"));
+            SalaBean sala = (SalaBean) request.getSession().getAttribute("sala");
             String ultimo_mensaje = String.valueOf(request.getSession().getAttribute("ultimo_mensaje"));
             String authToken = String.valueOf(request.getSession().getAttribute("token"));
             
+            if(ultimo_mensaje.equals("null") || ultimo_mensaje.isEmpty()) {
+                ultimo_mensaje = "-1";
+            }
+            
             URIBuilder builder = new URIBuilder();
-                builder.setScheme("http").setHost("25.136.78.82").setPort(8080).setPath("/mensajes/sala/" + id_sala);
+                builder.setScheme("http").setHost("25.136.78.82").setPort(8080).setPath("/mensajes/sala/" + sala.getId());
                 builder.setParameter("ultimo_mensaje", ultimo_mensaje);
 
             HttpGet getRequest = new HttpGet();
@@ -60,9 +68,19 @@ public class ActualizarMensajesAction implements Action {
             
             //parse message data from response
             Gson gson = new Gson();
-            MensajeBean[] msgList = gson.fromJson(restResp, MensajeBean[].class);
+            Type listType = new TypeToken<LinkedList<MensajeBean>>(){}.getType();
+            List<MensajeBean> mensajes = gson.fromJson(restResp, listType);
             
-            request.setAttribute("mensajes", msgList);
+            if(!mensajes.isEmpty()) {
+                MensajeBean ultimo = mensajes.get(mensajes.size() -1);
+                request.getSession().removeAttribute("ultimo_mensaje");
+                request.getSession().setAttribute("ultimo_mensaje", ultimo.getId_mensaje());
+            }
+            
+            if(!ultimo_mensaje.equals("-1")) { 
+                request.setAttribute("mensajes", mensajes);
+            }
+            
             return mapping.getForwardByName("success");
 
         } catch (IOException | URISyntaxException e) {

@@ -22,12 +22,12 @@
             <img src="img/logo.png"/>
             <span><fmt:message key="titulo" bundle="${etq}" /></span>
         </div>
-        <div class="logout-btn col-xs-2 pull-right" id="logout">
-            <button type="button" onclick="jChat.logout(); return false;"><fmt:message key="logout" bundle="${etq}" /></button>
+        <div class="logout-btn col-xs-2 pull-right" id="logout" style="display:none">
+            <button type="button" class="btn white" onclick="jChat.logout(); return false;"><fmt:message key="logout" bundle="${etq}" /></button>
         </div>
     </div>
     <div id="executing"></div>    
-    <div id="message" class="pull-right"></div>
+    <div id="message" class="panel"></div>
     <div id="dashboard" class="row">
         <div class="col-md-4 border-cols"></div>
         <div class="login-container col-md-4">

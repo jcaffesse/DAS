@@ -25,60 +25,65 @@ function login() {
     var params = $('#login-form input');
     jChat.removerWatchers();
     $.ajax({
-        url: "/ChatMVC3/chat/Valid.do/",
-        type: "post",
-        dataType: "html",
+        url: '/ChatMVC3/chat/Valid.do/',
+        type: 'post',
+        dataType: 'html',
         data: params,
         error: function(err){
-            jUtils.showing("message", err.responseText);
+            jUtils.showing('message', err.responseText);
         },
         success: function(data) {
             var parsed = $.parseHTML(data);
-            jUtils.hiding("message");
-            $('#dashboard').html($(parsed).filter("div#dashboard")[0].innerHTML);
+            jUtils.hiding('message');
+            console.log(data);
+            $('#dashboard').html($(parsed).filter('div#dashboard')[0].innerHTML);
             $('.login-logo').addClass('dashboard');
-
-            jUtils.showing("logout-btn");
+            $('.logout-btn').show();
+           
         }
     });
 };
 
 function logout() {
     $.ajax({
-        url: "/ChatMVC3/chat/Logout.do/",
-        type: "post",
-        dataType: "html",
+        url: '/ChatMVC3/chat/Logout.do/',
+        type: 'post',
+        dataType: 'html',
         data: {},
         error: function(err){
-            jUtils.showing("message", err.responseText);
+            jUtils.showing('message', err.responseText);
         },
         success: function(data) {
             jChat.removerWatchers();
             var parsed = $.parseHTML(data);
-            jUtils.hiding("message");
-            jUtils.hiding("logout-btn");
-            $('#dashboard').html($(parsed).filter("div#dashboard")[0].innerHTML);
+            jUtils.hiding('message');
+            jUtils.hiding('logout-btn');
+            console.log(data);
+            $('#dashboard').html($(parsed).filter('div#dashboard')[0].innerHTML);
+            jUtils.hiding('response');
+            jUtils.showing('dashboard');
+            $('.logout-btn').hide();
         }
     });
 };
 
 function ingresarSala(id_sala){
     $.ajax({
-        url: "/ChatMVC3/chat/SalasJoin.do",
-        type: "post",
-        dataType: "html",
+        url: '/ChatMVC3/chat/SalasJoin.do',
+        type: 'post',
+        dataType: 'html',
         data: {id_sala: id_sala},
         error: function(err){
-            jUtils.showing("message", err.responseText);
+            jUtils.showing('message', err.responseText);
         },
         success: function(data) {
-            /*jChat.removerWatchers();
-            jChat.actualizarMensajesWatcher();*/
-            jUtils.hiding("message");
-            jUtils.hiding("dashboard");
-            jUtils.showing("logout-btn");
+            jChat.removerWatchers();
+            jChat.actualizarMensajesWatcher();
+            jUtils.hiding('message');
+            jUtils.hiding('dashboard');
+            $('logout-btn').show();
             
-            jUtils.showing("response", data);
+            jUtils.showing('response', data);
             jChat.listarMensajes();
         }
     });        
@@ -86,18 +91,18 @@ function ingresarSala(id_sala){
 
 function listarMensajes(){
     $.ajax({
-        url: "/ChatMVC3/chat/MessagesList.do",
-        type: "post",
-        dataType: "html",
+        url: '/ChatMVC3/chat/MessagesList.do',
+        type: 'post',
+        dataType: 'html',
         data: {},
         error: function(err){
-            jUtils.showing("message", err.responseText);
+            jUtils.showing('message', err.responseText);
         },
         success: function(data) {
-            /*jChat.removerWatchers();
-            jChat.actualizarMensajesWatcher();*/
-            jUtils.hiding("message");
-            $("#mensajes").append(data);
+            jChat.removerWatchers();
+            jChat.actualizarMensajesWatcher();
+            jUtils.hiding('message');
+            $('#mensajes').append(data);
             jChat.listarUsuarios();
         }
     });      
@@ -105,63 +110,67 @@ function listarMensajes(){
 
 function listarUsuarios(){
     $.ajax({
-        url: "/ChatMVC3/chat/UsuariosList.do",
-        type: "post",
-        dataType: "html",
+        url: '/ChatMVC3/chat/UsuariosList.do',
+        type: 'post',
+        dataType: 'html',
         data: {},
         error: function(err){
-            jUtils.showing("message", err.responseText);
+            jUtils.showing('message', err.responseText);
         },
         success: function(data) {
-            /*jChat.removerWatchers();*/
-            jUtils.hiding("message");
-            $("#usuarios").append(data);
+            jUtils.hiding('message');
+            $('#usuarios').append(data);
+            var list = $($.parseHTML(data)).filter('ul');
+            if(list) {
+                $('.participantes').html(list.children().length);
+            }
         }
     });        
 };
 
 function listarTodosLosUsuarios(){
     $.ajax({
-        url: "/ChatMVC3/chat/TodosUsuariosList.do",
-        type: "post",
-        dataType: "html",
+        url: '/ChatMVC3/chat/TodosUsuariosList.do',
+        type: 'post',
+        dataType: 'html',
         data: {},
         error: function(err){
-            jUtils.showing("message", err.responseText);
+            jUtils.showing('message', err.responseText);
         },
         success: function(data) {
             jChat.removerWatchers();
-            jUtils.hiding("message");
-            jUtils.hiding("dashboard");
-            jUtils.showing("response", data);
+            jUtils.hiding('message');
+            jUtils.hiding('dashboard');
+            jUtils.showing('response', data);
         }
     });        
 };
 
-function expulsarUsuario(id_usuario, id_sala) {
+function expulsarUsuario(event, id_usuario, id_sala) {
+    event.preventDefault();
     $.ajax({
-        url: "/ChatMVC3/chat/ExpulsarUsuario.do",
-        type: "post",
-        dataType: "html",
+        url: '/ChatMVC3/chat/ExpulsarUsuario.do',
+        type: 'post',
+        dataType: 'html',
         data: {id_usuario: id_usuario, id_sala: id_sala},
         error: function(err){
-            jUtils.showing("message", err.responseText);
+            jUtils.showing('message', err.responseText);
         },
         success: function(data) {
-            jUtils.hiding("message");
-            $('#usr-'+id_usuario).remove();
+            jUtils.hiding('message');
+            $(event.target).closest('li').remove();
         }
     });   
 };
 
 function borrarMensaje(event, id_mensaje){
     $.ajax({
-        url: "/ChatMVC3/chat/EliminarMensaje.do",
-        type: "post",
-        dataType: "html",
+        url: '/ChatMVC3/chat/EliminarMensaje.do',
+        type: 'post',
+        dataType: 'html',
         data: {id_mensaje: id_mensaje},
         error: function(err){
-            jUtils.showing("message", err.responseText);
+            jUtils.showing('message', err.responseText);
         },
         success: function(data) {
             $(event.target).closest('li').remove();
@@ -171,19 +180,19 @@ function borrarMensaje(event, id_mensaje){
 
 function volverDashboard() {
     $.ajax({
-        url: "/ChatMVC3/chat/Dashboard.do",
-        type: "post",
-        dataType: "html",
+        url: '/ChatMVC3/chat/Dashboard.do',
+        type: 'post',
+        dataType: 'html',
         data: {},
         error: function(err){
-            jUtils.showing("message", err.responseText);
+            jUtils.showing('message', err.responseText);
         },
         success: function(data) {
             jChat.removerWatchers();
             var parsed = $.parseHTML(data);
-            jUtils.hiding("message");
-            jUtils.hiding("response");
-            jUtils.showing("dashboard", $(parsed).filter("div#dashboard")[0].innerHTML);
+            jUtils.hiding('message');
+            jUtils.hiding('response');
+            jUtils.showing('dashboard', $(parsed).filter('div#dashboard')[0].innerHTML);
         }
     });    
 };
@@ -193,15 +202,16 @@ function actualizarMensajesWatcher() {
 
     function actualizarMensajes() {
         $.ajax({
-            url: "/ChatMVC3/chat/ActualizarMensajes.do",
-            type: "post",
-            dataType: "html",
+            url: '/ChatMVC3/chat/ActualizarMensajes.do',
+            type: 'post',
+            dataType: 'html',
             data: {},
             error: function(err){
-                jUtils.showing("message", err.responseText);
+                console.log(err);
+                jUtils.showing('message', 'Error al actualizar los mensajes: ' + err.responseText);
             },
             success: function(data) {
-                $("#response table").append(data);
+                $('#mensajes ul').append(data);
             }
         });
     };

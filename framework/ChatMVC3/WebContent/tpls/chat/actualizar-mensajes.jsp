@@ -7,31 +7,16 @@
 <!DOCTYPE html>        
 <c:forEach var="mensaje" items="${requestScope.mensajes}" varStatus="status">
     <c:set var="index" value="${status.index}" scope="session"/>
-    <tr id="msg-${index}">
-        <td>
-            <span>${mensaje.getUsuario().getNombre()}</span>
-        </td>
-        <td>
-            <span>${mensaje.getMensaje()}</span>
-        </td>
-        <td>
-            <span>${mensaje.getFecha_mensaje()}</span>                            
-        </td>
-        <td>
-            <span>
-                <a id="ingresar" href="#" 
-                   onclick="jChat.borrarMensaje('${mensaje.getId_mensaje()}');return false;">
-                    <fmt:message key="borrarMensaje" bundle="${etq}" />
-                </a>
-            </span>
-        </td>
-        <td>
-            <span>
-                <a id="ingresar" href="#" 
-                   onclick="jChat.expulsarUsuario('${mensaje.getUsuario().getId()}', '${sessionScope.id_sala}');return false;">
-                    <fmt:message key="expulsarUsuario" bundle="${etq}" />
-                </a>
-            </span>
-        </td>                
-    </tr>
+    <li class="clearfix">
+        <div class="mensaje" onclick="jChat.mostrarBorrar(event)">
+            <span class="nombre-usuario">${mensaje.getUsuario().getNombre()}</span>
+            <span class="texto-mensaje">${mensaje.getMensaje()}</span>
+            <span class="fecha">${mensaje.getFecha_mensaje()}</span>
+        </div>
+        <div class="control-buttons">
+            <a href onclick="jChat.borrarMensaje(event, ${mensaje.getId_mensaje()}); return false;">
+                <img class="borrar-btn" src="img/cancel-button.png" />
+            </a>
+        </div>
+    </li>
 </c:forEach>

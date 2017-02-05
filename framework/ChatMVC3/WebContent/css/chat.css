@@ -26,6 +26,11 @@ li {
     border-radius: 2px;
 }
 
+#message {
+    display: none;
+    margin: 0 auto;
+    width: 33.33%;
+}
 .panel {
     background-color: #EBF4FB !important;
     padding: 30px;
@@ -39,15 +44,13 @@ li {
     display: inline-block;   
 }
 
-.control-buttons {
-    float: left;
-    display: none;
+.btn.white {
+    background: #FFF;
+    color: #6CA1AD;
 }
 
-.control-buttons .borrar-btn {
-    width: 20px;
-    height: 20px;
-    margin: 20px;
+.control-buttons {
+    float: left;
 }
 
 /*div.border-cols {
@@ -109,7 +112,7 @@ li {
 }
 
 .logout-btn {
-    display: none;
+    display: block;
 }
 
 /*list styles */
@@ -152,6 +155,10 @@ li {
     margin: 10px;
 }
 
+.salas.list-container li:hover {
+    background: rgba(256,256,256,0.6);
+}
+
 h2.titulo-sala {
     margin-left: 50px;
 }
@@ -164,6 +171,15 @@ h2.titulo-sala {
     width: 80%;
     border-radius: 4px;
     float: left;
+    cursor: pointer;
+}
+
+.mensajes.list-container .mensaje:hover {
+    background: rgba(204, 204, 204, 0.4); 
+}
+
+.mensajes.list-container .mensaje.selected {
+    background: rgba(204, 204, 204, 0.4); 
 }
 
 .mensajes.list-container .nombre-usuario {
@@ -186,3 +202,38 @@ h2.titulo-sala {
     font-size: 8px;
     display: block;
 }
+
+.mensajes.list-container .control-buttons {
+    display: none;
+}
+
+.mensajes.list-container .control-buttons .borrar-btn {
+    width: 20px;
+    height: 20px;
+    margin: 20px;
+}
+
+.usuarios.list-container li {
+    padding: 5px 15px;
+    background: #FFF;
+}
+
+.usuarios.list-container .nombre-usuario {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.usuarios.list-container .email {
+    font-size: 12px;
+}
+
+.usuarios.list-container .control-buttons {
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+.usuarios.list-container .control-buttons .expulsar-btn {
+    width: 20px;
+    height: 20px;
+}
+
