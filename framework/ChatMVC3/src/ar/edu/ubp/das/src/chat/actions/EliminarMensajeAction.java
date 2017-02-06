@@ -58,10 +58,11 @@ public class EliminarMensajeAction implements Action {
             
             return mapping.getForwardByName("success");
 
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException | URISyntaxException | RuntimeException e) {
             String id_mensaje = form.getItem("id_mensaje");
             request.setAttribute("message", "Error al intentar eliminar mensaje " + id_mensaje + "; " + e.getMessage());
-            return mapping.getForwardByName("error");
+            response.setStatus(400);
+            return mapping.getForwardByName("failure");
         }
     }
     

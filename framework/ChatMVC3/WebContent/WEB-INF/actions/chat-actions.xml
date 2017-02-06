@@ -23,9 +23,6 @@
         <action path="/UsuariosList.do" type="UsuariosListAction" secure="true">
             <forward name="success" path="/chat/listar-usuarios.jsp"/>
     	</action>
-        <action path="/TodosUsuariosList.do" type="TodosUsuariosListAction" secure="true">
-            <forward name="success" path="/chat/listar-todos-usuarios.jsp"/>
-    	</action>
         <action path="/EliminarMensaje.do" type="EliminarMensajeAction" noforward="true" secure="true" />
         <action path="/Logout.do" type="LogoutAction" secure="true" >
             <forward name="success" path="/ChatMVC3/chat/Login.do" redirect="true"/>
@@ -34,5 +31,8 @@
         <action path="/ActualizarMensajes.do" type="ActualizarMensajesAction" secure="true">
             <forward name="success" path="/chat/actualizar-mensajes.jsp"/>
         </action>
+        <action path="/ActualizarUsuarios.do" type="ActualizarUsuariosAction" secure="true">
+            <forward name="success" path="/chat/actualizar-usuarios.jsp"/>
+        </action>        
     </action-mappings>
 </actions>

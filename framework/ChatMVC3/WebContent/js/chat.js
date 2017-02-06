@@ -13,8 +13,8 @@ var jChat = {
     expulsarUsuario : expulsarUsuario,
     borrarMensaje : borrarMensaje,
     volverDashboard: volverDashboard,
-    listarTodosLosUsuarios: listarTodosLosUsuarios,
     actualizarMensajesWatcher: actualizarMensajesWatcher,
+    actualizarUsuariosWatcher: actualizarUsuariosWatcher,
     removerWatchers: removerWatchers,
     mostrarBorrar: mostrarBorrar
 };
@@ -35,7 +35,6 @@ function login() {
         success: function(data) {
             var parsed = $.parseHTML(data);
             jUtils.hiding('message');
-            console.log(data);
             $('#dashboard').html($(parsed).filter('div#dashboard')[0].innerHTML);
             $('.login-logo').addClass('dashboard');
             $('.logout-btn').show();
@@ -58,7 +57,6 @@ function logout() {
             var parsed = $.parseHTML(data);
             jUtils.hiding('message');
             jUtils.hiding('logout-btn');
-            console.log(data);
             $('#dashboard').html($(parsed).filter('div#dashboard')[0].innerHTML);
             jUtils.hiding('response');
             jUtils.showing('dashboard');
@@ -124,24 +122,6 @@ function listarUsuarios(){
             if(list) {
                 $('.participantes').html(list.children().length);
             }
-        }
-    });        
-};
-
-function listarTodosLosUsuarios(){
-    $.ajax({
-        url: '/ChatMVC3/chat/TodosUsuariosList.do',
-        type: 'post',
-        dataType: 'html',
-        data: {},
-        error: function(err){
-            jUtils.showing('message', err.responseText);
-        },
-        success: function(data) {
-            jChat.removerWatchers();
-            jUtils.hiding('message');
-            jUtils.hiding('dashboard');
-            jUtils.showing('response', data);
         }
     });        
 };
@@ -212,6 +192,37 @@ function actualizarMensajesWatcher() {
             },
             success: function(data) {
                 $('#mensajes ul').append(data);
+            }
+        });
+    };
+};
+
+function actualizarUsuariosWatcher() {
+    /*mensajesWatcher = setInterval(actualizarMensajes, 10*1000);*/
+
+    actualizarUsuarios();
+
+    function actualizarUsuarios() {
+        $.ajax({
+            url: '/ChatMVC3/chat/ActualizarUsuarios.do',
+            type: 'post',
+            dataType: 'html',
+            data: {},
+            error: function(err){
+                console.log(err);
+                jUtils.showing('message', err.responseText);
+            },
+            success: function(data) {
+                var items = $($.parseHTML(data)).filter('li');
+
+                items.each(function(key, item){
+                    var id = $(item).attr('id');
+                    if( $('#'+id).length > 0 ) {
+                        $('#'+id).replaceWith(item);
+                    } else {
+                        $('#usuarios ul').append(item);
+                    }
+                });
             }
         });
     };

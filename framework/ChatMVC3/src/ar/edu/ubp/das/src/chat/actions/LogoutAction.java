@@ -11,20 +11,14 @@ import ar.edu.ubp.das.mvc.action.DynaActionForm;
 import ar.edu.ubp.das.mvc.config.ForwardConfig;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
-import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 
@@ -57,8 +51,9 @@ public class LogoutAction implements Action {
             
             return mapping.getForwardByName("success");
 
-        } catch (IOException e) {
-            request.setAttribute("message", "Error al realizar login: " + e.getMessage());
+        } catch (IOException | RuntimeException e) {
+            request.setAttribute("message", "Error al realizar logout: " + e.getMessage());
+            response.setStatus(400);
             return mapping.getForwardByName("failure");
         }
     }

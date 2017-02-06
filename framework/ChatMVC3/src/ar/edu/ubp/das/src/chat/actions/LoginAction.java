@@ -21,9 +21,7 @@ public class LoginAction implements Action {
 
     @Override
     public ForwardConfig execute(ActionMapping mapping, DynaActionForm form, HttpServletRequest request, HttpServletResponse response) throws SQLException, RuntimeException {
-  
         return mapping.getForwardByName("success");
-        // return null;
     }
     
 }

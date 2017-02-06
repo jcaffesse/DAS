@@ -30,7 +30,7 @@
     <div id="message" class="panel"></div>
     <div id="dashboard" class="row">
         <div class="col-md-4 border-cols"></div>
-        <div class="login-container col-md-4">
+        <div class="login-container panel col-md-4">
             <div class="greeting"><fmt:message key="greeting" bundle="${etq}" /></div>
             <form id="login-form">
                 <div class="input-group">

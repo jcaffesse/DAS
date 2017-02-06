@@ -58,10 +58,11 @@ public class ExpulsarUsuarioAction implements Action {
 
             return mapping.getForwardByName("success");
 
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException | URISyntaxException | RuntimeException e) {
             String id_usuario = form.getItem("id_usuario");
             request.setAttribute("message", "Error al intentar expulsar usuario: " + id_usuario + "; " + e.getMessage());
-            return mapping.getForwardByName("error");
+            response.setStatus(400);
+            return mapping.getForwardByName("failure");
         }
     }
     

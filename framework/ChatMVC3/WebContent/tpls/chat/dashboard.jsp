@@ -22,11 +22,11 @@
             <span><fmt:message key="titulo" bundle="${etq}" /></span>
         </div>
         <div class="logout-btn  col-xs-2 pull-right" id="logout">
-            <button type="button" class="btn" onclick="jChat.logout(); return false;"><fmt:message key="logout" bundle="${etq}" /></button>
+            <button type="button" class="btn white" onclick="jChat.logout(); return false;"><fmt:message key="logout" bundle="${etq}" /></button>
         </div>
     </div>
     <div id="executing"></div>    
-    <div id="message"></div>
+    <div id="message"  class="panel"></div>
     <div id="dashboard" class="row">
         <div class="col-md-3 border-cols"></div>
         <div class="salas list-container col-md-6">

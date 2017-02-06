@@ -14,7 +14,7 @@
 <ul>
     <c:forEach var="usuario" items="${requestScope.usuarios}" varStatus="status">
         <c:set var="index" value="${status.index}" scope="session"/>
-        <li class="clearfix">
+        <li class="clearfix" id="user-${usuario.getId()}">
             <span class="nombre-usuario">${usuario.getNombre()}</span>
             <span class="email">(${usuario.getEmail()})</span>
             <a class="control-buttons pull-right"

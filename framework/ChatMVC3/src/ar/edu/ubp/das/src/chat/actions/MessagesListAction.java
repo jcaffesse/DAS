@@ -78,8 +78,9 @@ public class MessagesListAction implements Action {
             
             return mapping.getForwardByName("success");
 
-        } catch (IOException | URISyntaxException e) {
-            request.setAttribute("message", "Error al intentar ingresar a Sala " + e.getMessage());
+        } catch (IOException | URISyntaxException | RuntimeException e) {
+            request.setAttribute("message", "Error al intentar mostrar mensajes: " + e.getMessage());
+            response.setStatus(400);
             return mapping.getForwardByName("error");
         }
     }

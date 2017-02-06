@@ -25,6 +25,7 @@
     </div>
     <div class="control-buttons col-md-9">
         <button type="button" class="btn" onclick="jChat.volverDashboard(); return false;"><fmt:message key="volver" bundle="${etq}" /></button>
+        <button type="button" class="btn" onclick="jChat.actualizarUsuariosWatcher(); return false;">actualizar pa</button>
     </div>
 </div>
 <div class="col-md-2 border-cols"></div>

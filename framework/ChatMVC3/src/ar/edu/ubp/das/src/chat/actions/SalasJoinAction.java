@@ -75,12 +75,14 @@ public class SalasJoinAction implements Action {
                 .collect(Collectors.toList()).get(0);
             
             request.getSession().setAttribute("sala", actual);
+            request.getSession().setAttribute("ultima_actualizacion", String.valueOf(System.currentTimeMillis()));
             
             return mapping.getForwardByName("success");
 
-        } catch (IOException e) {
-           request.setAttribute("message", "Error al intentar ingresar a Sala " + e.getMessage());
-            return mapping.getForwardByName("error");
+        } catch (IOException | RuntimeException e) {
+            request.setAttribute("message", "Error al intentar ingresar a Sala: " + e.getMessage());
+            response.setStatus(400);
+            return mapping.getForwardByName("failure");
         }
     }
     

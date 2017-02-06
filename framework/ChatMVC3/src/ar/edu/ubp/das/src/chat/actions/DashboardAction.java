@@ -58,8 +58,9 @@ public class DashboardAction implements Action {
             request.getSession().setAttribute("salas", salas);
             return mapping.getForwardByName("success");
 
-        } catch (IOException e) {
+        } catch (IOException | RuntimeException e) {
            request.setAttribute("message", "Error al intentar listar Salas " + e.getMessage());
+           response.setStatus(400);
            return mapping.getForwardByName("failure");
         }
     }

@@ -28,8 +28,8 @@ li {
 
 #message {
     display: none;
-    margin: 0 auto;
-    width: 33.33%;
+    margin: 0 auto 25px;
+    width: 34%;
 }
 .panel {
     background-color: #EBF4FB !important;
@@ -66,10 +66,11 @@ li {
 }
 .login-container {
 	font-size: 18px;
-    background-color: #fff;
+    background-color: #EBF4FB;
     height: 300px;
     padding: 30px 50px;
     margin: 50px auto;
+    border-radius: 4px;
 }
 
 .login-container .greeting {

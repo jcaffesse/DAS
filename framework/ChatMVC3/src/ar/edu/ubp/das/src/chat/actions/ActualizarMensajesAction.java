@@ -83,10 +83,11 @@ public class ActualizarMensajesAction implements Action {
             
             return mapping.getForwardByName("success");
 
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException | URISyntaxException | RuntimeException e) {
             String id_sala = (String) request.getSession().getAttribute("id_sala");
-            request.setAttribute("message", "Error al intentar actualizar mensajes de Sala " + id_sala + "; " + e.getMessage());
-            return mapping.getForwardByName("error");
+            request.setAttribute("message", "Error al intentar actualizar mensajes de Sala " + id_sala + ": " + e.getMessage());
+            response.setStatus(400);
+            return mapping.getForwardByName("failure");
         }
     }
     

@@ -49,7 +49,8 @@ public class ValidAction implements Action {
             String restResp = EntityUtils.toString(responseEntity);
 
             if(responseStatus.getStatusCode() != 200) {
-                throw new RuntimeException(restResp);
+                System.out.println(restResp);
+                throw new RuntimeException("Los datos ingresados son incorrectos");
             }
             
             Header authHeader = postResponse.getFirstHeader("Auth-Token");
@@ -75,7 +76,7 @@ public class ValidAction implements Action {
 
         } catch (IOException | RuntimeException e) {
             request.setAttribute("message", "Error al realizar login: " + e.getMessage());
-            response.setStatus(400);
+            response.setStatus(401);
             return mapping.getForwardByName("failure");
         }
     }
