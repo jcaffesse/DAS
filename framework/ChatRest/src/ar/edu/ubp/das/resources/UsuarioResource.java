@@ -121,7 +121,6 @@ public class UsuarioResource {
                 
         try {
             Dao dao = DaoFactory.getDao("Usuarios");
-            System.out.println("hello");
             dao.update(bean);
 
             return Response.status(Response.Status.OK).build();
